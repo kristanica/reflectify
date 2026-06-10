@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  xp  Int @default(0)
+  level Int @default(0)
+  currency Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+profile String?
+
+  password String
+
+  decks Deck[]
+  gameSessions GameSession[]
+  inventory Inventory?
+  purchases Purchase[]
+}
+
+
+model Deck {
+  id String @id  @default(cuid())
+  userId String
+  title String
+  description String
+  sourceType SourceType
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  cards Card[]
+  sessions GameSession[]
+
+
+  @@index([userId])
+}
+
+
+model Inventory {
+  id String @id @default(cuid())
+userId String @unique
+
+
+user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+inventoryItems InventoryItem[]
+}
+
+model InventoryItem{
+  id String @id @default(cuid())
+  inventoryId String
+  keyItem String
+  quantity Int  @default(0)
+  updatedAt DateTime @updatedAt
+  inventory Inventory @relation(fields: [inventoryId], references: [id] ,onDelete: Cascade)
+
+@@unique([inventoryId, keyItem])
+@@index([inventoryId])
+}
+
+model Purchase {
+  id String @id @default(cuid())
+  userId String
+  cost Int
+  sessionId String?
+  itemKey String
+  purchasedAt DateTime @default(now())
+
+
+  session GameSession? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum SourceType {
+  DOCUMENT
+  TOPIC
+  MANUAL
+}
+
+
+
+
+model Card {
+  id String @id @default(cuid())
+  deckId String 
+  questionType QuestionType
+  options String[]
+  answer String
+  difficulty Int @default(1)
+
+
+  deck Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+@@index([deckId])
+}
+
+model GameSession {
+  id String @id @default(cuid())
+  userId String 
+  deckId String
+  livesStart Int @default(3)
+
+
+  startedAt DateTime @default(now())
+  endedAt DateTime?
+
+
+  livesEnd Int @default(3)
+  score Int
+  xpEarned Int
+  currencyEarned Int
+  correctCount Int
+  incorrectCount Int
+  streak Int
+
+
+  user User @relation(fields: [userId], references: [id])
+  deck Deck @relation(fields: [deckId], references: [id])
+
+
+  purchases Purchase[]
+
+@@index([userId])
+@@index([deckId])
+}
+
+
+
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_OR_FALSE
+  IDENTIFICATION
+  SCENARIO
+}
