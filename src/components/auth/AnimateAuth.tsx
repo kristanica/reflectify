@@ -29,6 +29,7 @@ const AnimateAuth = () => {
             <FieldDescription className="text-center">
               Don&apos;t have an account?{" "}
               <Button
+                type="button"
                 onClick={() => toggleAuthForm("signUp")}
                 variant="link"
                 className="underline-offset-0 text-muted-foreground hover:text-foreground text-xs"
@@ -49,11 +50,12 @@ const AnimateAuth = () => {
               damping: 15,
             }}
           >
-            <SignUpForm></SignUpForm>
+            <SignUpForm toggleAuthForm={toggleAuthForm}></SignUpForm>
 
             <FieldDescription className="text-center">
               Already have an Account?
               <Button
+                type="button"
                 onClick={() => toggleAuthForm("login")}
                 variant="ghost"
                 className="underline-offset-0 text-muted-foreground hover:text-foreground text-xs"

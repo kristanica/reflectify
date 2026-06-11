@@ -13,6 +13,7 @@ const Login = () => {
         </section>
         <section className="relative hidden lg:flex flex-1 flex-col items-center justify-center bg-gray-900 bg-linear-to-br from-gray-800 m-5 rounded-3xl via-gray-800 to-gray-900 border border-gray-800 shadow-2xl">
           <Balatro></Balatro>
+
           <div className="flex absolute items-center justify-center gap-3 max-w-lg text-center flex-col p-8">
             <Label className=" text-4xl uppercase font-black tracking-widest text-amber-500">
               Reflectify

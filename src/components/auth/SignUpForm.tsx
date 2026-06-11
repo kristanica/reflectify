@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useActionState, useEffect, useState } from "react";
 import { Field, FieldGroup, FieldLabel } from "../ui/field";
 import { Button } from "../ui/button";
 import {
@@ -10,30 +10,64 @@ import {
   InputGroupInput,
 } from "../ui/input-group";
 import { Lock, Mail, Eye, EyeClosed, User } from "lucide-react";
+import { initialState } from "@/hooks/authState";
+import signUpAction from "@/actions/signUpAction";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Spinner } from "../ui/spinner";
+import { ReflectifyLogo } from "../ReflectifyLogo";
 
-const SignUpForm = () => {
+const SignUpForm = ({
+  toggleAuthForm,
+}: {
+  toggleAuthForm: React.Dispatch<React.SetStateAction<"login" | "signUp">>;
+}) => {
+  const router = useRouter();
   const [isPasswordShown, setIsPasswordShown] = useState<boolean>(false);
   const [isConfirmPasswordShown, setIsConfirmPasswordShown] =
     useState<boolean>(false);
+
+  const [state, formAction, isPending] = useActionState(
+    signUpAction,
+    initialState,
+  );
+
+  useEffect(() => {
+    if (!state) {
+      return;
+    }
+
+    if (state.success) {
+      toast.success("Account created succesfully!");
+      toggleAuthForm("login");
+    } else if (!state.success && state.error) {
+      toast.error(`Validation Error  `, {
+        description: state.error,
+      });
+    }
+  }, [state, router, toggleAuthForm]);
+
   return (
     <div className="w-full bg-transparent border-none border-0 ">
-      <form className="md:w-xl mx-auto">
+      <form action={formAction} className="md:w-xl mx-auto">
         <FieldGroup className="text-foreground">
           <div className="flex flex-col items-center gap-1 text-center">
+            <ReflectifyLogo className="h-auto w-25"></ReflectifyLogo>
+
             <h1 className="text-2xl font-bold text-foreground">
-              Create an Account{" "}
+              Create an Account
             </h1>
             <p className="text-sm text-balance text-muted-foreground">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
           </div>
           <Field>
-            <FieldLabel htmlFor="email" className="text-foreground">
+            <FieldLabel htmlFor="name" className="text-foreground">
               Username
             </FieldLabel>
 
             <InputGroup>
-              <InputGroupInput placeholder="Username" id="email" />
+              <InputGroupInput placeholder="Username" id="name" name="name" />
               <InputGroupAddon>
                 <User></User>
               </InputGroupAddon>
@@ -46,7 +80,7 @@ const SignUpForm = () => {
             </FieldLabel>
 
             <InputGroup>
-              <InputGroupInput placeholder="Email" id="email" />
+              <InputGroupInput placeholder="Email" id="email" name="email" />
               <InputGroupAddon>
                 <Mail></Mail>
               </InputGroupAddon>
@@ -61,6 +95,7 @@ const SignUpForm = () => {
                 placeholder="********"
                 type={isPasswordShown ? "text " : "password"}
                 id="password"
+                name="password"
               />
               <InputGroupAddon>
                 <Lock></Lock>
@@ -76,14 +111,15 @@ const SignUpForm = () => {
             </InputGroup>
           </Field>
           <Field>
-            <FieldLabel htmlFor="password" className="text-foreground">
+            <FieldLabel htmlFor="confirmPassword" className="text-foreground">
               Confirm Password
             </FieldLabel>
             <InputGroup>
               <InputGroupInput
                 placeholder="********"
                 type={isConfirmPasswordShown ? "text " : "password"}
-                id="password"
+                name="confirmPassword"
+                id="confirmPassword"
               />
               <InputGroupAddon>
                 <Lock></Lock>
@@ -100,7 +136,9 @@ const SignUpForm = () => {
           </Field>
 
           <Field>
-            <Button type="submit">Regiter</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? <Spinner></Spinner> : "Register"}
+            </Button>
           </Field>
         </FieldGroup>
       </form>

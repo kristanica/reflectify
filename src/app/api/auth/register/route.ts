@@ -1,17 +1,36 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { email, object, string, ZodError } from "zod";
+import { safeParse, ZodError } from "zod";
 import bcrypt from "bcryptjs";
-const registerSchema = object({
-  name: string().min(2),
-  email: email(),
-  password: string().min(8),
-});
+import { registerSchema } from "@/schema/registerSchema";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     const body = await req.json();
-    const { name, email, password } = registerSchema.parse(body);
+    const validated = safeParse(registerSchema, body);
+
+    if (!validated.success) {
+      return NextResponse.json(
+        {
+          error: "Validation Failed",
+        },
+        {
+          status: 422,
+        },
+      );
+    }
+    const { email, password, confirmPassword, name } = validated.data;
+
+    if (confirmPassword !== password) {
+      return NextResponse.json(
+        {
+          error: "Password does not match",
+        },
+        {
+          status: 422,
+        },
+      );
+    }
 
     const existing = await prisma.user.findUnique({
       where: { email },
