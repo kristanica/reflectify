@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Session from "../components/layout/Session";
+import { Inter } from "next/font/google";
+import { cn } from "@/lib/utils";
+import Theme from "@/components/layout/Theme";
+import { Toaster } from "sonner";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Reflectify",
@@ -13,9 +19,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("font-sans", inter.variable)}
+    >
       <Session>
-        <body>{children}</body>
+        <body>
+          <Toaster />
+
+          <Theme>{children}</Theme>
+        </body>
       </Session>
     </html>
   );
