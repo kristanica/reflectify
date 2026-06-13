@@ -77,7 +77,6 @@ async function main() {
     }).map(() => ({
       userId: user.id,
       title: faker.word.words(3),
-      description: faker.lorem.sentence(),
       sourceType: faker.helpers.enumValue(SourceType),
     })),
   );

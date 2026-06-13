@@ -1,9 +1,13 @@
-import React from "react";
+"use client";
 import Profile from "@/components/profile/Profile";
+import { Button } from "@/components/ui/button";
+import { signOut } from "next-auth/react";
 const Page = () => {
   return (
     <div className="w-full h-full flex flex-col p-6 space-y-6 text-[#f0ede8] overflow-y-auto">
       <Profile></Profile>
+
+      <Button onClick={() => signOut()}>SIGNOUT</Button>
     </div>
   );
 };

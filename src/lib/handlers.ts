@@ -3,11 +3,14 @@ import { type NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "./prisma";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+
 // removed unused imports
 
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
@@ -73,7 +76,7 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session?.user) {
-        (session.user as any).id = token.id as string;
+        (session.user as any).id = (token.id || token.sub) as string;
         (session.user as any).role = token.role as string;
       }
       return session;

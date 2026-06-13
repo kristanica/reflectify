@@ -14,7 +14,7 @@ const DeckHeader = () => {
       </div>
 
       <Link
-        href="/upload"
+        href="/decks/ingest"
         className="border border-[#f0a500] hover:bg-[#f0a500] hover:text-black text-[#f0a500] font-mono text-xs font-bold px-4 py-2 transition-all"
       >
         + INGEST NEW SEED
