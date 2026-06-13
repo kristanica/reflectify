@@ -14,4 +14,4 @@ export const fileValidationSchema = instanceof_(File, {
     { message: "File must be PDF" },
   );
 
-export type Register = zInfer<typeof fileValidationSchema>;
+export type FileValidation = zInfer<typeof fileValidationSchema>;

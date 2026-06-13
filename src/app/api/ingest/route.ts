@@ -50,7 +50,7 @@ export async function POST(req: Request) {
 
     const { title, ingestType, topic } = formDataResult.data;
     let fileUrl: string = "";
-    let rawText = [];
+    let rawText: string[] = [];
 
     //   If ingestTyppe is file, do another validation
     if (ingestType === "File") {
@@ -88,8 +88,8 @@ export async function POST(req: Request) {
 
       rawText = extractPdf.text
         .split(/\n\n+/)
-        .filter((chunk: any) => chunk.trim().length > 0);
-    } else if (ingestType === "Topic" && ingestType) {
+        .filter((chunk: any) => chunk.trim().length > 0) as string[];
+    } else if (ingestType === "Topic" && topic) {
       rawText = [topic];
     } else {
       return NextResponse.json(
@@ -109,17 +109,41 @@ export async function POST(req: Request) {
       );
     }
 
-    // Saves it as a deck
-    const deck = await prisma.deck.create({
-      data: {
-        title: title,
-        sourceType: ingestType.toUpperCase() as SourceType,
-        rawText: JSON.stringify(rawText),
+    const conceptExtraction = (await import("@/lib/conceptExtraction")).default;
 
-        user: {
-          connect: { id: userId },
+    const isTopic = ingestType === "Topic";
+    const generatedConcepts = await conceptExtraction(rawText, isTopic);
+
+    // Put into transaction so succeed or , only expose deck as return value
+    const deck = await prisma.$transaction(async (tx) => {
+      //  Save it as deck first
+      const deck = await tx.deck.create({
+        data: {
+          title: title,
+          sourceType: ingestType.toUpperCase() as SourceType,
+          rawText: JSON.stringify(rawText),
+
+          user: {
+            connect: { id: userId },
+          },
         },
-      },
+      });
+      // Save extracted concepts
+      const concepts = await tx.concept.createManyAndReturn({
+        data: generatedConcepts.map((concept) => ({
+          concept: concept,
+          deckId: deck.id,
+        })),
+      });
+      // Generate masteries
+      await tx.conceptMasteries.createMany({
+        data: concepts.map((concept) => ({
+          userId: userId,
+          conceptId: concept.id,
+        })),
+      });
+
+      return deck;
     });
 
     return NextResponse.json({

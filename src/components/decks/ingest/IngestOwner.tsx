@@ -1,10 +1,16 @@
 "use client";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import TypeIt from "typeit-react";
 
 const IngestOwner = () => {
   return (
-    <header className="border-b py-5">
-      <div className="flex flex-col items-center justify-center max-w-2xl mx-auto gap-2">
+    <header className="border-b py-5 relative">
+      <Link href="/decks" className="absolute left-0 top-0 text-zinc-500">
+        <ArrowLeft size={15}></ArrowLeft>
+      </Link>
+
+      <div className="flex flex-col items-center relative justify-center max-w-2xl mx-auto gap-2">
         <div className="flex items-center flex-col space-y-2">
           <div className="relative w-20 h-20 rounded-full border border-[#f0a500] bg-zinc-950 flex items-center justify-center shadow-[0_0_15px_rgba(240,165,0,0.15)] overflow-hidden">
             <div className="text-[#f0a500] text-3xl">🧭</div>
