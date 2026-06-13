@@ -2,6 +2,7 @@
 import { fileValidationSchema } from "@/schema/fileValidationSchemta";
 import { ingestFormSchema } from "@/schema/ingestFormSchema";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/handlers";
 import { NextResponse } from "next/server";
 import { safeParse } from "zod";
 import { put } from "@vercel/blob";
@@ -11,7 +12,7 @@ import { SourceType } from "@/generated/prisma/enums";
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
 
     //   Check session
     if (!session?.user) {
@@ -88,8 +89,6 @@ export async function POST(req: Request) {
       rawText = extractPdf.text
         .split(/\n\n+/)
         .filter((chunk: any) => chunk.trim().length > 0);
-
-      console.log(rawText);
     } else if (ingestType === "Topic" && ingestType) {
       rawText = [topic];
     } else {

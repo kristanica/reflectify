@@ -5,6 +5,7 @@ import { fileValidationSchema } from "@/schema/fileValidationSchemta";
 
 import axios from "axios";
 import { Dispatch } from "react";
+import { toast } from "sonner";
 
 export default async function useSubmitIngestForm(
   dipatch: Dispatch<IngestAction>,
@@ -21,6 +22,9 @@ export default async function useSubmitIngestForm(
 
   // Validate form
   if (!formDataResult.success) {
+    toast.error("Form Error", {
+      description: formDataResult.error.issues[0].message,
+    });
     return false;
   }
   const formData = new FormData();
@@ -32,6 +36,9 @@ export default async function useSubmitIngestForm(
   if (ingestType === "File") {
     const fileDataResult = safeParse(fileValidationSchema, file);
     if (!fileDataResult.success) {
+      toast.error("Form Error", {
+        description: fileDataResult.error.issues[0].message,
+      });
       return false;
     }
     formData.append("file", fileDataResult.data);
@@ -53,7 +60,6 @@ export default async function useSubmitIngestForm(
     });
 
     dipatch({ type: "RESET" });
-
     return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {

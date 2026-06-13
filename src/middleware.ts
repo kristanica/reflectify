@@ -37,5 +37,13 @@ export default async function middleware(
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: [
+    "/dashboard/:path*",
+    "/decks/:path*",
+    "/leaderboard/:path*",
+    "/profile/:path*",
+    "/shop/:path*",
+    "/login",
+    "/"
+  ],
 };
