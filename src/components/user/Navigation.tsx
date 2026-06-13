@@ -10,7 +10,7 @@ const Navigation = () => {
 
   const navItems = [
     { name: "Keep", href: "/dashboard", icon: Shield },
-    { name: "Archives (Seeds)", href: "/decks", icon: BookOpen },
+    { name: "Archives (Seeds)", href: "/decks?page=1", icon: BookOpen },
     { name: "Shop", href: "/shop", icon: Sparkles },
     { name: "Leaderboard", href: "/leaderboard", icon: Trophy },
     { name: "Player Profile", href: "/profile", icon: User },

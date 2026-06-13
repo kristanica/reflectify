@@ -72,7 +72,7 @@ export default function DashboardPage() {
                 INITIATE RUN
               </Link>
               <Link
-                href="/upload"
+                href="/decks/ingest"
                 className="border border-zinc-700 hover:border-white text-zinc-400 hover:text-white font-mono text-xs px-4 py-2 transition-all"
               >
                 INGEST NEW SEED
