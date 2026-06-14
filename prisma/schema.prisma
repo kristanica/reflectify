@@ -145,12 +145,12 @@ model GameSession {
 
 
   livesEnd Int @default(3)
-  score Int
-  xpEarned Int
-  currencyEarned Int
-  correctCount Int
-  incorrectCount Int
-  streak Int
+  score Int @default(0)
+  xpEarned Int @default(0)
+  currencyEarned Int @default(0)
+  correctCount Int @default(0)
+  incorrectCount Int @default(0)
+  streak Int @default(0)
 
 
   user User @relation(fields: [userId], references: [id])

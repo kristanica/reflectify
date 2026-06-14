@@ -1,3 +1,4 @@
+import StartSessionForm from "@/components/decks/StartSessionForm";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import React from "react";
@@ -41,23 +42,8 @@ const page = async ({ params }: PageProps) => {
             permanent.
           </p>
         </div>
-
         {/* Action Buttons */}
-        <div className="flex gap-4 pt-6 mt-4 border-t border-zinc-900/50">
-          <Link
-            href={`/run?deckId=${slug}`}
-            className="flex-1 text-center border border-[#f0a500] hover:bg-[#f0a500] hover:text-black text-[#f0a500] py-1.5 transition-all uppercase font-bold text-[10px] rounded-sm"
-          >
-            <span className="relative z-10">Initiate Run</span>
-          </Link>
-
-          <Link
-            href="/decks"
-            className="flex-1 text-center border border-zinc-800 hover:border-white text-zinc-400 hover:text-white py-1.5 transition-all uppercase font-bold text-[10px] rounded-sm"
-          >
-            Abandon
-          </Link>
-        </div>
+        <StartSessionForm deckId={slug}></StartSessionForm>
       </div>
     </div>
   );
