@@ -2,8 +2,16 @@ import { QuestionType } from "@/generated/prisma/enums";
 import { object, string, infer as zInfer, enum as _enum, array } from "zod";
 
 export const FORMAT_INSTRUCTIONS = {
-  MULTIPLE_CHOICE:
-    "Provide 1 correct answer and 3 highly plausible distractors. The options must be challenging and related to the topic.",
+  MULTIPLE_CHOICE: `
+Provide 1 correct answer and 3 highly plausible distractors. The options must be challenging and related to the topic.
+CRITICAL DISTRACTOR RULES:
+1. Distractors must be brutally challenging but fair.
+2. Use common misconceptions, near-misses, chronologically adjaent events, or partially correct statements.
+3. NEVER use obvious joke answers, throwaways, or grammatically mismatched options that give away the answer.
+4. All 4 options must be roughly the same length and share the same clinical, objective tone.
+RANDOMIZATION:
+You must randomize the position of the correct answer within the options array. DO NOT default to placing the correct answer at index 0 or index 3. The correct answer's position must be completely unpredictable across consecutive questions.
+`,
   TRUE_OR_FALSE:
     "Make the statement tricky but definitively true or false. The answer must be exactly 'True' or 'False'. Do not use ambiguous wording.",
   IDENTIFICATION:
