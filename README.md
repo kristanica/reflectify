@@ -24,9 +24,9 @@ Instead of traditional, boring flashcards, Reflectify uses AI to dynamically gen
 
 ## 🧠 How the Architecture Works
 
-1. **Ingest (Day 8):** Users input a topic or upload a file. The Vercel AI SDK reads the text and extracts 15-20 specific, factual "Concepts" using a strict Zod schema.
-2. **The Queue (Day 11):** When a user initiates a run, the frontend grabs the lowest-mastery concepts from the database (excluding any concepts already in the player's active queue).
-3. **JIT Generation (Day 9):** Those raw concepts are sent to the `/actions/generateBatch` Server Action, where OpenAI transforms the raw facts into playable game questions with highly plausible distractors.
+1. **Ingest:** Users input a topic or upload a file. The Vercel AI SDK reads the text and extracts 15-20 specific, factual "Concepts" using a strict Zod schema.
+2. **The Queue :** When a user initiates a run, the frontend grabs the lowest-mastery concepts from the database (excluding any concepts already in the player's active queue).
+3. **JIT Generation:** Those raw concepts are sent to a Server Action, where OpenAI transforms the raw facts into playable game questions with highly plausible distractors.
 4. **The Loop:** As the player answers questions, the frontend queue shrinks. Once the "Low-Water Mark" is reached (e.g., < 10 questions left), TanStack Query silently triggers the pipeline again to refill the queue.
 
 ## 🚀 Getting Started
