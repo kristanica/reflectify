@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { toast } from "sonner";
 
 const MAX_ITEM_PER_PAGE = 4;
 
@@ -97,7 +96,7 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
             {/* Card Actions */}
             <div className="flex gap-2 pt-2 border-t border-zinc-900">
               <Link
-                href={`/run?deckId=${seed.id}`}
+                href={`/decks/${seed.id}`}
                 className="flex-1 text-center border border-[#f0a500] hover:bg-[#f0a500] hover:text-black text-[#f0a500] py-1.5 transition-all uppercase font-bold text-[10px] rounded-sm"
               >
                 START RUN

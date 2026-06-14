@@ -1,9 +1,6 @@
-import { ReflectifyLogo } from "@/components/ReflectifyLogo";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopItems from "@/components/shop/ShopItems";
 import ShopOwner from "@/components/shop/ShopOwner";
-import React from "react";
-import TypeIt from "typeit-react";
 
 const page = () => {
   return (

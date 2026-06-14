@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function DashboardPage() {
   return (
-    <div className="w-full h-full flex flex-col p-6 space-y-6 text-[#f0ede8] overflow-y-auto">
+    <div className="w-full h-full flex  flex-col p-6 space-y-6 text-[#f0ede8] overflow-y-auto">
       {/* 1. Header & Character Status */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-800 pb-4 gap-4">
         <div>
