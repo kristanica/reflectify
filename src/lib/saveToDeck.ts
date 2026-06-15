@@ -42,6 +42,7 @@ async function saveToDeck({
       data: concepts.map((concept) => ({
         userId: userId,
         conceptId: concept.id,
+        level: 2,
       })),
     });
     return deck;

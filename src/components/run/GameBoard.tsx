@@ -1,15 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import InitialLoading from "./InitialLoading";
-import { AnimatePresence, hasScale, motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import useGenerateQuestions from "@/hooks/useGenerateQuestions";
+import GameTypeIdentifier from "./GameTypeIdentifier";
+import { useGameEngineStore } from "@/store/useGameEngineStore";
 
 export default function GameBoard({ deckId, userId }: GameBoardType) {
-  const [questionQueues, setQuestionQueues] = useState<GeneratedQuestion[]>([]);
-  const [selectedAnswer, setSelectedAnswer] = useState<string>();
-  const [hasAnswered, setHasAnswered] = useState<boolean>(false);
+  const selectedAnswer = useGameEngineStore((state) => state.selectedAnswer);
+  const hasAnswered = useGameEngineStore((state) => state.hasAnswered);
+  const setHasAnswered = useGameEngineStore((state) => state.setHasAnswered);
+  const questionQueues = useGameEngineStore((state) => state.questionQueues);
+  const setQuestionQueues = useGameEngineStore(
+    (state) => state.setQuestionQueues,
+  );
+
+  const handleNextQuestion = useGameEngineStore(
+    (state) => state.handleNextQuestion,
+  );
 
   const {
     mutate: fetchMoreQuestion,
@@ -19,10 +29,13 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     userId: userId,
     deckId: deckId,
     onGeneratedQuestsion: (newQuestions) => {
-      setQuestionQueues((prev) => [...prev, ...newQuestions]);
+      setQuestionQueues(newQuestions);
     },
   });
 
+  const answerQuestion = () => {
+    setHasAnswered(true);
+  };
   useEffect(() => {
     if (questionQueues.length < 10 && !isFetchingQuestion) {
       const conceptIds = questionQueues.map((concept) => concept.conceptId);
@@ -35,22 +48,6 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     questionQueues,
     fetchMoreQuestion,
   ]);
-
-  const answerQuestion = () => {
-    setHasAnswered(true);
-  };
-
-  const handleNext = () => {
-    console.log(
-      "----",
-      questionQueues[0],
-      "Has been slicced!",
-      questionQueues.length,
-      "----",
-    );
-    setHasAnswered(false);
-    setQuestionQueues((prev) => prev.slice(1));
-  };
   return (
     <div className="text-gray-400 h-full flex flex-1  flex-col items-center justify-center">
       <AnimatePresence mode="wait">
@@ -79,44 +76,12 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
                 {questionQueues[0].question}
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-2 w-full max-w-3xl">
-              {questionQueues[0].options.map((option, i) => {
-                let optionStyle =
-                  "border-zinc-800 text-gray-300 hover:border-amber-600 hover:bg-amber-600/5";
 
-                if (!hasAnswered) {
-                  if (selectedAnswer === option) {
-                    optionStyle = "border-amber-600 bg-amber-600/5";
-                  }
-                } else {
-                  const isCorrectPick = option === questionQueues[0].answer;
-                  const isWrongPick =
-                    selectedAnswer === option && !isCorrectPick;
-
-                  if (isCorrectPick) {
-                    optionStyle =
-                      "border-green-500 bg-green-500/10 text-green-400";
-                  } else if (isWrongPick) {
-                    optionStyle = "border-red-500 bg-red-500/10 text-red-400";
-                  } else {
-                    optionStyle = "border-zinc-800 text-gray-500 opacity-30";
-                  }
-                }
-
-                return (
-                  <button
-                    onClick={() => setSelectedAnswer(option)}
-                    key={i}
-                    className={`relative border rounded-sm text-left p-4 pl-8 min-h-20 flex items-center font-mono text-xs leading-relaxed transition-all duration-150 ${optionStyle} ${!hasAnswered ? "cursor-pointer" : "cursor-default"}`}
-                  >
-                    <span className="absolute top-2 left-2 text-[10px] text-zinc-600">
-                      {i + 1}
-                    </span>
-                    {option}
-                  </button>
-                );
-              })}
-            </div>
+            <GameTypeIdentifier
+              choices={questionQueues[0].options as string[]}
+              answer={questionQueues[0].answer}
+              type={questionQueues[0].type}
+            ></GameTypeIdentifier>
 
             <AnimatePresence mode="wait">
               {hasAnswered && (
@@ -140,7 +105,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
             {hasAnswered ? (
               <button
                 disabled={!hasAnswered}
-                onClick={() => handleNext()}
+                onClick={() => handleNextQuestion()}
                 className="self-end py-2.5 px-8 mt-6 border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm "
               >
                 NEXT
