@@ -7,6 +7,7 @@ type GetConceptsType = {
   userId: string;
   deckId: string;
   questionQueues: string[];
+  depth: number;
 };
 
 export type ConceptMasteries = {
@@ -15,43 +16,43 @@ export type ConceptMasteries = {
   format: QuestionType;
 }[];
 
+const getLevel = (depth: number) => {
+  if (depth < 5) return 1;
+  if (depth < 15) return 2;
+  if (depth < 25) return 3;
+  return 4;
+};
+const getRandomFormat = () => {
+  const formats = ["TRUE_OR_FALSE", "MULTIPLE_CHOICE", "IDENTIFICATION"];
+
+  // Pick a random format from the array
+  const randomIndex = Math.floor(Math.random() * formats.length);
+  return formats[randomIndex] as QuestionType;
+};
+
 export default async function getConcepts({
   userId,
   deckId,
   questionQueues,
+  depth,
 }: GetConceptsType): Promise<ConceptMasteries> {
-  const pendingMasteries = await prisma.conceptMasteries.findMany({
+  const pendingMasteries = await prisma.concept.findMany({
     where: {
-      userId: userId,
-      concept: {
-        deckId: deckId,
-      },
-      conceptId: {
+      deckId: deckId,
+      id: {
         notIn: questionQueues,
       },
     },
-    include: {
-      concept: true,
-    },
-
-    orderBy: {
-      level: "asc",
-    },
     take: 10,
   });
-
-  const formats: QuestionType[] = [
-    "MULTIPLE_CHOICE",
-    "TRUE_OR_FALSE",
-    "IDENTIFICATION",
-    "SCENARIO",
-  ];
+  const currentLevel = getLevel(depth);
 
   const conceptMasteries = pendingMasteries.map((mastery) => {
     return {
-      conceptId: mastery.conceptId,
-      content: mastery.concept.concept,
-      format: formats[mastery.level - 1] as QuestionType,
+      conceptId: mastery.id,
+      content: mastery.concept,
+      level: currentLevel,
+      format: getRandomFormat(),
     };
   });
 

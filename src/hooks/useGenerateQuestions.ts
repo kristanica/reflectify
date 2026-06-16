@@ -1,7 +1,6 @@
 import generateQuestions from "@/actions/run/generateQuestions";
 import getConcepts from "@/actions/run/getConcepts";
 import { useMutation } from "@tanstack/react-query";
-import React from "react";
 import { toast } from "sonner";
 
 type UseGenerateQuestionsType = {
@@ -17,11 +16,18 @@ const useGenerateQuestions = ({
   onGeneratedQuestsion,
 }: UseGenerateQuestionsType) => {
   return useMutation({
-    mutationFn: async (currentIds: string[]) => {
+    mutationFn: async ({
+      currentIds,
+      depth,
+    }: {
+      currentIds: string[];
+      depth: number;
+    }) => {
       const tasks = await getConcepts({
         userId: userId,
         deckId: deckId,
         questionQueues: currentIds,
+        depth,
       });
 
       if (!tasks || tasks.length === 0) return;

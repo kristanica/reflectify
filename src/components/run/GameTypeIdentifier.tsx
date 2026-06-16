@@ -2,6 +2,7 @@ import { JSX } from "react/jsx-runtime";
 import MultipleChoice from "./gamemode/MultipleChoice";
 import { QuestionType } from "@/generated/prisma/enums";
 import TrueOrFalse from "./gamemode/TrueOrFalse";
+import Identification from "./gamemode/Identification";
 
 type GameTypeIdentifierType = {
   choices: string[];
@@ -20,6 +21,7 @@ const GameTypeIdentifier = ({
       <MultipleChoice choices={choices} answer={answer}></MultipleChoice>
     ),
     TRUE_OR_FALSE: <TrueOrFalse answer={answer}></TrueOrFalse>,
+    IDENTIFICATION: <Identification></Identification>,
   };
 
   return board[type] || null;
