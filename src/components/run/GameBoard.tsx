@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import InitialLoading from "./InitialLoading";
 import { AnimatePresence, motion } from "motion/react";
@@ -10,7 +10,8 @@ import { useGameEngineStore } from "@/store/useGameEngineStore";
 import { ratio } from "fuzzball";
 
 import Lives from "./Lives";
-import { redirect } from "next/navigation";
+
+import GameOver from "./GameOver";
 
 export default function GameBoard({ deckId, userId }: GameBoardType) {
   const selectedAnswer = useGameEngineStore((state) => state.selectedAnswer);
@@ -20,6 +21,14 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
   const depth = useGameEngineStore((state) => state.questionsAnswered);
   const decrementLives = useGameEngineStore((state) => state.decrementLives);
   const lives = useGameEngineStore((state) => state.lives);
+  const plusStreak = useGameEngineStore((state) => state.plusStreak);
+  const streak = useGameEngineStore((state) => state.streak);
+  const score = useGameEngineStore((state) => state.score);
+  const resetStreak = useGameEngineStore((state) => state.resetStreak);
+  const setScore = useGameEngineStore((state) => state.setScore);
+  const setSelectedAnswer = useGameEngineStore(
+    (state) => state.setSelectedAnswer,
+  );
 
   const setQuestionQueues = useGameEngineStore(
     (state) => state.setQuestionQueues,
@@ -43,6 +52,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
 
   const answerQuestion = async () => {
     setHasAnswered(true);
+    setSelectedAnswer("");
     let isCorrect = selectedAnswer === questionQueues[0].answer;
 
     if (questionQueues[0].type === "IDENTIFICATION") {
@@ -57,6 +67,11 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
 
     if (!isCorrect) {
       decrementLives();
+      setScore(-50);
+      resetStreak();
+    } else {
+      plusStreak();
+      setScore(100);
     }
   };
 
@@ -74,73 +89,15 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
   ]);
 
   if (lives <= 0) {
-    return (
-      <div className="text-gray-400 h-full flex flex-1  flex-col items-center justify-center">
-        <div className="flex flex-col items-center justify-center h-full w-full max-w-2xl mx-auto text-center px-4">
-          <motion.div
-            // A slick cinematic fade-in from a slight blur
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="w-full flex flex-col items-center"
-          >
-            {/* --- HEADER --- */}
-            <p className="text-red-500/80 font-mono tracking-[0.5em] text-xs mb-3 uppercase animate-pulse">
-              Fatal Error
-            </p>
-            <h1 className="text-4xl md:text-5xl  font-bold text-red-600 tracking-widest uppercase">
-              Run Terminated
-            </h1>
-            <div className="border border-red-900/30 my-5 bg-zinc-950/80 p-8 rounded-sm mb-10 w-full max-w-md text-left relative overflow-hidden shadow-[0_0_30px_rgba(220,38,38,0.05)]">
-              <div className="absolute inset-0  pointer-events-none opacity-30"></div>
+    return <GameOver></GameOver>;
+  }
 
-              <div className="relative z-10 flex flex-col gap-5">
-                <div className="flex justify-between items-center border-b border-zinc-900 pb-3">
-                  <span className="text-zinc-500 font-mono text-xs tracking-widest uppercase">
-                    Depth Reached
-                  </span>
-                  <span className="text-amber-500 font-mono text-lg">
-                    {depth}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center border-b border-zinc-900 pb-3">
-                  <span className="text-zinc-500 font-mono text-xs tracking-widest uppercase">
-                    System Status
-                  </span>
-                  <span className="text-red-500 font-mono text-sm uppercase tracking-widest">
-                    Offline
-                  </span>
-                </div>
-                {/* Diagnostic Message */}
-                <div className="flex justify-between items-start pt-2">
-                  <span className="text-zinc-500 font-mono text-[10px] tracking-widest uppercase mt-1">
-                    Diagnostic
-                  </span>
-                  <span className="text-zinc-400 font-mono text-xs text-right max-w-50 leading-relaxed">
-                    Insufficient knowledge parameters detected. Core memory
-                    override failed.
-                  </span>
-                </div>
-              </div>
-            </div>
-            {/* --- ACTION BUTTONS --- */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md">
-              <button
-                onClick={() => redirect("/decks")}
-                className="w-full py-3 px-8 border border-zinc-700 text-zinc-300 hover:bg-amber-600 hover:text-white transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase rounded-sm"
-              >
-                Return to Base
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    );
+  if (lives <= 0) {
+    return <GameOver></GameOver>;
   }
 
   return (
-    <div className="text-gray-400 h-full flex flex-1  flex-col items-center justify-center">
+    <div className="text-gray-400 h-full flex flex-1 flex-col items-center justify-center">
       <AnimatePresence mode="wait">
         {questionQueues.length === 0 &&
         (isFetchingQuestion || isFetchingIdle) ? (
@@ -157,10 +114,55 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="flex flex-col flex-1 relative  min-w-3xl  items-center justify-center"
+            className="flex flex-col flex-1 relative min-w-3xl w-full max-w-3xl items-center justify-center"
           >
-            <Lives></Lives>
-            <div className="w-full max-w-3xl border-b border-zinc-800 pb-4 mb-6">
+            {/* 🚨 THE NEW TACTICAL HUD 🚨 */}
+            <div className="w-full flex justify-between items-end border-b border-zinc-800 pb-4 mb-6">
+              {/* Left Side: Lives */}
+              <Lives></Lives>
+
+              {/* Right Side: Score & Streak */}
+              <div className="flex items-end gap-6">
+                {/* Dynamic Combo Meter (Only shows if Streak > 1) */}
+                <AnimatePresence>
+                  {streak > 1 && (
+                    <motion.div
+                      key="combo-meter"
+                      initial={{ opacity: 0, scale: 0.8, x: 20 }}
+                      animate={{ opacity: 1, scale: 1, x: 0 }}
+                      exit={{
+                        opacity: 0,
+                        scale: 0.5,
+                        y: 10,
+                        filter: "blur(5px)",
+                      }} // Shatter effect!
+                      className="flex items-center gap-2 bg-amber-500/10 px-3 py-1 border border-amber-500/30 rounded-sm"
+                    >
+                      <span className="text-amber-500 font-mono text-[10px] tracking-[0.2em] uppercase animate-pulse">
+                        Combo
+                      </span>
+                      <span className="text-amber-400 font-bold font-mono text-sm">
+                        x{streak}
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Score Display */}
+                <div className="flex flex-col items-end">
+                  <span className="text-[10px] tracking-widest text-zinc-500 font-mono uppercase mb-1">
+                    Data Sync
+                  </span>
+                  <span className="text-cyan-400 font-mono text-xl tracking-widest leading-none">
+                    {/* Pads the score with zeroes: 150 -> 00150 */}
+                    {score.toString().padStart(5, "0")}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* 🚨 END TACTICAL HUD 🚨 */}
+
+            <div className="w-full max-w-3xl mb-6">
               <p className="text-[10px] tracking-widest text-amber-600 mb-2 font-mono">
                 QUESTION
               </p>
@@ -168,11 +170,13 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
                 {questionQueues[0].question}
               </p>
             </div>
+
             <GameTypeIdentifier
               choices={questionQueues[0].options as string[]}
               answer={questionQueues[0].answer}
               type={questionQueues[0].type}
             ></GameTypeIdentifier>
+
             <AnimatePresence mode="wait">
               {hasAnswered && (
                 <motion.div
@@ -180,7 +184,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="w-full max-w-3xl mt-6 p-4 border border-zinc-800 bg-zinc-950/50 rounded-sm"
+                  className="w-full max-w-3xl mt-6 p-4 border border-zinc-800 bg-zinc-950/50 rounded-sm overflow-hidden"
                 >
                   <p className="text-[10px] tracking-widest text-zinc-500 mb-2 font-mono uppercase">
                     System Analysis
@@ -191,11 +195,12 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
                 </motion.div>
               )}
             </AnimatePresence>
+
             {hasAnswered ? (
               <button
                 disabled={!hasAnswered}
                 onClick={() => handleNextQuestion()}
-                className="self-end py-2.5 px-8 mt-6 border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm "
+                className="self-end py-2.5 px-8 mt-6 border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
               >
                 NEXT
               </button>
@@ -203,7 +208,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
               <button
                 disabled={!selectedAnswer}
                 onClick={answerQuestion}
-                className="self-end py-2.5 px-8 mt-6 border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm "
+                className="self-end py-2.5 px-8 mt-6 border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
               >
                 ANSWER
               </button>
@@ -211,8 +216,6 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <AnimatePresence></AnimatePresence>
     </div>
   );
 }

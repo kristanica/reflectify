@@ -31,7 +31,6 @@ model User {
   purchases     Purchase[]
   accounts      Account[]
   sessions      Session[]
-  conceptMasteries ConceptMasteries[]
 }
 
 
@@ -60,23 +59,8 @@ model Concept{
   updatedAt DateTime @updatedAt
   deck Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
 
-  conceptMasteries ConceptMasteries[]
 }
-model ConceptMasteries{
-  id String @id  @default(cuid())
-  userId String
-  conceptId String
-  level Int @default(1)
-  timesCorrect Int @default(0)
-  timesWrong Int @default(0)
 
-  @@unique([userId, conceptId])
-
-
-  concept Concept @relation(fields: [conceptId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-}
 
 
 
@@ -137,14 +121,14 @@ model GameSession {
   id String @id @default(cuid())
   userId String 
   deckId String
-  livesStart Int @default(3)
+
 
 
   startedAt DateTime @default(now())
   endedAt DateTime?
 
 
-  livesEnd Int @default(3)
+
   score Int @default(0)
   xpEarned Int @default(0)
   currencyEarned Int @default(0)
