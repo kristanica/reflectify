@@ -17,17 +17,29 @@ const Lives = () => {
         </span>
         <div className="flex flex-row gap-1">
           <AnimatePresence>
-            {Array.from({ length: lives }).map((_, index) => (
-              <motion.div
-                key={index}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 1, opacity: 50, scaleX: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <HeartIcon className="fill-red-700 stroke-none" />
-              </motion.div>
-            ))}
+            {Array.from({ length: 3 }).map((_, index) => {
+              // Check if this heart slot is still active
+              const isAlive = index < lives;
+              return (
+                <motion.div
+                  key={index}
+                  // When you lose a life, the heart physically shrinks and fades slightly!
+                  animate={{
+                    scale: isAlive ? 1 : 0.8,
+                    opacity: isAlive ? 1 : 0.4,
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <HeartIcon
+                    className={`transition-colors duration-300 ${
+                      isAlive
+                        ? "fill-red-700 stroke-red-700 drop-shadow-[0_0_8px_rgba(185,28,28,0.5)]"
+                        : "fill-transparent stroke-zinc-600"
+                    }`}
+                  />
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
       </div>

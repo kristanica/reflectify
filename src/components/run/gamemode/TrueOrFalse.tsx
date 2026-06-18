@@ -13,7 +13,7 @@ const TrueOrFalse = ({ answer }: TrueOrFalseType) => {
   const hasAnswered = useGameEngineStore((state) => state.hasAnswered);
 
   return (
-    <div className="grid grid-cols-2 gap-2 w-full max-w-3xl">
+    <div className="grid grid-cols-2 gap-2 w-full ">
       {["True", "False"].map((option, i) => {
         let optionStyle =
           "border-zinc-800 text-gray-300 hover:border-amber-600 hover:bg-amber-600/5";

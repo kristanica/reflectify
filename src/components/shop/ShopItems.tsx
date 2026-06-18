@@ -98,12 +98,12 @@ export default function ShopItems() {
                   onClick={() => buyItem(item)}
                   disabled={!canAfford}
                   className={`px-3 py-1.5 border text-[10px] font-bold transition-all ${
-                    canAfford
+                    !canAfford
                       ? "border-[#f0a500] text-[#f0a500] hover:bg-[#f0a500] hover:text-black cursor-pointer"
                       : "border-zinc-800 text-zinc-650 cursor-not-allowed"
                   }`}
                 >
-                  {canAfford ? "PURCHASE" : "LACK COINS"}
+                  {!canAfford ? "PURCHASE" : "LACK COINS"}
                 </button>
               </div>
             </div>

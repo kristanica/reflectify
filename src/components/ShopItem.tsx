@@ -1,8 +1,14 @@
 import React from "react";
 
-const ShopItem = ({ id, name, description, cost, icon }: ShopItem) => {
-  const canAfford = true;
-
+const ShopItem = ({
+  id,
+  name,
+  description,
+  cost,
+  icon,
+  onPurchase,
+  canAfford,
+}: ShopItem & { onPurchase: () => void; canAfford: boolean }) => {
   return (
     <div
       key={id}
@@ -27,13 +33,14 @@ const ShopItem = ({ id, name, description, cost, icon }: ShopItem) => {
         <span className="text-[#f0a500] font-bold">🪙 {cost} GP</span>
 
         <button
+          onClick={onPurchase}
           className={`px-3 py-1.5 border text-[10px] font-bold transition-all ${
-            canAfford
+            !canAfford
               ? "border-[#f0a500] text-[#f0a500] hover:bg-[#f0a500] hover:text-black cursor-pointer"
               : "border-zinc-800 text-zinc-650 cursor-not-allowed"
           }`}
         >
-          {canAfford ? "PURCHASE" : "LACK COINS"}
+          {!canAfford ? "PURCHASE" : "LACK COINS"}
         </button>
       </div>
     </div>

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 import InitialLoading from "./InitialLoading";
-import { AnimatePresence, motion } from "motion/react";
+import { animate, AnimatePresence, motion, scale } from "motion/react";
 import useGenerateQuestions from "@/hooks/useGenerateQuestions";
 import GameTypeIdentifier from "./GameTypeIdentifier";
 import { useGameEngineStore } from "@/store/useGameEngineStore";
@@ -13,9 +13,8 @@ import Lives from "./Lives";
 
 import GameOver from "./GameOver";
 import Score from "./Score";
-import { Book, Heart } from "lucide-react";
-import Shop from "./shop/BlackMarket";
 import BlackMarket from "./shop/BlackMarket";
+import Explanation from "@/components/run/Explanation";
 
 export default function GameBoard({ deckId, userId }: GameBoardType) {
   const selectedAnswer = useGameEngineStore((state) => state.selectedAnswer);
@@ -26,13 +25,20 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
   const decrementLives = useGameEngineStore((state) => state.decrementLives);
   const lives = useGameEngineStore((state) => state.lives);
   const plusStreak = useGameEngineStore((state) => state.plusStreak);
-  const streak = useGameEngineStore((state) => state.streak);
-  const score = useGameEngineStore((state) => state.score);
+  const setCredits = useGameEngineStore((state) => state.setCredits);
   const resetStreak = useGameEngineStore((state) => state.resetStreak);
   const setScore = useGameEngineStore((state) => state.setScore);
   const setSelectedAnswer = useGameEngineStore(
     (state) => state.setSelectedAnswer,
   );
+
+  const consumables = useGameEngineStore((state) => state.consumables);
+
+  const streak = useGameEngineStore((state) => state.streak);
+  const isShopOpen = useGameEngineStore((state) => state.isShopOpen);
+  const openShop = useGameEngineStore((state) => state.openShop);
+  const lastShopDepth = useGameEngineStore((state) => state.lastOpenedShop);
+  const jokers = useGameEngineStore((state) => state.jokers);
 
   const setQuestionQueues = useGameEngineStore(
     (state) => state.setQuestionQueues,
@@ -54,7 +60,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     },
   });
 
-  const answerQuestion = async () => {
+  const answerQuestion = () => {
     setHasAnswered(true);
     setSelectedAnswer("");
     let isCorrect = selectedAnswer === questionQueues[0].answer;
@@ -76,6 +82,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     } else {
       plusStreak();
       setScore(100);
+      setCredits(Math.round(4 * ((streak || 1) * 0.5)));
     }
   };
 
@@ -91,6 +98,12 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     fetchMoreQuestion,
     depth,
   ]);
+
+  useEffect(() => {
+    if (depth > 0 && depth % 10 === 0 && lastShopDepth !== depth) {
+      openShop();
+    }
+  }, [depth, lastShopDepth, openShop]);
 
   if (lives <= 0) {
     return <GameOver></GameOver>;
@@ -109,10 +122,9 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     );
   }
 
-  // if (questionQueues.length % 10 === 0) {
-  //   return <BlackMarket></BlackMarket>;
-  // }
-
+  if (isShopOpen) {
+    return <BlackMarket />;
+  }
   return (
     <div className="text-gray-400 h-full flex  flex-1 flex-col items-center ">
       <AnimatePresence mode="wait">
@@ -121,24 +133,23 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -15 }}
-          className="flex flex-col flex-1 relative min-w-3xl w-full max-w-3xl items-center justify-evenly"
+          className="flex flex-col flex-1 relative w-full max-w-4xl items-center justify-evenly"
         >
           <div className="w-full flex justify-between items-end  pb-4 mb-6 flex-1">
-            {/* Left Side: Lives */}
             <Lives></Lives>
 
             <Score></Score>
           </div>
 
           <div className="w-full flex-2">
-            <div className="w-full max-w-3xl mb-6 ">
+            <div className="w-full  mb-6 ">
               <div className="pb-3 my-2 border-b border-zinc-400 flex  items-center justify-between">
                 <div className="flex flex-row gap-2  items-center justify-center ">
-                  <Book />
-                  <Heart />
-                  <Heart />
-                  <Heart />
-                  <Heart />
+                  {jokers.map((joker) => (
+                    <p key={joker.id} className="text-3xl">
+                      {joker.icon}
+                    </p>
+                  ))}
                 </div>
 
                 {hasAnswered ? (
@@ -178,46 +189,26 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
 
             <AnimatePresence mode="wait">
               {hasAnswered && (
-                <motion.div
-                  key="answer"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="w-full max-w-3xl mt-6 p-4 border border-zinc-800 bg-zinc-950/50 rounded-sm overflow-hidden"
-                >
-                  <p className="text-[10px] tracking-widest text-zinc-500 mb-2 font-mono uppercase">
-                    System Analysis
-                  </p>
-                  <p className="text-zinc-300 font-mono text-xs leading-relaxed">
-                    {questionQueues[0].explanation}
-                  </p>
-                </motion.div>
+                <Explanation
+                  explanation={questionQueues[0].explanation}
+                ></Explanation>
               )}
             </AnimatePresence>
           </div>
 
           <div className="w-full border flex items-center justify-center flex-[.5] ">
-            asd
+            {consumables.map((consume) => (
+              <motion.button
+                key={consume.id}
+                onClick={() => console.log(consume.name)}
+                className="text-3xl"
+              >
+                {consume.icon}
+              </motion.button>
+            ))}
           </div>
         </motion.div>
       </AnimatePresence>
     </div>
   );
-}
-
-{
-  /* <Button
-            onClick={() => {
-              console.log(
-                "----",
-                questionQueues[0],
-                "Has been slicced!",
-                questionQueues.length,
-                "----",
-              );
-              setQuestionQueues((prev) => prev.slice(1));
-            }}
-          >
-            Answer & Nexxt
-          </Button> */
 }

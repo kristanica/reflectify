@@ -1,3 +1,4 @@
+import PixelBackground from "@/components/background/PixelBackground";
 import Navigation from "@/components/user/Navigation";
 import React, { ReactNode } from "react";
 
@@ -8,7 +9,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         {/* <PixelBackground></PixelBackground> */}
       </div>
 
-      <main className="relative z-99  h-screen w-full md:w-3xl lg:w-5xl flex flex-col bg-black mx-auto border-l border-r ">
+      <main className="relative z-99  h-screen w-full md:w-3xl lg:w-6xl flex flex-col bg-black m-auto border-l border-r ">
         <Navigation></Navigation>
         <div className="flex  flex-1">{children}</div>
       </main>

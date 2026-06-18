@@ -1,56 +1,3 @@
-export const AUGMENT_DATABASE = [
-  {
-    id: "j_parasite",
-    name: "Data Parasite",
-    description:
-      "Your first correct answer in a sector deals +2 Damage to the ICE. It feeds on their structural weakness.",
-    cost: 45,
-    icon: "🦠",
-    effectType: "BONUS_DAMAGE",
-    value: 2,
-  },
-  {
-    id: "j_blood_pact",
-    name: "Blood Pact Algorithm",
-    description:
-      "True/False questions grant +15 Credits. A heavy purse, but it demands absolute perfection.",
-    cost: 60,
-    icon: "🩸",
-    effectType: "BONUS_CREDITS",
-    value: 15,
-  },
-  {
-    id: "j_martyr",
-    name: "Martyr's Protocol",
-    description:
-      "Absorbs 1 fatal error that would otherwise kill you. The script burns itself out to save your rig. Breaks after use.",
-    cost: 100,
-    icon: "🫀",
-    effectType: "SHIELD",
-    value: 1,
-  },
-  {
-    id: "j_whisper",
-    name: "Whisper in the Wire",
-    description:
-      "Every correct answer grants +5 Credits. It listens to your keystrokes and rewards your silence.",
-    cost: 50,
-    icon: "🕸️",
-    effectType: "BONUS_CREDITS",
-    value: 5,
-  },
-  {
-    id: "j_executioner",
-    name: "The Executioner",
-    description:
-      "If the Boss is below 2 HP, your next correct answer deals double damage. Finish them.",
-    cost: 120,
-    icon: "⚔️",
-    effectType: "BONUS_DAMAGE",
-    value: 1,
-  },
-];
-
 export const CONSUMABLE_DATABASE = [
   {
     id: "c_scalpel",
@@ -78,5 +25,85 @@ export const CONSUMABLE_DATABASE = [
     cost: 40,
     icon: "👁️",
     action: "REVEAL_EXPLANATION",
+  },
+];
+
+export const AUGMENTS: ShopItem[] = [
+  {
+    id: "aug_metronome",
+    name: "The Metronome",
+    description:
+      "Answering correctly in under 3 seconds grants +20 Credits. Taking longer than 10 seconds deducts -5 Credits.",
+    cost: 150,
+    icon: "⏱️",
+    type: "PASSIVE",
+    effect: "SPEED_PAYOUT",
+    value: 20,
+  },
+  {
+    id: "aug_sandbox",
+    name: "The Sandbox",
+    description:
+      "Sets Lives to 1. Defeat the next Boss without taking damage to permanently increase MAX Lives by +2.",
+    cost: 250,
+    icon: "📦",
+    type: "PASSIVE",
+    effect: "RISK_MAX_LIVES",
+    value: 2,
+  },
+  {
+    id: "aug_dictionary",
+    name: "The Dictionary Attack",
+    description:
+      "ANSWER button is disabled. Clicking an option instantly submits it. Every correct answer gives +5 bonus Credits.",
+    cost: 100,
+    icon: "📖",
+    type: "PASSIVE",
+    effect: "INSTANT_SUBMIT_PAYOUT",
+    value: 5,
+  },
+  {
+    id: "aug_rubber_band",
+    name: "The Rubber Band",
+    description:
+      "If you are currently at exactly 1 Life, all Credit payouts from all sources are Quadrupled.",
+    cost: 175,
+    icon: "🎗️",
+    type: "PASSIVE",
+    effect: "ADRENALINE_MULTIPLIER",
+    value: 4,
+  },
+  {
+    id: "aug_scapegoat",
+    name: "The Scapegoat",
+    description:
+      "Absorbs a fatal error when at 1 Life, instantly healing you to full Lives before permanently deleting itself.",
+    cost: 300,
+    icon: "🐐",
+    type: "PASSIVE",
+    effect: "FATAL_OVERRIDE",
+    value: 3, // Amount of lives it restores
+  },
+  {
+    id: "aug_crammer",
+    name: "Crammer's Algorithm",
+    description:
+      "True/False questions grant double Credits, but getting a Multiple Choice question wrong deals 2 Damage.",
+    cost: 125,
+    icon: "🧠",
+    type: "PASSIVE",
+    effect: "TF_MULTIPLIER",
+    value: 2,
+  },
+  {
+    id: "aug_synthesizer",
+    name: "The Synthesizer",
+    description:
+      "Every time you lose a Life, the system instantly generates a random Hack (Consumable) in one of your empty slots.",
+    cost: 200,
+    icon: "🧪",
+    type: "PASSIVE",
+    effect: "DAMAGE_SYNTHESIS",
+    value: 1,
   },
 ];
