@@ -1,4 +1,3 @@
-import PixelBackground from "@/components/background/PixelBackground";
 import Navigation from "@/components/user/Navigation";
 import React, { ReactNode } from "react";
 

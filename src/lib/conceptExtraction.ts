@@ -22,7 +22,7 @@ export default async function conceptExtraction(
   const activePrompt = isTopic ? topicPrompt : documentPrompt;
 
   const { output } = await generateText({
-    model: openai("gpt-4o-mini"),
+    model: openai("gpt-5-nano"),
     output: Output.object({
       schema: z.object({
         concepts: array(string()).describe(

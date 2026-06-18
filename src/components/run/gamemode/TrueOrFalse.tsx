@@ -1,6 +1,6 @@
 import { useGameEngineStore } from "@/store/useGameEngineStore";
-import React from "react";
 
+import { motion } from "motion/react";
 type TrueOrFalseType = {
   answer: string;
 };
@@ -36,9 +36,8 @@ const TrueOrFalse = ({ answer }: TrueOrFalseType) => {
         return (
           <button
             onClick={() => setSelectedAnswer(option)}
-            disabled={hasAnswered}
             key={i}
-            className={`relative border rounded-sm p-4 min-h-20 flex items-center justify-center font-mono text-sm tracking-widest transition-all duration-150 ${optionStyle} ${!hasAnswered ? "cursor-pointer" : "cursor-default"}`}
+            className={`relative border rounded-sm text-left p-4 pl-8 min-h-20 flex items-center font-mono text-xs leading-relaxed transition-colors duration-150 ${optionStyle} ${!hasAnswered ? "cursor-pointer" : "cursor-default"}`}
           >
             {option.toUpperCase()}
           </button>

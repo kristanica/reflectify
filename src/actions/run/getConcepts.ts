@@ -1,6 +1,5 @@
 "use server";
 
-import { QuestionType } from "@/generated/prisma/enums";
 import prisma from "@/lib/prisma";
 
 type GetConceptsType = {
@@ -13,25 +12,36 @@ type GetConceptsType = {
 export type ConceptMasteries = {
   conceptId: string;
   content: string;
-  format: QuestionType;
+  format: "MULTIPLE_CHOICE" | "TRUE_OR_FALSE";
+  level: number;
+  optionCount: number;
 }[];
 
-const getLevel = (depth: number) => {
-  if (depth < 5) return 1;
-  if (depth < 15) return 2;
-  if (depth < 25) return 3;
-  return 4;
-};
-const getRandomFormat = () => {
-  const formats = ["TRUE_OR_FALSE", "MULTIPLE_CHOICE", "IDENTIFICATION"];
+const getDifficultyParams = (depth: number) => {
+  // 1. Pick a random format to keep the game varied!
+  const formats = ["TRUE_OR_FALSE", "MULTIPLE_CHOICE"] as const;
+  const format = formats[Math.floor(Math.random() * formats.length)];
 
-  // Pick a random format from the array
-  const randomIndex = Math.floor(Math.random() * formats.length);
-  return formats[randomIndex] as QuestionType;
+  let level = 1;
+  let optionCount = 2;
+  if (depth < 5) {
+    level = 1;
+    if (format === "MULTIPLE_CHOICE") optionCount = 4;
+  } else if (depth < 15) {
+    level = 2;
+    if (format === "MULTIPLE_CHOICE") optionCount = 4;
+  } else if (depth < 25) {
+    level = 3;
+    if (format === "MULTIPLE_CHOICE") optionCount = 5;
+  } else {
+    level = 4;
+    if (format === "MULTIPLE_CHOICE") optionCount = 6;
+  }
+
+  return { format, level, optionCount };
 };
 
 export default async function getConcepts({
-  userId,
   deckId,
   questionQueues,
   depth,
@@ -45,14 +55,19 @@ export default async function getConcepts({
     },
     take: 10,
   });
-  const currentLevel = getLevel(depth);
 
   const conceptMasteries = pendingMasteries.map((mastery) => {
+    // Calculate difficulty for THIS specific question
+    const params = getDifficultyParams(depth);
+
+    console.log(params.optionCount);
+
     return {
       conceptId: mastery.id,
       content: mastery.concept,
-      level: currentLevel,
-      format: getRandomFormat(),
+      format: params.format,
+      level: params.level,
+      optionCount: params.optionCount,
     };
   });
 

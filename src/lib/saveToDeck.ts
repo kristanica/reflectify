@@ -31,18 +31,10 @@ async function saveToDeck({
       },
     });
     // Save extracted concepts
-    const concepts = await tx.concept.createManyAndReturn({
+    await tx.concept.createManyAndReturn({
       data: generatedConcepts.map((concept) => ({
         concept: concept,
         deckId: deck.id,
-      })),
-    });
-    // Generate masteries
-    await tx.conceptMasteries.createMany({
-      data: concepts.map((concept) => ({
-        userId: userId,
-        conceptId: concept.id,
-        level: 2,
       })),
     });
     return deck;

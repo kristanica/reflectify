@@ -4,7 +4,7 @@ type GameBoardType = {
 };
 type GeneratedQuestion = {
   conceptId: string;
-  type: QuestionType;
+  type: string;
   question: string;
   options: (string | undefined)[];
   answer: string;

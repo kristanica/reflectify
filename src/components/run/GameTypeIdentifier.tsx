@@ -1,6 +1,5 @@
 import { JSX } from "react/jsx-runtime";
 import MultipleChoice from "./gamemode/MultipleChoice";
-import { QuestionType } from "@/generated/prisma/enums";
 import TrueOrFalse from "./gamemode/TrueOrFalse";
 import Identification from "./gamemode/Identification";
 
@@ -8,7 +7,7 @@ type GameTypeIdentifierType = {
   choices: string[];
   answer: string;
 
-  type: QuestionType;
+  type: string;
 };
 
 const GameTypeIdentifier = ({
