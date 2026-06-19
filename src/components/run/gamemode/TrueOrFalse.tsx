@@ -15,29 +15,27 @@ const TrueOrFalse = ({ answer }: TrueOrFalseType) => {
   return (
     <div className="grid grid-cols-2 gap-2 w-full ">
       {["True", "False"].map((option, i) => {
+        const isSelected = selectedAnswer === option;
+        const isCorrectChoice = option === answer;
         let optionStyle =
           "border-zinc-800 text-gray-300 hover:border-amber-600 hover:bg-amber-600/5";
 
-        if (!hasAnswered) {
-          if (selectedAnswer === option) {
-            optionStyle = "border-amber-600 bg-amber-600/5 text-amber-500";
-          }
-        } else {
-          const isCorrectPick = option === answer;
-          const isWrongPick = selectedAnswer === option && !isCorrectPick;
-          if (isCorrectPick) {
-            optionStyle = "border-green-500 bg-green-500/10 text-green-400";
-          } else if (isWrongPick) {
-            optionStyle = "border-red-500 bg-red-500/10 text-red-400";
+        if (hasAnswered) {
+          if (isCorrectChoice) {
+          } else if (isSelected && !isCorrectChoice) {
+            optionStyle = "border-red-500 bg-red-500/10 text-red-500";
           } else {
-            optionStyle = "border-zinc-800 text-gray-500 opacity-30";
+            optionStyle = "border-zinc-900 text-zinc-700 opacity-50";
           }
+        } else if (isSelected) {
+          optionStyle =
+            "border-amber-500 bg-amber-500/10 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.2)]";
         }
         return (
           <button
             onClick={() => setSelectedAnswer(option)}
             key={i}
-            className={`relative border rounded-sm text-left p-4 pl-8 min-h-20 flex items-center font-mono text-xs leading-relaxed transition-colors duration-150 ${optionStyle} ${!hasAnswered ? "cursor-pointer" : "cursor-default"}`}
+            className={`w-full text-left p-5 border rounded-sm font-mono text-sm transition-all duration-300 ${optionStyle}`}
           >
             {option.toUpperCase()}
           </button>

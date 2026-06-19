@@ -1,5 +1,5 @@
-// removed unused/incorrect import
 import { CONSUMABLE_DATABASE } from "@/lib/mockData";
+import { Target } from "lucide-react";
 import { create } from "zustand";
 
 type State = {
@@ -13,8 +13,10 @@ type State = {
   maxStreak: number;
   score: number;
   credits: number;
+  is5050Active: boolean;
 
   jokers: ShopItem[];
+
   consumables: (ShopItem & { quantity: number })[];
   isShopOpen: boolean;
 
@@ -23,15 +25,11 @@ type State = {
 type Action = {
   setSelectedAnswer: (val: string) => void;
   setHasAnswered: (val: boolean) => void;
-
   setQuestionQueues: (newQuestions: GeneratedQuestion[]) => void;
-
   handleNextQuestion: () => void;
-
   incrementLives: () => void;
   decrementLives: () => void;
   resetLives: () => void;
-
   plusStreak: () => void;
   resetStreak: () => void;
   setScore: (val: number) => void;
@@ -41,8 +39,8 @@ type Action = {
   buyConsumable: (val: ShopItem) => void;
   openShop: () => void;
   closeShop: () => void;
-
   submitAnswer: (timeElapsedInSecond: number) => void;
+  useConsumable: (consumableId: string) => void;
 };
 
 export const useGameEngineStore = create<State & Action>((set) => ({
@@ -60,8 +58,91 @@ export const useGameEngineStore = create<State & Action>((set) => ({
   consumables: [],
   isShopOpen: false,
   lastOpenedShop: 0,
+  is5050Active: false,
 
   // Actions
+
+  useConsumable: (consumableId) =>
+    set((state) => {
+      const consumables = state.consumables;
+      const itemIndex = consumables.findIndex((c) => c.id === consumableId);
+
+      if (itemIndex === -1) return state;
+
+      const targetConsumable = consumables[itemIndex];
+
+      if (targetConsumable.effect === "SKIP_QUESTION") {
+        return {
+          questionQueues: state.questionQueues.slice(1),
+          questionsAnswered: state.questionsAnswered + 1,
+          streak: state.streak + 1,
+          score: state.score + 100,
+          is5050Active: false,
+          hasAnswered: false,
+          selectedAnswer: "",
+          consumables: state.consumables
+            .map((item, index) =>
+              index === itemIndex
+                ? { ...item, quantity: (item.quantity || 1) - 1 }
+                : item,
+            )
+            .filter((item) => (item.quantity || 0) > 0),
+        };
+      }
+
+      if (targetConsumable.quantity && targetConsumable.quantity <= 0)
+        return state;
+      let newLives = state.lives;
+      let newCredits = state.credits;
+      let newStreak = state.streak;
+      let isNew5050Active = state.is5050Active;
+
+      switch (targetConsumable.effect) {
+        case "FIFTY_FIFTY": {
+          isNew5050Active = true;
+          break;
+        }
+        case "SIPHON_STREAK": {
+          if (state.streak > 0) {
+            newCredits = state.credits + state.streak * targetConsumable.value;
+            newStreak = 0;
+            break;
+          }
+        }
+        case "RANSOMWARE": {
+          newCredits = Math.floor(newCredits * 0.6);
+          newLives = 3;
+          break;
+        }
+
+        case "MEMORY_LEAK": {
+          const gain = Math.min(state.credits, targetConsumable.value);
+          newCredits = state.credits + gain;
+          break;
+        }
+
+        default: {
+          return state;
+        }
+      }
+
+      const updatedConsumables = state.consumables
+        .map((item, index) =>
+          index === itemIndex
+            ? { ...item, quantity: (item.quantity || 1) - 1 }
+            : item,
+        )
+        .filter((item) => item.quantity || 0 > 0);
+
+      return {
+        lives: newLives,
+        credits: newCredits,
+        consumables: updatedConsumables,
+        streak: newStreak,
+        is5050Active: isNew5050Active,
+      };
+    }),
+
   openShop: () =>
     set((state) => {
       return {
@@ -80,6 +161,7 @@ export const useGameEngineStore = create<State & Action>((set) => ({
       questionQueues: state.questionQueues.slice(1),
       selectedAnswer: undefined,
       hasAnswered: false,
+      is5050Active: false,
       questionsAnswered: state.questionsAnswered + 1,
     })),
 

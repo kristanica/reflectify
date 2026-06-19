@@ -14,6 +14,7 @@ import GameOver from "./GameOver";
 import Score from "./Score";
 import BlackMarket from "./shop/BlackMarket";
 import Explanation from "@/components/run/Explanation";
+import { toast } from "sonner";
 
 export default function GameBoard({ deckId, userId }: GameBoardType) {
   // gameStore
@@ -28,7 +29,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
   const submitAnswer = useGameEngineStore((state) => state.submitAnswer);
 
   const consumables = useGameEngineStore((state) => state.consumables);
-
+  const consumeItem = useGameEngineStore((state) => state.useConsumable);
   const isShopOpen = useGameEngineStore((state) => state.isShopOpen);
   const openShop = useGameEngineStore((state) => state.openShop);
   const lastShopDepth = useGameEngineStore((state) => state.lastOpenedShop);
@@ -40,6 +41,13 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
 
   const handleNextQuestion = useGameEngineStore(
     (state) => state.handleNextQuestion,
+  );
+
+  const handleConsumable = useCallback(
+    (consumableId: string) => {
+      consumeItem(consumableId);
+    },
+    [consumeItem],
   );
 
   // Refs
@@ -147,7 +155,11 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
               <div className="pb-3 my-2 border-b border-zinc-400 flex  items-center justify-between">
                 <div className="flex flex-row gap-2  items-center justify-center ">
                   {jokers.map((joker) => (
-                    <p key={joker.id} className="text-3xl">
+                    <p
+                      key={joker.id}
+                      title={joker.description}
+                      className="text-3xl"
+                    >
                       {joker.icon}
                     </p>
                   ))}
@@ -203,7 +215,16 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
             {consumables.map((consume) => (
               <motion.button
                 key={consume.id}
-                onClick={() => console.log(consume.name)}
+                title={consume.description}
+                onClick={() => {
+                  toast.success(
+                    `${consume.icon} ${consume.name} has been used`,
+                    {
+                      position: "top-center",
+                    },
+                  );
+                  handleConsumable(consume.id);
+                }}
                 className="text-3xl"
               >
                 {consume.icon}
