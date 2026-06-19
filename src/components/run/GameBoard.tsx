@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import InitialLoading from "./InitialLoading";
-import { animate, AnimatePresence, motion, scale } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import useGenerateQuestions from "@/hooks/useGenerateQuestions";
 import GameTypeIdentifier from "./GameTypeIdentifier";
 import { useGameEngineStore } from "@/store/useGameEngineStore";
-import { ratio } from "fuzzball";
 
 import Lives from "./Lives";
 
@@ -17,24 +16,19 @@ import BlackMarket from "./shop/BlackMarket";
 import Explanation from "@/components/run/Explanation";
 
 export default function GameBoard({ deckId, userId }: GameBoardType) {
+  // gameStore
   const selectedAnswer = useGameEngineStore((state) => state.selectedAnswer);
   const hasAnswered = useGameEngineStore((state) => state.hasAnswered);
-  const setHasAnswered = useGameEngineStore((state) => state.setHasAnswered);
+
   const questionQueues = useGameEngineStore((state) => state.questionQueues);
   const depth = useGameEngineStore((state) => state.questionsAnswered);
-  const decrementLives = useGameEngineStore((state) => state.decrementLives);
+
   const lives = useGameEngineStore((state) => state.lives);
-  const plusStreak = useGameEngineStore((state) => state.plusStreak);
-  const setCredits = useGameEngineStore((state) => state.setCredits);
-  const resetStreak = useGameEngineStore((state) => state.resetStreak);
-  const setScore = useGameEngineStore((state) => state.setScore);
-  const setSelectedAnswer = useGameEngineStore(
-    (state) => state.setSelectedAnswer,
-  );
+
+  const submitAnswer = useGameEngineStore((state) => state.submitAnswer);
 
   const consumables = useGameEngineStore((state) => state.consumables);
 
-  const streak = useGameEngineStore((state) => state.streak);
   const isShopOpen = useGameEngineStore((state) => state.isShopOpen);
   const openShop = useGameEngineStore((state) => state.openShop);
   const lastShopDepth = useGameEngineStore((state) => state.lastOpenedShop);
@@ -46,6 +40,12 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
 
   const handleNextQuestion = useGameEngineStore(
     (state) => state.handleNextQuestion,
+  );
+
+  // Refs
+  const questionTimerStart = useRef<number | null>(null);
+  const hasDictionary = jokers.some(
+    (joker) => joker.effect === "INSTANT_SUBMIT_PAYOUT",
   );
 
   const {
@@ -60,32 +60,15 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     },
   });
 
-  const answerQuestion = () => {
-    setHasAnswered(true);
-    setSelectedAnswer("");
-    let isCorrect = selectedAnswer === questionQueues[0].answer;
+  const answerQuestion = useCallback(() => {
+    const timeElapsedInSecond = questionTimerStart.current
+      ? (Date.now() - questionTimerStart.current) / 1000
+      : 0;
 
-    if (questionQueues[0].type === "IDENTIFICATION") {
-      {
-        const cleanUserAnswer = selectedAnswer!.toLowerCase().trim();
-        const cleanAiAnswer = questionQueues[0].answer.toLowerCase().trim();
+    submitAnswer(timeElapsedInSecond);
+  }, [submitAnswer]);
 
-        const score = ratio(cleanUserAnswer, cleanAiAnswer);
-        isCorrect = score >= 85;
-      }
-    }
-
-    if (!isCorrect) {
-      decrementLives();
-      setScore(-50);
-      resetStreak();
-    } else {
-      plusStreak();
-      setScore(100);
-      setCredits(Math.round(4 * ((streak || 1) * 0.5)));
-    }
-  };
-
+  // Background fetching
   useEffect(() => {
     if (questionQueues.length < 10 && !isFetchingQuestion) {
       const conceptIds = questionQueues.map((concept) => concept.conceptId);
@@ -99,6 +82,24 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     depth,
   ]);
 
+  // Speed payout
+  useEffect(() => {
+    if (
+      questionTimerStart.current === null &&
+      questionQueues[0] &&
+      questionQueues[0].question
+    ) {
+      questionTimerStart.current = Date.now();
+    }
+  }, [questionQueues]);
+  // Dictionary attack
+  useEffect(() => {
+    if (hasDictionary && selectedAnswer && !hasAnswered) {
+      answerQuestion();
+    }
+  }, [answerQuestion, hasAnswered, hasDictionary, selectedAnswer]);
+
+  // Determines shop pop up
   useEffect(() => {
     if (depth > 0 && depth % 10 === 0 && lastShopDepth !== depth) {
       openShop();
@@ -161,13 +162,15 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
                     NEXT
                   </button>
                 ) : (
-                  <button
-                    disabled={!selectedAnswer}
-                    onClick={answerQuestion}
-                    className=" py-2.5 px-8  border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
-                  >
-                    ANSWER
-                  </button>
+                  !hasDictionary && (
+                    <button
+                      disabled={!selectedAnswer}
+                      onClick={answerQuestion}
+                      className=" py-2.5 px-8  border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
+                    >
+                      ANSWER
+                    </button>
+                  )
                 )}
               </div>
 

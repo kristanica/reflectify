@@ -66,12 +66,12 @@ export const AUGMENTS: ShopItem[] = [
     id: "aug_rubber_band",
     name: "The Rubber Band",
     description:
-      "If you are currently at exactly 1 Life, all Credit payouts from all sources are Quadrupled.",
+      "If you are currently at exactly 1 Life, all Credit payouts from all sources are doubled.",
     cost: 175,
     icon: "🎗️",
     type: "PASSIVE",
     effect: "ADRENALINE_MULTIPLIER",
-    value: 4,
+    value: 2,
   },
   {
     id: "aug_scapegoat",

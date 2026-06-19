@@ -1,4 +1,5 @@
 // removed unused/incorrect import
+import { CONSUMABLE_DATABASE } from "@/lib/mockData";
 import { create } from "zustand";
 
 type State = {
@@ -29,6 +30,7 @@ type Action = {
 
   incrementLives: () => void;
   decrementLives: () => void;
+  resetLives: () => void;
 
   plusStreak: () => void;
   resetStreak: () => void;
@@ -39,6 +41,8 @@ type Action = {
   buyConsumable: (val: ShopItem) => void;
   openShop: () => void;
   closeShop: () => void;
+
+  submitAnswer: (timeElapsedInSecond: number) => void;
 };
 
 export const useGameEngineStore = create<State & Action>((set) => ({
@@ -101,6 +105,10 @@ export const useGameEngineStore = create<State & Action>((set) => ({
 
   setCredits: (val) => set((state) => ({ credits: state.credits + val })),
   decrementLives: () => set((state) => ({ lives: state.lives - 1 })),
+  resetLives: () =>
+    set(() => ({
+      lives: 3,
+    })),
   resetGame: () =>
     set(() => ({
       questionQueues: [],
@@ -151,6 +159,111 @@ export const useGameEngineStore = create<State & Action>((set) => ({
           ...state.consumables,
           { ...val, quantity: 1 },
         ] as typeof state.consumables,
+      };
+    }),
+
+  submitAnswer: (timeElapsedInSecond) =>
+    set((state) => {
+      const currentQuestionType = state.questionQueues[0].type;
+
+      const isCorrect = state.selectedAnswer === state.questionQueues[0].answer;
+
+      if (!isCorrect) {
+        const hasScapeGoat = state.jokers.find(
+          (joker) => joker.effect === "FATAL_OVERRIDE",
+        );
+
+        const hasTfMultipler = state.jokers.find(
+          (joker) => joker.effect === "TF_MULTIPLIER",
+        );
+
+        const hasDamageSynthesis = state.jokers.find(
+          (joker) => joker.effect === "DAMAGE_SYNTHESIS",
+        );
+
+        const damageDealth =
+          hasTfMultipler && currentQuestionType === "MULTIPLE_CHOICE" ? 2 : 1;
+
+        let updatedConsumables = state.consumables;
+
+        // Fires damage synthesis
+        if (hasDamageSynthesis) {
+          const randomNumber = Math.floor(
+            Math.random() * CONSUMABLE_DATABASE.length,
+          );
+
+          const randomItem = CONSUMABLE_DATABASE[randomNumber];
+
+          const doesItemExistIndex = state.consumables.findIndex(
+            (c) => c.id === randomItem.id,
+          );
+
+          // update quantity
+          if (doesItemExistIndex !== -1) {
+            updatedConsumables = state.consumables.map((item, index) =>
+              index === doesItemExistIndex
+                ? { ...item, quantity: (item.quantity ?? 1) + 1 }
+                : item,
+            );
+            // Add item
+          } else {
+            updatedConsumables = [
+              ...state.consumables,
+              { ...(randomItem as unknown as ShopItem), quantity: 1 },
+            ];
+          }
+        }
+
+        // fires scapegoat if it will kill the player
+        if (hasScapeGoat && state.lives <= damageDealth) {
+          return {
+            lives: hasScapeGoat.value,
+            score: state.score - 50,
+            jokers: state.jokers.filter(
+              (joker) => joker.id !== hasScapeGoat.id,
+            ),
+            streak: 0,
+            hasAnswered: true,
+            selectedAnswer: "",
+          };
+        }
+
+        return {
+          lives: state.lives - damageDealth,
+          score: state.score - 50,
+          streak: 0,
+          consumables: updatedConsumables,
+          hasAnswered: true,
+          selectedAnswer: "",
+        };
+      }
+
+      let earnCredits = Math.round(4 * ((state.streak || 1) * 0.5));
+
+      state.jokers.forEach((joker) => {
+        if (joker.effect === "SPEED_PAYOUT") {
+          if (timeElapsedInSecond < 3) {
+            earnCredits += joker.value;
+          } else if (timeElapsedInSecond > 10) {
+            earnCredits -= 5;
+          }
+        }
+
+        if (joker.effect === "INSTANT_SUBMIT_PAYOUT") {
+          earnCredits += joker.value;
+        }
+
+        if (joker.effect === "ADRENALINE_MULTIPLIER" && state.lives === 1) {
+          earnCredits *= 2;
+        }
+      });
+
+      return {
+        streak: state.streak + 1,
+        hasAnswered: true,
+        selectedAnswer: "",
+        score: state.score + 100,
+        credits: state.credits + earnCredits,
       };
     }),
 }));
