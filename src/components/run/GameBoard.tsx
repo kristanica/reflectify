@@ -14,7 +14,6 @@ import GameOver from "./GameOver";
 import Score from "./Score";
 import BlackMarket from "./shop/BlackMarket";
 import Explanation from "@/components/run/Explanation";
-import { toast } from "sonner";
 
 export default function GameBoard({ deckId, userId }: GameBoardType) {
   // gameStore
@@ -146,7 +145,6 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
         >
           <div className="w-full flex justify-between items-end  pb-4 mb-6 flex-1">
             <Lives></Lives>
-
             <Score></Score>
           </div>
 
@@ -217,12 +215,6 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
                 key={consume.id}
                 title={consume.description}
                 onClick={() => {
-                  toast.success(
-                    `${consume.icon} ${consume.name} has been used`,
-                    {
-                      position: "top-center",
-                    },
-                  );
                   handleConsumable(consume.id);
                 }}
                 className="text-3xl"

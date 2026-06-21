@@ -1,6 +1,11 @@
 import { CONSUMABLE_DATABASE } from "@/lib/mockData";
 import { Target } from "lucide-react";
+import { toast } from "sonner";
+import { uuid } from "zod";
 import { create } from "zustand";
+
+type ToastType = "error" | "itemused";
+type ToastItem = { id: string; type: ToastType; message: string };
 
 type State = {
   selectedAnswer: string | undefined;
@@ -14,6 +19,8 @@ type State = {
   score: number;
   credits: number;
   is5050Active: boolean;
+
+  toasts: ToastItem[];
 
   jokers: ShopItem[];
 
@@ -41,9 +48,11 @@ type Action = {
   closeShop: () => void;
   submitAnswer: (timeElapsedInSecond: number) => void;
   useConsumable: (consumableId: string) => void;
+  addToast: (type: ToastType, message: string) => void;
+  removeToast: (id: string) => void;
 };
 
-export const useGameEngineStore = create<State & Action>((set) => ({
+export const useGameEngineStore = create<State & Action>((set, get) => ({
   //   States
   selectedAnswer: undefined,
   hasAnswered: false,
@@ -53,45 +62,86 @@ export const useGameEngineStore = create<State & Action>((set) => ({
   streak: 0,
   maxStreak: 0,
   score: 0,
+  toasts: [],
   credits: 2000,
   jokers: [],
-  consumables: [],
+  consumables: [
+    {
+      id: "hack_5050",
+      name: "50/50 Filter",
+      description:
+        "Instantly eliminates two incorrect options on a Multiple Choice question.",
+      cost: 50,
+      icon: "✂️",
+      type: "CONSUMABLE",
+      effect: "FIFTY_FIFTY",
+      value: 2,
+      quantity: 2,
+    },
+  ],
   isShopOpen: false,
   lastOpenedShop: 0,
   is5050Active: false,
 
   // Actions
 
-  useConsumable: (consumableId) =>
+  addToast: (type, message) => {
+    const id = String(uuid());
+
+    set((state) => ({ toasts: [...state.toasts, { id, type, message }] }));
+
+    setTimeout(() => {
+      get().removeToast(id);
+    }, 2000);
+  },
+
+  removeToast: (id) =>
+    set((state) => ({
+      toasts: state.toasts.filter((toast) => toast.id !== id),
+    })),
+
+  useConsumable: (consumableId) => {
+    const consumables = get().consumables;
+    const itemIndex = consumables.findIndex((c) => c.id === consumableId);
+
+    if (itemIndex === -1) return;
+
+    const targetConsumable = consumables[itemIndex];
+    if (targetConsumable.quantity && targetConsumable.quantity <= 0) return;
+
+    if (targetConsumable.effect === "FIFTY_FIFTY" && get().is5050Active) {
+      get().addToast("error", "FIFTY_FIFTY already activated");
+      return;
+    }
+
+    if (targetConsumable.effect === "SIPHON_STREAK" && get().streak <= 0) {
+      get().addToast("error", "SYS_ERR: No Combo Streak to siphon!");
+      return;
+    }
+
+    if (targetConsumable.effect === "SKIP_QUESTION") {
+      set((prev) => ({
+        questionQueues: prev.questionQueues.slice(1),
+        questionsAnswered: prev.questionsAnswered + 1,
+        streak: prev.streak + 1,
+        score: prev.score + 100,
+        is5050Active: false,
+        hasAnswered: false,
+        selectedAnswer: "",
+        consumables: prev.consumables
+          .map((item, index) =>
+            index === itemIndex
+              ? { ...item, quantity: (item.quantity || 1) - 1 }
+              : item,
+          )
+          .filter((item) => (item.quantity || 0) > 0),
+      }));
+
+      get().addToast("itemused", "ZERO-DAY EXPLOIT ");
+      return;
+    }
+
     set((state) => {
-      const consumables = state.consumables;
-      const itemIndex = consumables.findIndex((c) => c.id === consumableId);
-
-      if (itemIndex === -1) return state;
-
-      const targetConsumable = consumables[itemIndex];
-
-      if (targetConsumable.effect === "SKIP_QUESTION") {
-        return {
-          questionQueues: state.questionQueues.slice(1),
-          questionsAnswered: state.questionsAnswered + 1,
-          streak: state.streak + 1,
-          score: state.score + 100,
-          is5050Active: false,
-          hasAnswered: false,
-          selectedAnswer: "",
-          consumables: state.consumables
-            .map((item, index) =>
-              index === itemIndex
-                ? { ...item, quantity: (item.quantity || 1) - 1 }
-                : item,
-            )
-            .filter((item) => (item.quantity || 0) > 0),
-        };
-      }
-
-      if (targetConsumable.quantity && targetConsumable.quantity <= 0)
-        return state;
       let newLives = state.lives;
       let newCredits = state.credits;
       let newStreak = state.streak;
@@ -100,6 +150,7 @@ export const useGameEngineStore = create<State & Action>((set) => ({
       switch (targetConsumable.effect) {
         case "FIFTY_FIFTY": {
           isNew5050Active = true;
+
           break;
         }
         case "SIPHON_STREAK": {
@@ -141,7 +192,10 @@ export const useGameEngineStore = create<State & Action>((set) => ({
         streak: newStreak,
         is5050Active: isNew5050Active,
       };
-    }),
+    });
+
+    get().addToast("itemused", `${targetConsumable.name} has been activated`);
+  },
 
   openShop: () =>
     set((state) => {

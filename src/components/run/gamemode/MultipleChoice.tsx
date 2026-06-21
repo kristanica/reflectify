@@ -2,7 +2,7 @@
 
 import { useGameEngineStore } from "@/store/useGameEngineStore";
 import { motion } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 type MultipleChoiceType = {
   choices: string[] | undefined;
   answer: string;
@@ -67,9 +67,6 @@ const MultipleChoice = ({ choices, answer }: MultipleChoiceType) => {
             disabled={isDisabled}
             className={`w-full text-left p-5 border rounded-sm font-mono text-sm transition-all duration-300 ${optionStyle}`}
           >
-            <span className="absolute top-2 left-2 text-[10px] text-zinc-600">
-              {i + 1}
-            </span>
             {option}
           </motion.button>
         );

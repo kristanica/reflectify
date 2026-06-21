@@ -43,7 +43,6 @@ const Lives = () => {
           </AnimatePresence>
         </div>
       </div>
-
       <div className="flex flex-col">
         <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase font-mono">
           Depth
