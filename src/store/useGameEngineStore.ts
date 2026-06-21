@@ -1,4 +1,4 @@
-import { CONSUMABLE_DATABASE } from "@/lib/mockData";
+import { CONSUMABLE_DATABASE, MOCK_INVENTORY } from "@/lib/mockData";
 import { Target } from "lucide-react";
 import { toast } from "sonner";
 import { uuid } from "zod";
@@ -28,6 +28,8 @@ type State = {
   isShopOpen: boolean;
 
   lastOpenedShop: number;
+
+  logs: string[];
 };
 type Action = {
   setSelectedAnswer: (val: string) => void;
@@ -50,6 +52,7 @@ type Action = {
   useConsumable: (consumableId: string) => void;
   addToast: (type: ToastType, message: string) => void;
   removeToast: (id: string) => void;
+  addLogs: (logs: string) => void;
 };
 
 export const useGameEngineStore = create<State & Action>((set, get) => ({
@@ -65,28 +68,19 @@ export const useGameEngineStore = create<State & Action>((set, get) => ({
   toasts: [],
   credits: 2000,
   jokers: [],
-  consumables: [
-    {
-      id: "hack_5050",
-      name: "50/50 Filter",
-      description:
-        "Instantly eliminates two incorrect options on a Multiple Choice question.",
-      cost: 50,
-      icon: "✂️",
-      type: "CONSUMABLE",
-      effect: "FIFTY_FIFTY",
-      value: 2,
-      quantity: 2,
-    },
-  ],
+  consumables: MOCK_INVENTORY.map((item) => ({
+    ...item,
+    quantity: item.quantity ?? 0,
+  })),
   isShopOpen: false,
   lastOpenedShop: 0,
   is5050Active: false,
-
+  logs: ["> WELCOME TO REFLECTIFY_OS. AWAITING INPUT."],
   // Actions
 
+  addLogs: (val) => set((state) => ({ logs: [...state.logs, val] })),
   addToast: (type, message) => {
-    const id = String(uuid());
+    const id = crypto.randomUUID();
 
     set((state) => ({ toasts: [...state.toasts, { id, type, message }] }));
 
@@ -109,13 +103,27 @@ export const useGameEngineStore = create<State & Action>((set, get) => ({
     const targetConsumable = consumables[itemIndex];
     if (targetConsumable.quantity && targetConsumable.quantity <= 0) return;
 
-    if (targetConsumable.effect === "FIFTY_FIFTY" && get().is5050Active) {
-      get().addToast("error", "FIFTY_FIFTY already activated");
-      return;
+    if (targetConsumable.effect === "FIFTY_FIFTY") {
+      if (get().is5050Active) {
+        get().addToast("error", "50/50 is already activated!");
+        return;
+      }
+      if (get().questionQueues[0].type === "TRUE_OR_FALSE") {
+        get().addToast(
+          "error",
+          "SYS_ERR: 50/50 only works on Multiple Choice!",
+        );
+        return;
+      }
     }
 
     if (targetConsumable.effect === "SIPHON_STREAK" && get().streak <= 0) {
       get().addToast("error", "SYS_ERR: No Combo Streak to siphon!");
+      return;
+    }
+
+    if (targetConsumable.effect === "RANSOMWARE" && get().lives === 3) {
+      get().addToast("error", "SYS_ERR: You're still at max HP!");
       return;
     }
 
@@ -298,102 +306,140 @@ export const useGameEngineStore = create<State & Action>((set, get) => ({
       };
     }),
 
-  submitAnswer: (timeElapsedInSecond) =>
-    set((state) => {
-      const currentQuestionType = state.questionQueues[0].type;
+  submitAnswer: (timeElapsedInSecond) => {
+    // random logs
+    const successLogs = [
+      "LOGIC GATE SHATTERED. HARVESTING DATA.",
+      "TRUTH FRAGMENT EXTRACTED. NODE COMPROMISED.",
+      "SYNAPSE ALIGNED. SECURITY PROTOCOL OBLITERATED.",
+    ];
+    // random logs
+    const failLogs = [
+      "FATAL MISMATCH. BLACK ICE DEPLOYED.",
+      "PARADOX TRIGGERED. ACTIVE TRACE INITIATED.",
+      "LOGIC FAULT DETECTED. NEURAL FEEDBACK SEVERING LINK.",
+    ];
+    const state = get();
 
-      const isCorrect = state.selectedAnswer === state.questionQueues[0].answer;
+    const currentQuestionType = state.questionQueues[0].type;
+    const currentQuestion = state.questionQueues[0];
 
-      if (!isCorrect) {
-        const hasScapeGoat = state.jokers.find(
-          (joker) => joker.effect === "FATAL_OVERRIDE",
+    const isCorrect = state.selectedAnswer === state.questionQueues[0].answer;
+
+    if (!isCorrect) {
+      const randomFail =
+        failLogs[Math.floor(Math.random() * successLogs.length)];
+
+      state.addLogs(`> ${randomFail} `);
+      state.addLogs(
+        `> MISMATCH DETAILS: EXPECTED [${currentQuestion.answer}] | RECEIVED [${state.selectedAnswer || "NONE"}]`,
+      );
+
+      const hasScapeGoat = state.jokers.find(
+        (joker) => joker.effect === "FATAL_OVERRIDE",
+      );
+
+      const hasTfMultipler = state.jokers.find(
+        (joker) => joker.effect === "TF_MULTIPLIER",
+      );
+
+      const hasDamageSynthesis = state.jokers.find(
+        (joker) => joker.effect === "DAMAGE_SYNTHESIS",
+      );
+
+      const damageDealth =
+        hasTfMultipler && currentQuestionType === "MULTIPLE_CHOICE" ? 2 : 1;
+
+      let updatedConsumables = state.consumables;
+
+      // Fires damage synthesis
+      if (hasDamageSynthesis) {
+        state.addLogs(
+          `> DAMAGE SYNTHESIS: CONVERTING SYSTEM SHOCK INTO CONTRABAND...`,
+        );
+        const randomNumber = Math.floor(
+          Math.random() * CONSUMABLE_DATABASE.length,
         );
 
-        const hasTfMultipler = state.jokers.find(
-          (joker) => joker.effect === "TF_MULTIPLIER",
+        const randomItem = CONSUMABLE_DATABASE[randomNumber];
+        state.addLogs(`> DAMAGE SYNTHESIS: RECEIVED ${randomItem.name}`);
+
+        const doesItemExistIndex = state.consumables.findIndex(
+          (c) => c.id === randomItem.id,
         );
 
-        const hasDamageSynthesis = state.jokers.find(
-          (joker) => joker.effect === "DAMAGE_SYNTHESIS",
-        );
-
-        const damageDealth =
-          hasTfMultipler && currentQuestionType === "MULTIPLE_CHOICE" ? 2 : 1;
-
-        let updatedConsumables = state.consumables;
-
-        // Fires damage synthesis
-        if (hasDamageSynthesis) {
-          const randomNumber = Math.floor(
-            Math.random() * CONSUMABLE_DATABASE.length,
+        // update quantity
+        if (doesItemExistIndex !== -1) {
+          updatedConsumables = state.consumables.map((item, index) =>
+            index === doesItemExistIndex
+              ? { ...item, quantity: (item.quantity ?? 1) + 1 }
+              : item,
           );
-
-          const randomItem = CONSUMABLE_DATABASE[randomNumber];
-
-          const doesItemExistIndex = state.consumables.findIndex(
-            (c) => c.id === randomItem.id,
-          );
-
-          // update quantity
-          if (doesItemExistIndex !== -1) {
-            updatedConsumables = state.consumables.map((item, index) =>
-              index === doesItemExistIndex
-                ? { ...item, quantity: (item.quantity ?? 1) + 1 }
-                : item,
-            );
-            // Add item
-          } else {
-            updatedConsumables = [
-              ...state.consumables,
-              { ...(randomItem as unknown as ShopItem), quantity: 1 },
-            ];
-          }
+          // Add item
+        } else {
+          updatedConsumables = [
+            ...state.consumables,
+            { ...(randomItem as unknown as ShopItem), quantity: 1 },
+          ];
         }
-
-        // fires scapegoat if it will kill the player
-        if (hasScapeGoat && state.lives <= damageDealth) {
-          return {
-            lives: hasScapeGoat.value,
-            score: state.score - 50,
-            jokers: state.jokers.filter(
-              (joker) => joker.id !== hasScapeGoat.id,
-            ),
-            streak: 0,
-            hasAnswered: true,
-            selectedAnswer: "",
-          };
-        }
-
-        return {
-          lives: state.lives - damageDealth,
-          score: state.score - 50,
-          streak: 0,
-          consumables: updatedConsumables,
-          hasAnswered: true,
-          selectedAnswer: "",
-        };
       }
 
-      let earnCredits = Math.round(4 * ((state.streak || 1) * 0.5));
+      // fires scapegoat if it will kill the player
+      if (hasScapeGoat && state.lives <= damageDealth) {
+        state.addLogs(
+          `> CRITICAL HIT INTERCEPTED. SCAPEGOAT PROTOCOL EXECUTED.`,
+        );
+        set(() => ({
+          lives: hasScapeGoat.value,
+          score: state.score - 50,
+          jokers: state.jokers.filter((joker) => joker.id !== hasScapeGoat.id),
+          streak: 0,
+          hasAnswered: true,
+          selectedAnswer: "",
+        }));
+      }
 
-      state.jokers.forEach((joker) => {
-        if (joker.effect === "SPEED_PAYOUT") {
-          if (timeElapsedInSecond < 3) {
-            earnCredits += joker.value;
-          } else if (timeElapsedInSecond > 10) {
-            earnCredits -= 5;
-          }
-        }
+      set(() => ({
+        lives: state.lives - damageDealth,
+        score: state.score - 50,
+        streak: 0,
+        consumables: updatedConsumables,
+        hasAnswered: true,
+        selectedAnswer: "",
+      }));
+      return;
+    } // is incorrect ends here
 
-        if (joker.effect === "INSTANT_SUBMIT_PAYOUT") {
+    let earnCredits = Math.round(4 * ((state.streak || 1) * 0.5));
+
+    state.jokers.forEach((joker) => {
+      if (joker.effect === "SPEED_PAYOUT") {
+        if (timeElapsedInSecond < 3) {
+          state.addLogs(`> RAPID INJECTION DETECTED. SPEED BONUS APPLIED.`);
           earnCredits += joker.value;
+        } else if (timeElapsedInSecond > 10) {
+          earnCredits -= 5;
         }
+      }
 
-        if (joker.effect === "ADRENALINE_MULTIPLIER" && state.lives === 1) {
-          earnCredits *= 2;
-        }
-      });
+      if (joker.effect === "INSTANT_SUBMIT_PAYOUT") {
+        earnCredits += joker.value;
+      }
 
+      if (joker.effect === "ADRENALINE_MULTIPLIER" && state.lives === 1) {
+        state.addLogs(`> ADRENALINE MULTIPLIER ACTIVE: CREDITS DOUBLED.`);
+        earnCredits *= 2;
+      }
+    });
+
+    const randomSuccess =
+      successLogs[Math.floor(Math.random() * successLogs.length)];
+    state.addLogs(`> ${randomSuccess}`);
+    state.addLogs(
+      `> DECRYPTED PAYLOAD: [${state.selectedAnswer}] | NET GAIN: +$${earnCredits} CR`,
+    );
+
+    set(() => {
       return {
         streak: state.streak + 1,
         hasAnswered: true,
@@ -401,5 +447,6 @@ export const useGameEngineStore = create<State & Action>((set, get) => ({
         score: state.score + 100,
         credits: state.credits + earnCredits,
       };
-    }),
+    });
+  },
 }));

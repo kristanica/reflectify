@@ -67,6 +67,81 @@ export const CONSUMABLE_DATABASE = [
   },
 ];
 
+export const MOCK_INVENTORY: ShopItem[] = [
+  {
+    id: "hack_5050",
+    name: "50/50 Filter",
+    description:
+      "Instantly eliminates two incorrect options on a Multiple Choice question.",
+    cost: 50,
+    icon: "✂️",
+    type: "CONSUMABLE",
+    effect: "FIFTY_FIFTY",
+    value: 2,
+    quantity: 99,
+  },
+  {
+    id: "hack_skip",
+    name: "Zero-Day Exploit",
+    description:
+      "Instantly bypasses the current question, marking it as correct and continuing your streak.",
+    cost: 150, // Expensive, but guaranteed survival
+    icon: "⏭️",
+    type: "CONSUMABLE",
+    effect: "SKIP_QUESTION",
+    value: 1,
+    quantity: 99,
+  },
+  {
+    id: "hack_freeze",
+    name: "Cryostasis",
+    description:
+      "Freezes the question timer completely until you submit your answer.",
+    cost: 75,
+    icon: "❄️",
+    type: "CONSUMABLE",
+    effect: "FREEZE_TIMER",
+    value: 1,
+    quantity: 99,
+  },
+  {
+    id: "hack_siphon",
+    name: "Siphon Script",
+    description:
+      "Instantly sacrifice your entire Combo Streak to gain +15 Credits for every streak point lost.",
+    cost: 25, // Cheap to buy, but costs your momentum to use
+    icon: "💉",
+    type: "CONSUMABLE",
+    effect: "SIPHON_STREAK",
+    value: 15,
+    quantity: 99,
+  },
+  {
+    id: "hack_ransomware",
+    name: "Ransomware",
+    description:
+      "Lose exactly 50% of your current banked Credits, but instantly heal your Lives back to maximum.",
+    cost: 50,
+    icon: "💀",
+    type: "CONSUMABLE",
+    effect: "RANSOMWARE",
+    value: 0.5,
+    quantity: 99,
+  },
+  {
+    id: "hack_memory_leak",
+    name: "Memory Leak",
+    description:
+      "Instantly doubles your current banked Credits (up to a maximum gain of +150 Credits).",
+    cost: 50,
+    icon: "📈",
+    type: "CONSUMABLE",
+    effect: "MEMORY_LEAK",
+    value: 150, // Max cap
+    quantity: 99,
+  },
+];
+
 export const AUGMENTS: ShopItem[] = [
   {
     id: "aug_metronome",

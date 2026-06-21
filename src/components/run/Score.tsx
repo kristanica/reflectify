@@ -10,52 +10,50 @@ const Score = () => {
   const animatedScore = useAnimatedNumber({ val: score });
   const animatedCredits = useAnimatedNumber({ val: credits });
   return (
-    <div className="flex flex-col items-end  absolute top-7 right-2">
-      <div className="flex flx-row gap-2">
-        <AnimatePresence>
-          {streak > 1 && (
-            <motion.div
-              key="combo-meter"
-              initial={{ opacity: 0, scale: 0.8, x: 20 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{
-                opacity: 0,
-                scale: 0.5,
-                y: 10,
-                filter: "blur(5px)",
-              }}
-              className="flex items-center gap-2 bg-amber-500/10 px-3 py-1 border border-amber-500/30 rounded-sm"
-            >
-              <span className="text-amber-500 font-mono text-[10px] tracking-[0.2em] uppercase animate-pulse">
-                Combo
-              </span>
-              <span className="text-amber-400 font-bold font-mono text-sm">
-                x{streak}
-              </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div className="flex flex-col items-end">
-          <span className="text-[10px] tracking-widest text-zinc-500 font-mono uppercase mb-1">
-            SCORE
-          </span>
+    <div className="flex gap-4 items-center h-full">
+      <AnimatePresence>
+        {streak > 1 && (
           <motion.div
-            key={score}
-            initial={{ scale: 1.2, color: "#fff" }}
-            animate={{ scale: 1, color: "#22d3ee" }} // cyan-400 hex
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            key="combo-meter"
+            initial={{ opacity: 0, scale: 0.8, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{
+              opacity: 0,
+              scale: 0.5,
+              y: 10,
+              filter: "blur(5px)",
+            }}
+            className="flex items-center gap-2 border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 rounded h-full"
           >
-            <motion.span className="font-mono text-xl tracking-widest leading-none drop-shadow-[0_0_10px_rgba(34,211,238,0.4)]">
-              {animatedScore}
-            </motion.span>
+            <span className="text-amber-500 font-mono text-[10px] tracking-wider uppercase animate-pulse">
+              COMBO:
+            </span>
+            <span className="text-amber-400 font-bold font-mono text-xs leading-none">
+              x{streak}
+            </span>
           </motion.div>
-        </div>
+        )}
+      </AnimatePresence>
+
+      <div className="flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-1.5 rounded h-full">
+        <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase">
+          SCORE:
+        </span>
+        <motion.div
+          key={score}
+          initial={{ scale: 1.2, color: "#fff" }}
+          animate={{ scale: 1, color: "#22d3ee" }} // cyan-400 hex
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+        >
+          <motion.span className="font-mono text-xs text-white drop-shadow-[0_0_10px_rgba(34,211,238,0.4)] leading-none">
+            {animatedScore}
+          </motion.span>
+        </motion.div>
       </div>
 
-      <div className="flex flex-col items-end">
-        <span className="text-[10px] tracking-widest text-zinc-500 font-mono uppercase mb-1">
-          credits
+      <div className="flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-1.5 rounded h-full">
+        <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase">
+          GOLD:
         </span>
         <motion.div
           key={credits}
@@ -63,9 +61,8 @@ const Score = () => {
           animate={{ scale: 1, color: "gold" }} // cyan-400 hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          $
-          <motion.span className="font-mono text-xl tracking-widest leading-none drop-shadow-[0_0_10px_rgba(34,211,238,0.4)]">
-            {animatedCredits}
+          <motion.span className="text-[#f0a500] font-mono text-xs drop-shadow-[0_0_10px_rgba(240,165,0,0.4)] leading-none">
+           {animatedCredits}
           </motion.span>
         </motion.div>
       </div>

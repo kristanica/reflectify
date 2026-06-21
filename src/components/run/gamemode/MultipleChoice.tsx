@@ -34,7 +34,7 @@ const MultipleChoice = ({ choices, answer }: MultipleChoiceType) => {
   };
   return (
     <div
-      className={`grid gap-4 w-full max-w-4xl mt-4 ${getGridClass(safeChoices.length)}`}
+      className={`grid gap-4 w-full mt-4 ${getGridClass(safeChoices.length)}`}
     >
       {(choices ?? []).map((option, i) => {
         const isSelected = selectedAnswer === option;
@@ -42,7 +42,7 @@ const MultipleChoice = ({ choices, answer }: MultipleChoiceType) => {
         const isElminated = eliminated.includes(option);
         let isDisabled = hasAnswered;
         let optionStyle =
-          "border-zinc-800 text-gray-300 hover:border-amber-600 hover:bg-amber-600/5";
+          "border-zinc-800 bg-zinc-950/40 text-gray-300 hover:border-[#f0a500] hover:bg-[#f0a500]/10 hover:text-white";
 
         if (isElminated) {
           optionStyle =
@@ -50,14 +50,15 @@ const MultipleChoice = ({ choices, answer }: MultipleChoiceType) => {
           isDisabled = true;
         } else if (hasAnswered) {
           if (isCorrectChoice) {
+            optionStyle = "border-emerald-500 bg-emerald-500/10 text-emerald-400";
           } else if (isSelected && !isCorrectChoice) {
             optionStyle = "border-red-500 bg-red-500/10 text-red-500";
           } else {
-            optionStyle = "border-zinc-900 text-zinc-700 opacity-50";
+            optionStyle = "border-zinc-900 bg-zinc-950/20 text-zinc-700 opacity-50";
           }
         } else if (isSelected) {
           optionStyle =
-            "border-amber-500 bg-amber-500/10 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.2)]";
+            "border-[#f0a500] bg-[#f0a500]/20 text-[#f0a500] shadow-[0_0_10px_rgba(240,165,0,0.2)]";
         }
 
         return (

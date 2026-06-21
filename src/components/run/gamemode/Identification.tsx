@@ -8,9 +8,9 @@ const Identification = () => {
   );
   const answer = useGameEngineStore((state) => state.selectedAnswer);
   return (
-    <div className="w-full max-w-3xl flex flex-col">
+    <div className="w-full flex flex-col mt-4">
       <div className="relative w-full">
-        <span className="absolute top-8.5 left-4 text-[12px] text-amber-600/50 font-mono animate-pulse">
+        <span className="absolute top-1/2 -translate-y-1/2 left-4 text-[12px] text-[#f0a500]/50 font-mono animate-pulse">
           &gt;_
         </span>
 
@@ -21,7 +21,7 @@ const Identification = () => {
           spellCheck={false}
           value={answer}
           autoComplete="off"
-          className="w-full p-4 pl-10 min-h-20 bg-transparent border rounded-sm font-mono text-sm tracking-widest outline-none transition-all duration-300 border-zinc-800  text-amber-500  disabled:opacity-80 placeholder:text-zinc-700"
+          className="w-full p-4 pl-10 min-h-20 bg-zinc-950/40 border rounded-sm font-mono text-sm tracking-widest outline-none transition-all duration-300 border-zinc-800 focus:border-[#f0a500] focus:shadow-[0_0_10px_rgba(240,165,0,0.2)] text-[#f0ede8] disabled:opacity-80 placeholder:text-zinc-700"
         />
       </div>
     </div>
