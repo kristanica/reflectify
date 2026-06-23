@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { uuid } from "zod";
 import { create } from "zustand";
 
-type ToastType = "error" | "itemused";
+type ToastType = "error" | "itemused" | "system";
 type ToastItem = { id: string; type: ToastType; message: string };
 
 type State = {
@@ -26,10 +26,13 @@ type State = {
 
   consumables: (ShopItem & { quantity: number })[];
   isShopOpen: boolean;
-
   lastOpenedShop: number;
-
   logs: string[];
+
+  baseExp: number;
+  baseLevel: number;
+  sessionExpEarned: number;
+  currentLevel: number;
 };
 type Action = {
   setSelectedAnswer: (val: string) => void;
@@ -53,6 +56,7 @@ type Action = {
   addToast: (type: ToastType, message: string) => void;
   removeToast: (id: string) => void;
   addLogs: (logs: string) => void;
+  initPlayerStat: (baseExp: number, baseLevel: number) => void;
 };
 
 export const useGameEngineStore = create<State & Action>((set, get) => ({
@@ -72,10 +76,30 @@ export const useGameEngineStore = create<State & Action>((set, get) => ({
   isShopOpen: false,
   lastOpenedShop: 0,
   is5050Active: false,
-  logs: ["> WELCOME TO REFLECTIFY_OS. AWAITING INPUT."],
-  // Actions
+  logs: [
+    `[${new Date().toLocaleTimeString("en-US", { hour12: false })}] > WELCOME TO REFLECTIFY_OS. AWAITING INPUT.`,
+  ],
+  baseExp: 0,
+  sessionExpEarned: 0,
+  // this can change
+  baseLevel: 1,
+  currentLevel: 1,
 
-  addLogs: (val) => set((state) => ({ logs: [...state.logs, val] })),
+  // Actions
+  initPlayerStat: (baseExp, baseLevel) =>
+    set(() => ({
+      baseExp: baseExp,
+      baseLevel: baseLevel,
+      sessionExpEarned: 0,
+    })),
+  addLogs: (val) =>
+    set((state) => {
+      const timeString = new Date().toLocaleTimeString("en-us", {
+        hour12: false,
+      });
+
+      return { logs: [...state.logs, `[${timeString}]: ${val}`] };
+    }),
   addToast: (type, message) => {
     const id = crypto.randomUUID();
 
@@ -407,6 +431,33 @@ export const useGameEngineStore = create<State & Action>((set, get) => ({
       return;
     } // is incorrect ends here
 
+    //  -- EXP/ LEVEL CALCULATION --
+    // Depth BONUS
+    const DEPTH_MULTIPLIER = 0.05;
+    const BASE_XP_PER_CORRECT = 15;
+    const currentDepth = state.questionsAnswered + 1;
+    const depthBonus = 1 + currentDepth * DEPTH_MULTIPLIER;
+    const xpEarnedThisQuestion = Math.round(BASE_XP_PER_CORRECT * depthBonus);
+    // Base
+    const BASE_EXP = 100;
+    const GROWTH_EXPONENT = 1.5;
+
+    const newSessionXp = state.sessionExpEarned + xpEarnedThisQuestion;
+    const newTotalXp = state.baseExp + newSessionXp;
+
+    const newCalculatedLevel =
+      Math.floor(Math.pow(newTotalXp / BASE_EXP, 1 / GROWTH_EXPONENT)) + 1;
+
+    state.addLogs(
+      `> DATA HARVESTED: +${xpEarnedThisQuestion} XP | TOTAL: ${newTotalXp} XP`,
+    );
+    if (newCalculatedLevel > state.currentLevel) {
+      state.addLogs(
+        `> ⚠️ SYSTEM UPGRADE: LEVEL ${newCalculatedLevel} ACHIEVED.`,
+      );
+      get().addToast("system", `LEVEL UP: ${newCalculatedLevel}!`);
+    }
+
     let earnCredits = Math.round(4 * ((state.streak || 1) * 0.5));
 
     state.jokers.forEach((joker) => {
@@ -443,6 +494,10 @@ export const useGameEngineStore = create<State & Action>((set, get) => ({
         selectedAnswer: "",
         score: state.score + 100,
         credits: state.credits + earnCredits,
+
+        // playerstat
+        sessionExpEarned: newSessionXp,
+        currentLevel: newCalculatedLevel,
       };
     });
   },

@@ -1,6 +1,8 @@
 type GameBoardType = {
   deckId: string;
   userId: string;
+  baseXp: number;
+  baseLevel: number;
 };
 type GeneratedQuestion = {
   conceptId: string;

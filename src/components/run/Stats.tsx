@@ -62,7 +62,7 @@ const Stats = () => {
               y: 10,
               filter: "blur(5px)",
             }}
-            className="flex items-center gap-2 border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 rounded h-full"
+            className={`flex items-center gap-2 border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 rounded h-full`}
           >
             <span className="text-amber-500 font-mono text-[10px] tracking-wider uppercase animate-pulse">
               COMBO:

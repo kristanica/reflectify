@@ -43,7 +43,7 @@ const Toast = () => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className={`border-t-2 border-b-2 px-8 py-3 font-mono text-xs md:text-sm uppercase backdrop-blur-md min-w-[300px] text-center ${colors[toast.type]}`}
+              className={`border-t-2 border-b-2 px-8 py-3 font-mono text-xs md:text-sm uppercase backdrop-blur-md min-w-75 text-center ${colors[toast.type]}`}
             >
               <div className="flex items-center justify-center gap-2">
                 <span className="opacity-50">[{toast.type}]</span>

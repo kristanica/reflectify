@@ -20,18 +20,35 @@ const page = async ({ searchParams }: PageProps) => {
     redirect("/login");
   }
 
-  const activeSession = await prisma.gameSession.findFirstOrThrow({
-    where: {
-      id: sessionId,
-      endedAt: null,
-    },
-    select: {
-      deckId: true,
-    },
-  });
+  const [activeSession, userStat] = await Promise.all([
+    prisma.gameSession.findFirstOrThrow({
+      where: {
+        id: sessionId,
+        endedAt: null,
+      },
+      select: {
+        deckId: true,
+      },
+    }),
+
+    prisma.user.findFirstOrThrow({
+      where: {
+        id: userId,
+      },
+      select: {
+        xp: true,
+        level: true,
+      },
+    }),
+  ]);
   return (
     <div className="text-white h-full w-full flex-1 ">
-      <GameBoard deckId={activeSession?.deckId} userId={userId}></GameBoard>
+      <GameBoard
+        baseXp={userStat.xp}
+        baseLevel={userStat.level}
+        deckId={activeSession?.deckId}
+        userId={userId}
+      ></GameBoard>
     </div>
   );
 };

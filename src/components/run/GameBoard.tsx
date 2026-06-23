@@ -17,7 +17,12 @@ import Explanation from "@/components/run/Explanation";
 import Augments from "./Augments";
 import Logs from "./Logs";
 
-export default function GameBoard({ deckId, userId }: GameBoardType) {
+export default function GameBoard({
+  deckId,
+  userId,
+  baseXp,
+  baseLevel,
+}: GameBoardType) {
   // gameStore
   const selectedAnswer = useGameEngineStore((state) => state.selectedAnswer);
   const hasAnswered = useGameEngineStore((state) => state.hasAnswered);
@@ -33,6 +38,15 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
   const openShop = useGameEngineStore((state) => state.openShop);
   const lastShopDepth = useGameEngineStore((state) => state.lastOpenedShop);
   const jokers = useGameEngineStore((state) => state.jokers);
+  const initPlayerStat = useGameEngineStore((state) => state.initPlayerStat);
+
+  const hasInitialized = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (hasInitialized.current) return;
+    initPlayerStat(baseXp, baseLevel);
+    hasInitialized.current = true;
+  }, [baseXp, baseLevel, initPlayerStat]);
 
   const setQuestionQueues = useGameEngineStore(
     (state) => state.setQuestionQueues,
