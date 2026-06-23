@@ -2,7 +2,7 @@ import GameBoard from "@/components/run/GameBoard";
 import { authOptions } from "@/lib/handlers";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
 type PageProps = {
@@ -21,7 +21,7 @@ const page = async ({ searchParams }: PageProps) => {
   }
 
   const [activeSession, userStat] = await Promise.all([
-    prisma.gameSession.findFirstOrThrow({
+    prisma.gameSession.findFirst({
       where: {
         id: sessionId,
         endedAt: null,
@@ -31,7 +31,7 @@ const page = async ({ searchParams }: PageProps) => {
       },
     }),
 
-    prisma.user.findFirstOrThrow({
+    prisma.user.findFirst({
       where: {
         id: userId,
       },
@@ -41,6 +41,9 @@ const page = async ({ searchParams }: PageProps) => {
       },
     }),
   ]);
+  if (!activeSession || !userStat) {
+    notFound();
+  }
   return (
     <div className="text-white h-full w-full flex-1 ">
       <GameBoard

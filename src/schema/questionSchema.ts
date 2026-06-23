@@ -1,4 +1,3 @@
-import { QuestionType } from "@/generated/prisma/enums";
 import { object, string, infer as zInfer, enum as _enum, array } from "zod";
 
 export const FORMAT_INSTRUCTIONS = {
@@ -20,7 +19,7 @@ export const questionSchema = object({
   conceptId: string().describe(
     "The **EXACT** ID of this concept this question is testing",
   ),
-  type: _enum(QuestionType),
+  type: _enum(["MULTIPLE_CHOICE", "TRUE_OR_FALSE"]),
   question: string().describe("The text of the question"),
   options: array(string()).describe(
     "Provide EXACTLY the number of strings requested by 'Required Option Count'. Do not default to 4.",
