@@ -68,10 +68,7 @@ export const useGameEngineStore = create<State & Action>((set, get) => ({
   toasts: [],
   credits: 2000,
   jokers: [],
-  consumables: MOCK_INVENTORY.map((item) => ({
-    ...item,
-    quantity: item.quantity ?? 0,
-  })),
+  consumables: [],
   isShopOpen: false,
   lastOpenedShop: 0,
   is5050Active: false,

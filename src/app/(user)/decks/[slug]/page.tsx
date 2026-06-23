@@ -22,7 +22,7 @@ const page = async ({ params }: PageProps) => {
   });
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center p-6 text-[#f0ede8] relative">
+    <div className="flex flex-col flex-1 h-full items-center justify-center p-6 text-[#f0ede8] relative">
       {/* Background ambient glow (optional, adds atmosphere) */}
       <div className="w-full max-w-lg   shadow-2xl rounded  sm:p-10 flex flex-col  relative  ">
         {/* Header Section */}

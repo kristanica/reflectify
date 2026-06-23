@@ -1,10 +1,10 @@
 "use client";
 
-import { BookOpen, Shield, Sparkles, Trophy, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Modal from "../run/ExitRunModal";
+import { navItems } from "@/lib/constants";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -14,21 +14,14 @@ const Navigation = () => {
   };
 
   const [confirmExit, setConfirmExit] = useState<boolean>(false);
-  const navItems = [
-    { name: "Keep", href: "/dashboard", icon: Shield },
-    { name: "Archives (Seeds)", href: "/decks", icon: BookOpen },
-    { name: "Shop", href: "/shop", icon: Sparkles },
-    { name: "Leaderboard", href: "/leaderboard", icon: Trophy },
-    { name: "Player Profile", href: "/profile", icon: User },
-  ];
 
   return (
-    <aside className="flex inset-0 flex-row justify-between border-b py-2 px-7 w-full">
-      <div>
+    <aside className="w-full md:flex md:items-center md:justify-between my-1 px-7">
+      <div className="hidden md:block ">
         <p className="text-foreground font-bold tracking-widest">REFLECTIFY</p>
       </div>
 
-      <nav>
+      <nav className="hidden md:block">
         <ul className="flex flex-row gap-2  text-[12px] text-foreground/70 uppercase">
           {pathname === "/run" ? (
             <li

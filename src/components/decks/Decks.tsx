@@ -58,7 +58,7 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
   }
 
   return (
-    <div className="flex flex-col h-[480px] justify-between">
+    <div className="flex h-95   md:h-122 flex-col  justify-between overflow-y-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {decks.map((seed) => (
           <div

@@ -11,62 +11,60 @@ const AnimateAuth = () => {
   const [authForm, toggleAuthForm] = useState<"login" | "signUp">("login");
 
   return (
-    <div className="relative">
-      <AnimatePresence mode="wait">
-        {authForm === "login" ? (
-          <motion.div
-            key="login"
-            initial={{ opacity: 0, x: "-10%" }}
-            animate={{ opacity: 1, x: "0%" }}
-            exit={{ opacity: 0, x: "-10%" }}
-            transition={{
-              type: "spring",
-              stiffness: 100,
-              damping: 15,
-            }}
-          >
-            <LoginForm></LoginForm>
-            <FieldDescription className="text-center">
-              Don&apos;t have an account?{" "}
-              <Button
-                type="button"
-                onClick={() => toggleAuthForm("signUp")}
-                variant="link"
-                className="underline-offset-0 text-muted-foreground hover:text-foreground text-xs"
-              >
-                Sign up
-              </Button>
-            </FieldDescription>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="signUp"
-            initial={{ opacity: 0, x: "10%" }}
-            animate={{ opacity: 1, x: "0%" }}
-            exit={{ opacity: 0, x: "10%" }}
-            transition={{
-              type: "spring",
-              stiffness: 100,
-              damping: 15,
-            }}
-          >
-            <SignUpForm toggleAuthForm={toggleAuthForm}></SignUpForm>
+    <AnimatePresence mode="wait">
+      {authForm === "login" ? (
+        <motion.div
+          key="login"
+          initial={{ opacity: 0, x: "-10%" }}
+          animate={{ opacity: 1, x: "0%" }}
+          exit={{ opacity: 0, x: "-10%" }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 15,
+          }}
+        >
+          <LoginForm></LoginForm>
+          <FieldDescription className="text-center">
+            Don&apos;t have an account?{" "}
+            <Button
+              type="button"
+              onClick={() => toggleAuthForm("signUp")}
+              variant="link"
+              className="underline-offset-0 text-muted-foreground hover:text-foreground text-xs"
+            >
+              Sign up
+            </Button>
+          </FieldDescription>
+        </motion.div>
+      ) : (
+        <motion.div
+          key="signUp"
+          initial={{ opacity: 0, x: "10%" }}
+          animate={{ opacity: 1, x: "0%" }}
+          exit={{ opacity: 0, x: "10%" }}
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 15,
+          }}
+        >
+          <SignUpForm toggleAuthForm={toggleAuthForm}></SignUpForm>
 
-            <FieldDescription className="text-center">
-              Already have an Account?
-              <Button
-                type="button"
-                onClick={() => toggleAuthForm("login")}
-                variant="ghost"
-                className="underline-offset-0 text-muted-foreground hover:text-foreground text-xs"
-              >
-                Login
-              </Button>
-            </FieldDescription>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          <FieldDescription className="text-center">
+            Already have an Account?
+            <Button
+              type="button"
+              onClick={() => toggleAuthForm("login")}
+              variant="ghost"
+              className="underline-offset-0 text-muted-foreground hover:text-foreground text-xs"
+            >
+              Login
+            </Button>
+          </FieldDescription>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

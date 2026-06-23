@@ -14,10 +14,8 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <div className="w-full   flex flex-col p-6 space-y-6 text-[#f0ede8] overflow-y-auto">
-      {/* 1. Header & Quick Actions */}
       <DeckHeader></DeckHeader>
       <DeckOwner></DeckOwner>
-      {/* 2. Seeds Grid */}
 
       <Decks currentPage={currentPage}></Decks>
     </div>

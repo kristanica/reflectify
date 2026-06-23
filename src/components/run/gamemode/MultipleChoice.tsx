@@ -50,11 +50,13 @@ const MultipleChoice = ({ choices, answer }: MultipleChoiceType) => {
           isDisabled = true;
         } else if (hasAnswered) {
           if (isCorrectChoice) {
-            optionStyle = "border-emerald-500 bg-emerald-500/10 text-emerald-400";
+            optionStyle =
+              "border-emerald-500 bg-emerald-500/10 text-emerald-400";
           } else if (isSelected && !isCorrectChoice) {
             optionStyle = "border-red-500 bg-red-500/10 text-red-500";
           } else {
-            optionStyle = "border-zinc-900 bg-zinc-950/20 text-zinc-700 opacity-50";
+            optionStyle =
+              "border-zinc-900 bg-zinc-950/20 text-zinc-700 opacity-50";
           }
         } else if (isSelected) {
           optionStyle =

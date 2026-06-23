@@ -8,12 +8,14 @@ import useGenerateQuestions from "@/hooks/useGenerateQuestions";
 import GameTypeIdentifier from "./GameTypeIdentifier";
 import { useGameEngineStore } from "@/store/useGameEngineStore";
 
-import Lives from "./Lives";
+import Stats from "./Stats";
 
 import GameOver from "./GameOver";
-import Score from "./Score";
+
 import BlackMarket from "./shop/BlackMarket";
 import Explanation from "@/components/run/Explanation";
+import Augments from "./Augments";
+import Logs from "./Logs";
 
 export default function GameBoard({ deckId, userId }: GameBoardType) {
   // gameStore
@@ -24,10 +26,8 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
   const depth = useGameEngineStore((state) => state.questionsAnswered);
 
   const lives = useGameEngineStore((state) => state.lives);
-  const logs = useGameEngineStore((state) => state.logs);
   const submitAnswer = useGameEngineStore((state) => state.submitAnswer);
 
-  const consumables = useGameEngineStore((state) => state.consumables);
   const consumeItem = useGameEngineStore((state) => state.useConsumable);
   const isShopOpen = useGameEngineStore((state) => state.isShopOpen);
   const openShop = useGameEngineStore((state) => state.openShop);
@@ -134,7 +134,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
     return <BlackMarket />;
   }
   return (
-    <div className="w-full h-full flex flex-col p-6 text-[#f0ede8] overflow-hidden">
+    <div className="w-full h-full flex flex-col pt-2 p-6 text-[#f0ede8] overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
           key="question"
@@ -144,7 +144,7 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
           className="flex flex-col flex-1 relative w-full max-w-5xl mx-auto h-full space-y-6 min-h-0"
         >
           {/* Header Block */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-800 pb-4 gap-4 flex-none">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-800 pb-4 gap-4 ">
             <div>
               <h2 className="text-xl font-bold font-mono tracking-widest text-[#f0a500] uppercase">
                 [ ACTIVE RUN ]
@@ -154,16 +154,15 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
               </p>
             </div>
 
-            <div className="flex gap-4 text-xs font-mono items-center">
-              <Lives />
-              <Score />
+            <div className="flex  gap-4 text-xs font-mono items-center  flex-row">
+              <Stats />
             </div>
           </div>
 
           {/* Main Layout Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0 ">
             {/* LEFT COLUMN: Question & Answers (3/4 Width) */}
-            <div className="lg:col-span-3 flex flex-col space-y-6 overflow-y-auto pr-2 pb-6">
+            <div className="lg:col-span-3 row-span-4 flex flex-col space-y-6 overflow-y-auto pr-2 pb-6 ">
               {/* Question Block */}
               <div className="border border-zinc-800 bg-zinc-950/40 p-6 rounded flex flex-col space-y-4">
                 <div className="flex justify-between items-start border-b border-zinc-800 pb-4">
@@ -246,85 +245,14 @@ export default function GameBoard({ deckId, userId }: GameBoardType) {
                 </AnimatePresence>
               </div>
 
-              <div className="border border-zinc-800 bg-zinc-950/40 p-5 rounded font-mono mt-4">
-                <h2 className="text-sm font-bold font-mono tracking-widest text-yellow-500 uppercase mb-3">
-                  [ LOGS RUN ]
-                </h2>
-
-                <div className="max-h-32 w-full border-zinc-800 border bg-zinc-950/20 py-2 px-3 overflow-y-auto text-xs flex flex-col-reverse">
-                  {logs.map((item, index) => (
-                    <p key={index} className="text-zinc-500 mb-1">
-                      {item}
-                    </p>
-                  ))}
-                </div>
+              <div className="  grid  gap-2 md:grid-cols-2 rounded font-mono mt-4">
+                <Augments handleConsumable={handleConsumable}></Augments>
               </div>
             </div>
 
             {/* RIGHT COLUMN: Augments & Consumables (1/4 Width) */}
-            <div className="flex flex-col space-y-6 overflow-y-auto pr-2 pb-6 min-h-0">
-              {/* Active Augments */}
-              <div className="border border-zinc-800 bg-zinc-950/40 p-5 rounded space-y-4 font-mono text-xs flex-none">
-                <h3 className="font-bold text-[#f0a500] tracking-wider uppercase border-b border-zinc-800 pb-2">
-                  [ AUGMENTS ]
-                </h3>
-
-                {jokers.length === 0 ? (
-                  <p className="text-zinc-500 text-[10px] uppercase tracking-widest">
-                    No active augments
-                  </p>
-                ) : (
-                  <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-3 gap-2">
-                    {jokers.map((joker) => (
-                      <div
-                        key={joker.id}
-                        title={joker.description}
-                        className="relative group cursor-help flex items-center justify-center aspect-square border border-zinc-800 bg-zinc-950 rounded hover:border-[#f0a500]/50 transition-colors"
-                      >
-                        <span className="text-xl drop-shadow-[0_0_5px_rgba(240,165,0,0.5)] group-hover:scale-110 transition-transform">
-                          {joker.icon}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Consumables (Hacks) */}
-              <div className="border border-zinc-800 bg-zinc-950/40 p-5 rounded flex flex-col font-mono text-xs flex-1 min-h-0">
-                <h3 className="font-bold text-cyan-500 tracking-wider uppercase border-b border-zinc-800 pb-2 mb-4">
-                  [ HACKS ]
-                </h3>
-
-                {consumables.length === 0 ? (
-                  <p className="text-zinc-500 text-[10px] uppercase tracking-widest">
-                    No hacks available
-                  </p>
-                ) : (
-                  <div className="flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar">
-                    {consumables.map((consume) => (
-                      <button
-                        key={consume.id}
-                        title={consume.description}
-                        onClick={() => handleConsumable(consume.id)}
-                        className="w-full flex items-center justify-between p-2.5 border border-zinc-800 bg-zinc-950 rounded hover:border-cyan-500/50 transition-colors group text-left flex-none"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl drop-shadow-[0_0_5px_rgba(6,182,212,0.5)] group-hover:scale-110 transition-transform">
-                            {consume.icon}
-                          </span>
-                          <span className="text-xs text-zinc-300 group-hover:text-cyan-400 transition-colors hidden xl:inline-block">
-                            {consume.name}
-                          </span>
-                        </div>
-                        <span className="text-[10px] font-bold text-zinc-400 bg-zinc-900 px-2 py-1 rounded border border-zinc-800">
-                          x{consume.quantity}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+            <div className="flex  flex-1 flex-col space-x-6 md:space-x-0 border-t row-span-1 pt-5 md:pt-0 md:border-none md:row-span-4 space-y-6 overflow-y-auto pr-2 pb-6">
+              <Logs></Logs>
             </div>
           </div>
         </motion.div>
