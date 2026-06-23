@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import useGenerateQuestions from "@/hooks/useGenerateQuestions";
 import GameTypeIdentifier from "./GameTypeIdentifier";
 import { useGameEngineStore } from "@/store/useGameEngineStore";
-
+import { useShallow } from "zustand/react/shallow";
 import Stats from "./Stats";
 
 import GameOver from "./GameOver";
@@ -22,39 +22,53 @@ export default function GameBoard({
   userId,
   baseXp,
   baseLevel,
+  sessionId,
 }: GameBoardType) {
   // gameStore
-  const selectedAnswer = useGameEngineStore((state) => state.selectedAnswer);
-  const hasAnswered = useGameEngineStore((state) => state.hasAnswered);
-
-  const questionQueues = useGameEngineStore((state) => state.questionQueues);
-  const depth = useGameEngineStore((state) => state.questionsAnswered);
-
-  const lives = useGameEngineStore((state) => state.lives);
-  const submitAnswer = useGameEngineStore((state) => state.submitAnswer);
-
-  const consumeItem = useGameEngineStore((state) => state.useConsumable);
-  const isShopOpen = useGameEngineStore((state) => state.isShopOpen);
-  const openShop = useGameEngineStore((state) => state.openShop);
-  const lastShopDepth = useGameEngineStore((state) => state.lastOpenedShop);
-  const jokers = useGameEngineStore((state) => state.jokers);
-  const initPlayerStat = useGameEngineStore((state) => state.initPlayerStat);
+  const {
+    selectedAnswer,
+    hasAnswered,
+    questionQueues,
+    depth,
+    lives,
+    submitAnswer,
+    consumeItem,
+    isShopOpen,
+    openShop,
+    lastShopDepth,
+    jokers,
+    initPlayerStat,
+    setQuestionQueues,
+    handleNextQuestion,
+    setSessionId,
+  } = useGameEngineStore(
+    useShallow((state) => ({
+      selectedAnswer: state.selectedAnswer,
+      hasAnswered: state.hasAnswered,
+      questionQueues: state.questionQueues,
+      depth: state.questionsAnswered,
+      lives: state.lives,
+      submitAnswer: state.submitAnswer,
+      consumeItem: state.useConsumable,
+      isShopOpen: state.isShopOpen,
+      openShop: state.openShop,
+      lastShopDepth: state.lastOpenedShop,
+      jokers: state.jokers,
+      initPlayerStat: state.initPlayerStat,
+      setQuestionQueues: state.setQuestionQueues,
+      handleNextQuestion: state.handleNextQuestion,
+      setSessionId: state.setSessionId,
+    })),
+  );
 
   const hasInitialized = useRef<boolean>(false);
 
   useEffect(() => {
     if (hasInitialized.current) return;
     initPlayerStat(baseXp, baseLevel);
+    setSessionId(sessionId);
     hasInitialized.current = true;
-  }, [baseXp, baseLevel, initPlayerStat]);
-
-  const setQuestionQueues = useGameEngineStore(
-    (state) => state.setQuestionQueues,
-  );
-
-  const handleNextQuestion = useGameEngineStore(
-    (state) => state.handleNextQuestion,
-  );
+  }, [baseXp, baseLevel, initPlayerStat, setSessionId, sessionId]);
 
   const handleConsumable = useCallback(
     (consumableId: string) => {

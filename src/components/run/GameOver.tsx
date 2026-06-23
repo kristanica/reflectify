@@ -1,16 +1,81 @@
 import { motion } from "motion/react";
 import { useGameEngineStore } from "@/store/useGameEngineStore";
-import { redirect } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { useShallow } from "zustand/react/shallow";
+import saveToGameSession from "@/actions/run/saveGameSession";
+import { useRouter } from "next/navigation";
+
 const GameOver = () => {
-  const depth = useGameEngineStore((state) => state.questionsAnswered);
-  const maxStreak = useGameEngineStore((state) => state.maxStreak);
-  const score = useGameEngineStore((state) => state.score);
-  const resetGame = useGameEngineStore((state) => state.resetGame);
+  const router = useRouter();
+  const {
+    depth,
+    maxStreak,
+    shopHistory,
+    inCorrectAnswerCount,
+    resetGame,
+    correctAnswerCount,
+    score,
+    totalAccumulatedCredits,
+    newLevel,
+    sessionId,
+    sessionExpEarned,
+    addToast,
+  } = useGameEngineStore(
+    useShallow((state) => ({
+      depth: state.questionsAnswered,
+      maxStreak: state.maxStreak,
+      shopHistory: state.shopHistory,
+      inCorrectAnswerCount: state.incorrectAnswerCount,
+      correctAnswerCount: state.correctAnswerCount,
+      sessionExpEarned: state.sessionExpEarned,
+      resetGame: state.resetGame,
+      score: state.score,
+      totalAccumulatedCredits: state.totalAccumulatedCredits,
+      newLevel: state.currentLevel,
+      sessionId: state.sessionId,
+      addToast: state.addToast,
+    })),
+  );
+
+  const hasSaved = useRef<boolean>(false);
 
   const handleReset = () => {
     resetGame();
-    redirect("/decks");
+    router.push("/decks");
   };
+
+  useEffect(() => {
+    if (hasSaved.current) return;
+    (async () => {
+      const response = await saveToGameSession({
+        maxStreak,
+        shopHistory,
+        inCorrectAnswerCount,
+        correctAnswerCount,
+        sessionId,
+        score,
+        sessionExpEarned,
+        totalAccumulatedCredits,
+        newLevel,
+      });
+
+      if (response.success) {
+        addToast("system", "Run ended");
+      }
+    })();
+    hasSaved.current = true;
+  }, [
+    correctAnswerCount,
+    inCorrectAnswerCount,
+    maxStreak,
+    newLevel,
+    score,
+    sessionExpEarned,
+    sessionId,
+    shopHistory,
+    totalAccumulatedCredits,
+    addToast,
+  ]);
 
   return (
     <div className="text-gray-400 h-full flex flex-1  flex-col items-center justify-center">

@@ -48,6 +48,7 @@ const page = async ({ searchParams }: PageProps) => {
         baseLevel={userStat.level}
         deckId={activeSession?.deckId}
         userId={userId}
+        sessionId={sessionId}
       ></GameBoard>
     </div>
   );

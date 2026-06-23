@@ -1,7 +1,5 @@
 import StartSessionForm from "@/components/decks/StartSessionForm";
 import prisma from "@/lib/prisma";
-import Link from "next/link";
-import React from "react";
 
 type PageProps = {
   params: Promise<{

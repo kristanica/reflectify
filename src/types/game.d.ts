@@ -3,6 +3,7 @@ type GameBoardType = {
   userId: string;
   baseXp: number;
   baseLevel: number;
+  sessionId: string;
 };
 type GeneratedQuestion = {
   conceptId: string;
