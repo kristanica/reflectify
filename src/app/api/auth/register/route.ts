@@ -4,7 +4,7 @@ import { safeParse, ZodError } from "zod";
 import bcrypt from "bcryptjs";
 import { registerSchema } from "@/schema/registerSchema";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const validated = safeParse(registerSchema, body);
