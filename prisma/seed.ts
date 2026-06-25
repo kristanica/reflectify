@@ -1,6 +1,6 @@
 import prisma from "../src/lib/prisma";
 import { faker } from "@faker-js/faker";
-import { QuestionType, SourceType } from "@/generated/prisma/enums";
+import { SourceType } from "@/generated/prisma/enums";
 const fakeUsers = Array.from({ length: 10 }).map(() => ({
   email: faker.internet.email(),
   name: faker.person.fullName(),
@@ -91,7 +91,10 @@ async function main() {
     Array.from({ length: faker.number.int({ min: 5, max: 25 }) }).map(
       (_, index) => ({
         deckId: deck.id,
-        questionType: faker.helpers.enumValue(QuestionType),
+        questionType: faker.helpers.arrayElement([
+          "MULTIPLE_CHOICE",
+          "TRUE_OR_FALSE",
+        ]),
         options:
           (index + 1) % 3
             ? Array.from({ length: 4 }).map(() => faker.word.words(1))
