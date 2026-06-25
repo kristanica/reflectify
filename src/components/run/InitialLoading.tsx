@@ -31,7 +31,7 @@ const InitialLoading = () => {
   }, [LOADING_QUOTES]);
 
   return (
-    <div className="text-[#f0a500] font-mono text-xs uppercase tracking-[0.3em] animate-pulse text-center px-4">
+    <div className="text-mocha-yellow font-mono text-xs uppercase tracking-[0.3em] animate-pulse text-center px-4">
       <Spinner className="mx-auto my-10 h-10 w-10"></Spinner>
       {quote}
     </div>

@@ -13,7 +13,7 @@ export default async function Page({ searchParams }: PageProps) {
   const currentPage = Number(params.page || 1);
 
   return (
-    <div className="w-full   flex flex-col p-6 space-y-6 text-[#f0ede8] overflow-y-auto">
+    <div className="w-full flex flex-col p-6 space-y-6 text-mocha-text overflow-y-auto">
       <DeckHeader></DeckHeader>
       <DeckOwner></DeckOwner>
 

@@ -1,5 +1,6 @@
 import generateQuestions from "@/actions/run/generateQuestions";
 import getConcepts from "@/actions/run/getConcepts";
+import { MOCK_QUESTIONS } from "@/lib/constants";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -23,18 +24,17 @@ const useGenerateQuestions = ({
       currentIds: string[];
       depth: number;
     }) => {
-      const tasks = await getConcepts({
-        userId: userId,
-        deckId: deckId,
-        questionQueues: currentIds,
-        depth,
-      });
+      // const tasks = await getConcepts({
+      //   userId: userId,
+      //   deckId: deckId,
+      //   questionQueues: currentIds,
+      //   depth,
+      // });
 
-      if (!tasks || tasks.length === 0) return;
+      // if (!tasks || tasks.length === 0) return;
 
-      const generatedConcepts = await generateQuestions(tasks);
-      console.log(generatedConcepts);
-      return generatedConcepts;
+      // const generatedConcepts = await generateQuestions(tasks);
+      return MOCK_QUESTIONS;
     },
     onSettled: () => {},
     onSuccess: (data) => {

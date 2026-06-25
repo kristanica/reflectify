@@ -166,16 +166,16 @@ export default function LeaderboardPage() {
   const [activeTab, setActiveTab] = useState<TabType>("xp");
 
   return (
-    <div className="w-full flex flex-col p-6 space-y-6 text-[#f0ede8] overflow-y-auto">
-      <div className="flex border border-zinc-800 bg-zinc-950 p-1.5 rounded font-mono text-xs gap-2">
+    <div className="w-full flex flex-col p-6 space-y-6 text-mocha-text overflow-y-auto">
+      <div className="flex border border-mocha-surface1 bg-mocha-mantle p-1.5 rounded font-mono text-xs gap-2">
         {(["xp", "score", "streak"] as TabType[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 text-center py-2 transition-all uppercase font-bold tracking-wider ${
               activeTab === tab
-                ? "bg-[#f0a500] text-black shadow-[0_0_8px_rgba(240,165,0,0.2)]"
-                : "text-zinc-500 hover:text-zinc-300"
+                ? "bg-mocha-yellow text-black shadow-[0_0_8px_rgba(240,165,0,0.2)]"
+                : "text-mocha-overlay1 hover:text-mocha-subtext1"
             }`}
           >
             {tab === "xp"
@@ -188,10 +188,10 @@ export default function LeaderboardPage() {
       </div>
 
       {/* 3. Scores Table */}
-      <div className="border border-zinc-800 bg-zinc-950/40 rounded overflow-hidden font-mono text-xs">
+      <div className="border border-mocha-surface1 bg-mocha-base/40 rounded overflow-hidden font-mono text-xs">
         <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="border-b border-zinc-800 bg-zinc-950 text-zinc-500 text-[10px] tracking-wider uppercase">
+            <tr className="border-b border-mocha-surface1 bg-mocha-mantle text-mocha-overlay1 text-[10px] tracking-wider uppercase">
               <th className="py-3 px-4 font-bold">Rank</th>
               <th className="py-3 px-4 font-bold">Scholar</th>
               <th className="py-3 px-4 font-bold text-center">Level</th>
@@ -203,19 +203,19 @@ export default function LeaderboardPage() {
               // Styling helper for podium ranks (Gold, Silver, Bronze)
               const rankColor =
                 row.rank === 1
-                  ? "text-[#f0a500] font-bold"
+                  ? "text-mocha-yellow font-bold"
                   : row.rank === 2
-                    ? "text-zinc-350 font-bold"
+                    ? "text-mocha-subtext0 font-bold"
                     : row.rank === 3
-                      ? "text-amber-700 font-bold"
-                      : "text-zinc-500";
+                      ? "text-mocha-maroon font-bold"
+                      : "text-mocha-overlay1";
 
               return (
                 <tr
                   key={row.name}
-                  className={`border-b border-zinc-900 transition-colors hover:bg-zinc-900/30 ${
+                  className={`border-b border-mocha-surface2 transition-colors hover:bg-mocha-surface1/30 ${
                     row.isCurrentUser
-                      ? "bg-zinc-900/50 border-y border-[#f0a500]/30"
+                      ? "bg-mocha-surface1/50 border-y border-mocha-yellow/30"
                       : ""
                   }`}
                 >
@@ -234,19 +234,21 @@ export default function LeaderboardPage() {
                   </td>
 
                   {/* Name Column */}
-                  <td className="py-3.5 px-4 font-bold text-zinc-200">
-                    <span className={row.isCurrentUser ? "text-[#f0a500]" : ""}>
+                  <td className="py-3.5 px-4 font-bold text-mocha-subtext0">
+                    <span
+                      className={row.isCurrentUser ? "text-mocha-yellow" : ""}
+                    >
                       {row.name}
                     </span>
                   </td>
 
                   {/* Level Column */}
-                  <td className="py-3.5 px-4 text-center text-zinc-400 font-bold">
+                  <td className="py-3.5 px-4 text-center text-mocha-overlay2 font-bold">
                     Lv. {row.level}
                   </td>
 
                   {/* Value Column */}
-                  <td className="py-3.5 px-4 text-right font-bold text-white tracking-wide">
+                  <td className="py-3.5 px-4 text-right font-bold text-mocha-text tracking-wide">
                     {row.value}
                   </td>
                 </tr>
@@ -257,9 +259,9 @@ export default function LeaderboardPage() {
       </div>
 
       {/* 4. Player Standing Footer */}
-      <div className="border border-[#f0a500]/20 bg-[#f0a500]/5 p-4 rounded text-center font-mono text-xs text-zinc-400">
+      <div className="border border-mocha-yellow/20 bg-mocha-yellow/5 p-4 rounded text-center font-mono text-xs text-mocha-overlay2">
         <span>Your active global ranking is: </span>
-        <span className="text-[#f0a500] font-bold">#5 overall</span>
+        <span className="text-mocha-yellow font-bold">#5 overall</span>
         <span>. Play runs and log daily reviews to advance.</span>
       </div>
     </div>

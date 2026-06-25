@@ -85,7 +85,7 @@ const IngestForm = () => {
   return (
     <section className=" w-1/2 mx-auto  ">
       {isSubmitting ? (
-        <div className="flex flex-col items-center gap-4 mt-4 justify-center border border-zinc-800 bg-zinc-950 p-6 rounded font-mono text-xs text-zinc-400">
+        <div className="flex flex-col items-center gap-4 mt-4 justify-center border border-mocha-surface1 bg-mocha-mantle p-6 rounded font-mono text-xs text-mocha-overlay2">
           <div className="flex items-center gap-3">
             <span>
               {progress < 100
@@ -93,9 +93,9 @@ const IngestForm = () => {
                 : "LORE UPLOADED"}
             </span>
           </div>
-          <div className="w-full max-w-xs h-1 bg-zinc-900 rounded-full overflow-hidden">
+          <div className="w-full max-w-xs h-1 bg-mocha-surface1 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-zinc-400"
+              className="h-full bg-mocha-overlay2"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ ease: "linear", duration: 0.2 }}
@@ -112,7 +112,7 @@ const IngestForm = () => {
             <Field>
               <FieldLabel
                 htmlFor="seedTitle"
-                className="text-zinc-400 uppercase tracking-wider block"
+                className="text-mocha-overlay2 uppercase tracking-wider block"
               >
                 Seed Identication
               </FieldLabel>
@@ -130,14 +130,14 @@ const IngestForm = () => {
                     payload: e.target.value,
                   })
                 }
-                className="w-full border border-zinc-850 bg-zinc-950 px-4 py-3 text-white rounded outline-none focus:border-[#f0a500] transition-colors"
+                className="w-full border border-mocha-surface1 bg-mocha-mantle px-4 py-3 text-mocha-text rounded outline-none focus:border-mocha-yellow transition-colors"
               ></Input>
             </Field>
 
             <Field className="flex flex-col">
               <FieldLabel
                 htmlFor="ingestionType"
-                className="text-zinc-400 uppercase tracking-wider block"
+                className="text-mocha-overlay2 uppercase tracking-wider block"
               >
                 Ingestion Type
               </FieldLabel>
@@ -147,7 +147,7 @@ const IngestForm = () => {
                 id="ingestionType"
                 value={state.ingestType}
               />
-              <div className="flex border border-zinc-850 bg-zinc-950 p-1 rounded gap-2">
+              <div className="flex border border-mocha-surface1 bg-mocha-mantle p-1 rounded gap-2">
                 {toggleType.map((type) => (
                   <Button
                     type="button"
@@ -159,10 +159,10 @@ const IngestForm = () => {
                       })
                     }
                     key={type}
-                    className={`flex-1 text-center py-2 transition-all uppercase font-bold text-[10px] bg-zinc-950  ${
+                    className={`flex-1 text-center py-2 transition-all uppercase font-bold text-[10px] bg-mocha-mantle ${
                       state.ingestType === type
-                        ? "bg-[#f0a500] text-black"
-                        : "text-zinc-500 hover:text-zinc-300"
+                        ? "bg-mocha-yellow text-black"
+                        : "text-mocha-overlay1 hover:text-mocha-subtext1"
                     }`}
                   >
                     {type}
@@ -185,12 +185,12 @@ const IngestForm = () => {
                     exit={{ x: -20, opacity: 0 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     onClick={() => fileRef.current?.click()}
-                    className="h-full border border-dashed border-zinc-800 hover:border-[#f0a500]/50 font-mono text-xs text-zinc-400 rounded p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-zinc-950 hover:bg-zinc-900/40"
+                    className="h-full border border-dashed border-mocha-surface1 hover:border-mocha-yellow/50 font-mono text-xs text-mocha-overlay2 rounded p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-mocha-mantle hover:bg-mocha-base/40"
                   >
                     {state.file ? (
                       <div className="flex flex-col items-center space-y-2">
-                        <FileText className="w-10 h-10 text-[#f0a500]" />
-                        <p className="text-white text-xs font-bold truncate max-w-[200px]">
+                        <FileText className="w-10 h-10 text-mocha-yellow" />
+                        <p className="text-mocha-text text-xs font-bold truncate max-w-[200px]">
                           {state.file.name}
                         </p>
                         <button
@@ -203,14 +203,14 @@ const IngestForm = () => {
                               payload: null,
                             });
                           }}
-                          className="text-[10px] text-red-500 hover:text-red-400 flex items-center gap-1 font-mono uppercase"
+                          className="text-[10px] text-mocha-red hover:text-mocha-red/80 flex items-center gap-1 font-mono uppercase"
                         >
                           <X className="w-3.5 h-3.5" /> Remove file
                         </button>
                       </div>
                     ) : (
                       <div className="flex flex-col items-center justify-center">
-                        <UploadCloudIcon className="w-8 h-8 mb-2 text-zinc-500" />
+                        <UploadCloudIcon className="w-8 h-8 mb-2 text-mocha-overlay1" />
                         <Label className="pointer-events-none">
                           Ingest Source File (Max 10MB)
                         </Label>
@@ -251,7 +251,7 @@ const IngestForm = () => {
                       id="topicDescription"
                       name="topicDescription"
                       placeholder="Explain the topic or list facts you want compiled..."
-                      className="w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-white rounded outline-none focus:border-[#f0a500] transition-colors resize-none leading-relaxed"
+                      className="w-full border border-mocha-surface1 bg-mocha-mantle px-4 py-3 text-mocha-text rounded outline-none focus:border-mocha-yellow transition-colors resize-none leading-relaxed"
                     />
                   </motion.div>
                 )}
@@ -261,7 +261,7 @@ const IngestForm = () => {
             <Field>
               <button
                 type="submit"
-                className="w-full block text-center border border-[#f0a500] hover:bg-[#f0a500] hover:text-black text-[#f0a500] py-3.5 transition-all uppercase font-bold text-xs rounded-sm cursor-pointer"
+                className="w-full block text-center border border-mocha-yellow hover:bg-mocha-yellow hover:text-black text-mocha-yellow py-3.5 transition-all uppercase font-bold text-xs rounded-sm cursor-pointer"
               >
                 Ingest
               </button>

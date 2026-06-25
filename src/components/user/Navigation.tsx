@@ -16,7 +16,7 @@ const Navigation = () => {
   const [confirmExit, setConfirmExit] = useState<boolean>(false);
 
   return (
-    <aside className="w-full md:flex md:items-center md:justify-between my-1 px-7">
+    <aside className="w-full md:flex md:items-center md:justify-between my-1 px-7 border-b py-2">
       <div className="hidden md:block ">
         <p className="text-foreground font-bold tracking-widest">REFLECTIFY</p>
       </div>
@@ -24,11 +24,7 @@ const Navigation = () => {
       <nav className="hidden md:block">
         <ul className="flex flex-row gap-2  text-[12px] text-foreground/70 uppercase">
           {pathname === "/run" ? (
-            <li
-              className="flex flex-row px-3 py-1 border-x border-zinc-800 items-center justify-center transition-all hover:text-white 
-                    
-                       text-zinc-400"
-            >
+            <li className="flex flex-row px-3 py-1 border-x border-mocha-surface1 items-center justify-center transition-all hover:text-mocha-text text-mocha-overlay2">
               <button onClick={toggleExit}>Exit</button>
             </li>
           ) : (
@@ -39,10 +35,10 @@ const Navigation = () => {
               return (
                 <Link key={index} href={item.href}>
                   <li
-                    className={`flex flex-row px-3 py-1 border-x border-zinc-800 items-center justify-center transition-all hover:text-white ${
+                    className={`flex flex-row px-3 py-1 border-x  items-center justify-center transition-all hover:text-white ${
                       activeUrl
-                        ? "text-[#f0a500] font-bold border-[#f0a500]"
-                        : "text-zinc-400"
+                        ? "text-primary font-bold border-primary  "
+                        : "text-foreground border-muted "
                     }`}
                   >
                     <p>{item.name}</p>
@@ -51,7 +47,6 @@ const Navigation = () => {
               );
             })
           )}
-
           {confirmExit && <Modal onToggle={toggleExit}></Modal>}
         </ul>
       </nav>

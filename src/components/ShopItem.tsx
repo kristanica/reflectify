@@ -19,33 +19,33 @@ const ShopItem = ({
   return (
     <div
       key={id}
-      className="border border-zinc-800 bg-zinc-950/40 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-4 hover:border-[#f0a500]/30 transition-all group"
+      className="border border-mocha-surface1 bg-mocha-base/40 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-4 hover:border-mocha-yellow/30 transition-all group"
     >
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <span className="text-2xl group-hover:scale-110 transition-transform">
             {icon}
           </span>
-          <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+          <h3 className="text-sm font-bold text-mocha-text tracking-wide uppercase">
             {name}
           </h3>
         </div>
-        <p className="text-zinc-400 text-[11px] leading-relaxed">
+        <p className="text-mocha-overlay2 text-[11px] leading-relaxed">
           {description}
         </p>
       </div>
 
       {/* Bottom Section */}
-      <div className="flex items-center justify-between pt-3 border-t border-zinc-900">
-        <span className="text-[#f0a500] font-bold">🪙 {cost} GP</span>
+      <div className="flex items-center justify-between pt-3 border-t border-mocha-surface2">
+        <span className="text-mocha-yellow font-bold">🪙 {cost} GP</span>
 
         <button
           onClick={onPurchase}
           disabled={!canAfford || isSold}
           className={`px-3 py-1.5 border text-[10px] font-bold transition-all ${
             canAfford && !isSold
-              ? "border-[#f0a500] text-[#f0a500] hover:bg-[#f0a500] hover:text-black cursor-pointer"
-              : "border-zinc-800 text-zinc-650 cursor-not-allowed"
+              ? "border-mocha-yellow text-mocha-yellow hover:bg-mocha-yellow hover:text-black cursor-pointer"
+              : "border-mocha-surface1 text-mocha-overlay1 cursor-not-allowed"
           }`}
         >
           {dynamicText || `BUY $${cost}`}

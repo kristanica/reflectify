@@ -58,9 +58,9 @@ export default function ShopItems() {
     <div className="space-y-6">
       {/* Dynamic Gold Status HUD */}
       <div className="flex justify-end pr-2">
-        <div className="border border-[#f0a500]/40 bg-zinc-950 px-4 py-2 rounded text-xs font-mono text-[#f0a500] shadow-[0_0_10px_rgba(240,165,0,0.1)]">
+        <div className="border border-mocha-yellow/40 bg-mocha-mantle px-4 py-2 rounded text-xs font-mono text-mocha-yellow shadow-[0_0_10px_rgba(240,165,0,0.1)]">
           🪙 INVENTORY GOLD:{" "}
-          <span className="text-white font-bold">{gold} GP</span>
+          <span className="text-mocha-text font-bold">{gold} GP</span>
         </div>
       </div>
 
@@ -71,7 +71,7 @@ export default function ShopItems() {
           return (
             <div
               key={item.id}
-              className="border border-zinc-800 bg-zinc-950/40 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-4 hover:border-[#f0a500]/30 transition-all group"
+              className="border border-mocha-surface1 bg-mocha-base/40 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-4 hover:border-mocha-yellow/30 transition-all group"
             >
               {/* Top Section */}
               <div className="space-y-2">
@@ -79,18 +79,18 @@ export default function ShopItems() {
                   <span className="text-2xl group-hover:scale-110 transition-transform">
                     {item.icon}
                   </span>
-                  <h3 className="text-sm font-bold text-white tracking-wide uppercase">
+                  <h3 className="text-sm font-bold text-mocha-text tracking-wide uppercase">
                     {item.name}
                   </h3>
                 </div>
-                <p className="text-zinc-400 text-[11px] leading-relaxed">
+                <p className="text-mocha-overlay2 text-[11px] leading-relaxed">
                   {item.description}
                 </p>
               </div>
 
               {/* Bottom Section */}
-              <div className="flex items-center justify-between pt-3 border-t border-zinc-900">
-                <span className="text-[#f0a500] font-bold">
+              <div className="flex items-center justify-between pt-3 border-t border-mocha-surface2">
+                <span className="text-mocha-yellow font-bold">
                   🪙 {item.cost} GP
                 </span>
 
@@ -99,8 +99,8 @@ export default function ShopItems() {
                   disabled={!canAfford}
                   className={`px-3 py-1.5 border text-[10px] font-bold transition-all ${
                     !canAfford
-                      ? "border-[#f0a500] text-[#f0a500] hover:bg-[#f0a500] hover:text-black cursor-pointer"
-                      : "border-zinc-800 text-zinc-650 cursor-not-allowed"
+                      ? "border-mocha-yellow text-mocha-yellow hover:bg-mocha-yellow hover:text-black cursor-pointer"
+                      : "border-mocha-surface1 text-mocha-overlay1 cursor-not-allowed"
                   }`}
                 >
                   {!canAfford ? "PURCHASE" : "LACK COINS"}

@@ -16,8 +16,8 @@ const Stats = () => {
   return (
     <div className="grid w-full grid-cols-2 md:flex gap-4 items-center h-full">
       {/* Lives */}
-      <section className=" flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-1.5 rounded h-full">
-        <span className="text-zinc-500 font-mono text-[10px] tracking-wider">
+      <section className=" flex items-center gap-2 border bg-card  px-3 py-1.5 rounded h-full">
+        <span className="text-mocha-subtext1 font-mono text-[10px] tracking-wider">
           LIVES:
         </span>
         <div className="flex flex-row gap-1">
@@ -38,8 +38,8 @@ const Stats = () => {
                   <HeartIcon
                     className={`w-3.5 h-3.5 transition-colors duration-300 ${
                       isAlive
-                        ? "fill-red-700 stroke-red-700 drop-shadow-[0_0_8px_rgba(185,28,28,0.5)]"
-                        : "fill-transparent stroke-zinc-600"
+                        ? "fill-mocha-pink stroke-mocha-pink "
+                        : "fill-transparent stroke-mocha-subtext0"
                     }`}
                   />
                 </motion.div>
@@ -75,8 +75,8 @@ const Stats = () => {
       </AnimatePresence>
 
       {/* Score */}
-      <section className="flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-1.5 rounded h-full">
-        <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase">
+      <section className="flex items-center gap-2 border bg-card text-mocha-sky px-3 py-1.5 rounded h-full">
+        <span className="text-mocha-subtext1 font-mono text-[10px] tracking-wider uppercase">
           SCORE:
         </span>
         <motion.div
@@ -85,14 +85,14 @@ const Stats = () => {
           animate={{ scale: 1, color: "#22d3ee" }} // cyan-400 hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          <motion.span className="font-mono text-xs text-white drop-shadow-[0_0_10px_rgba(34,211,238,0.4)] leading-none">
+          <motion.span className="font-mono text-xs text-mocha-sky  leading-none">
             {animatedScore}
           </motion.span>
         </motion.div>
       </section>
 
-      <section className="flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-1.5 rounded h-full">
-        <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase">
+      <section className="flex items-center gap-2 border bg-card  px-3 py-1.5 rounded h-full">
+        <span className="text-mocha-subtext1 font-mono text-[10px] tracking-wider uppercase">
           GOLD:
         </span>
         <motion.div
@@ -101,7 +101,7 @@ const Stats = () => {
           animate={{ scale: 1, color: "gold" }} // cyan-400 hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          <motion.span className="text-[#f0a500] font-mono text-xs drop-shadow-[0_0_10px_rgba(240,165,0,0.4)] leading-none">
+          <motion.span className="text-mocha-sky font-mono text-xs  leading-none">
             {animatedCredits}
           </motion.span>
         </motion.div>

@@ -162,7 +162,7 @@ export default function GameBoard({
     return <BlackMarket />;
   }
   return (
-    <div className="w-full h-full flex flex-col pt-2 p-6 text-[#f0ede8] overflow-hidden">
+    <div className="w-full h-full flex flex-col pt-2 p-6 overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
           key="question"
@@ -172,12 +172,12 @@ export default function GameBoard({
           className="flex flex-col flex-1 relative w-full max-w-5xl mx-auto h-full space-y-6 min-h-0"
         >
           {/* Header Block */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-800 pb-4 gap-4 ">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b  pb-4 gap-4 ">
             <div>
-              <h2 className="text-xl font-bold font-mono tracking-widest text-[#f0a500] uppercase">
+              <h2 className="text-xl font-bold font-mono tracking-widest text-primary uppercase">
                 [ ACTIVE RUN ]
               </h2>
-              <p className="text-xs text-zinc-500 font-mono mt-1">
+              <p className="text-xs text-mocha-subtext0 font-mono mt-1">
                 DEPTH: {depth}
               </p>
             </div>
@@ -192,10 +192,10 @@ export default function GameBoard({
             {/* LEFT COLUMN: Question & Answers (3/4 Width) */}
             <div className="lg:col-span-3 row-span-4 flex flex-col space-y-6 overflow-y-auto pr-2 pb-6 ">
               {/* Question Block */}
-              <div className="border border-zinc-800 bg-zinc-950/40 p-6 rounded flex flex-col space-y-4">
-                <div className="flex justify-between items-start border-b border-zinc-800 pb-4">
+              <div className="border bg-card p-6 rounded flex flex-col space-y-4">
+                <div className="flex justify-between items-start border-b  pb-4">
                   <div>
-                    <h3 className="text-sm font-bold tracking-wider font-mono text-white uppercase">
+                    <h3 className="text-sm font-bold tracking-wider font-mono text-mocha-text uppercase">
                       CURRENT QUERY
                     </h3>
                   </div>
@@ -205,7 +205,7 @@ export default function GameBoard({
                       <button
                         disabled={!hasAnswered}
                         onClick={() => handleNextQuestion()}
-                        className="px-6 py-2 border border-[#f0a500] hover:bg-[#f0a500] hover:text-black text-[#f0a500] font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
+                        className="px-6 py-2 border  bg-transparent  text-mocha-text border-primary hover:bg-primary font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
                       >
                         NEXT
                       </button>
@@ -214,7 +214,7 @@ export default function GameBoard({
                         <button
                           disabled={!selectedAnswer}
                           onClick={answerQuestion}
-                          className="px-6 py-2 border border-[#f0a500] hover:bg-[#f0a500] hover:text-black text-[#f0a500] font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
+                          className="px-6 py-2 border  bg-transparent  text-mocha-text border-primary hover:bg-primary hover:text-muted font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
                         >
                           ANSWER
                         </button>
@@ -224,7 +224,7 @@ export default function GameBoard({
                 </div>
 
                 <div>
-                  <p className="text-zinc-200 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+                  <p className="ttext-mocha-subtext1 font-mono text-sm leading-relaxed whitespace-pre-wrap">
                     {questionQueues[0].question}
                   </p>
                 </div>
@@ -239,8 +239,8 @@ export default function GameBoard({
                 />
               </div>
 
-              <div className="border border-[#f0a500]/30 bg-zinc-950/20 p-5 rounded font-mono mt-4">
-                <h4 className="text-xs text-[#f0a500] uppercase font-bold tracking-wider mb-3">
+              <div className="border bg-card p-5 rounded font-mono mt-4">
+                <h4 className="text-xs text-mocha-text uppercase font-bold tracking-wider mb-3">
                   🤖 AI EXPLANATION
                 </h4>
 

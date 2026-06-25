@@ -10,7 +10,7 @@ const MobileNavigation = () => {
 
   return (
     pathname !== "/run" && (
-      <nav className="md:hidden min-h-[10%] absolute left-1/2 -translate-x-1/2 bottom-0 py-5  w-full flex items-center justify-center dark:bg-black border-t">
+      <nav className="md:hidden min-h-[10%] absolute left-1/2 -translate-x-1/2 bottom-0 py-5 w-full flex items-center justify-center dark:bg-mocha-crust border-t">
         <ul className="flex flex-row gap-2  text-[12px] text-foreground/70 uppercase">
           {navItems.map((item, index) => {
             const activeUrl =
@@ -20,7 +20,9 @@ const MobileNavigation = () => {
               <Link key={index} href={item.href}>
                 <li
                   className={`flex flex-row px-3 py-1  items-center justify-center transition-all hover:text-white ${
-                    activeUrl ? "text-[#f0a500] font-bold " : "text-white"
+                    activeUrl
+                      ? "text-mocha-yellow font-bold"
+                      : "text-mocha-text"
                   }`}
                 >
                   <item.icon></item.icon>

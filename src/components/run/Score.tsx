@@ -23,20 +23,20 @@ const Score = () => {
               y: 10,
               filter: "blur(5px)",
             }}
-            className="flex items-center gap-2 border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 rounded h-full"
+            className="flex items-center gap-2 border border-mocha-yellow/30 bg-mocha-yellow/10 px-3 py-1.5 rounded h-full"
           >
-            <span className="text-amber-500 font-mono text-[10px] tracking-wider uppercase animate-pulse">
+            <span className="text-mocha-yellow font-mono text-[10px] tracking-wider uppercase animate-pulse">
               COMBO:
             </span>
-            <span className="text-amber-400 font-bold font-mono text-xs leading-none">
+            <span className="text-mocha-yellow font-bold font-mono text-xs leading-none">
               x{streak}
             </span>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-1.5 rounded h-full">
-        <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase">
+      <div className="flex items-center gap-2 border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5 rounded h-full">
+        <span className="text-mocha-overlay1 font-mono text-[10px] tracking-wider uppercase">
           SCORE:
         </span>
         <motion.div
@@ -45,14 +45,14 @@ const Score = () => {
           animate={{ scale: 1, color: "#22d3ee" }} // cyan-400 hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          <motion.span className="font-mono text-xs text-white drop-shadow-[0_0_10px_rgba(34,211,238,0.4)] leading-none">
+          <motion.span className="font-mono text-xs text-mocha-text drop-shadow-[0_0_10px_rgba(34,211,238,0.4)] leading-none">
             {animatedScore}
           </motion.span>
         </motion.div>
       </div>
 
-      <div className="flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-1.5 rounded h-full">
-        <span className="text-zinc-500 font-mono text-[10px] tracking-wider uppercase">
+      <div className="flex items-center gap-2 border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5 rounded h-full">
+        <span className="text-mocha-overlay1 font-mono text-[10px] tracking-wider uppercase">
           GOLD:
         </span>
         <motion.div
@@ -61,8 +61,8 @@ const Score = () => {
           animate={{ scale: 1, color: "gold" }} // cyan-400 hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          <motion.span className="text-[#f0a500] font-mono text-xs drop-shadow-[0_0_10px_rgba(240,165,0,0.4)] leading-none">
-           {animatedCredits}
+          <motion.span className="text-mocha-yellow font-mono text-xs drop-shadow-[0_0_10px_rgba(240,165,0,0.4)] leading-none">
+            {animatedCredits}
           </motion.span>
         </motion.div>
       </div>

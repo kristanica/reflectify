@@ -3,26 +3,26 @@ import TypeIt from "typeit-react";
 
 const BlackMarketOwner = () => {
   return (
-    <aside className="border-b border-zinc-800 py-5 select-none">
+    <aside className="border-b border-mocha-surface1 py-5 select-none">
       <div className="grid grid-cols-3 place-items-center">
         <div className="flex items-center flex-col space-y-2">
-          <div className="relative w-20 h-20 rounded-md border border-cyan-500/50 bg-zinc-950 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.15)] overflow-hidden group">
-            <div className="text-cyan-400 text-3xl group-hover:scale-110 transition-transform duration-500">
+          <div className="relative w-20 h-20 rounded-md border border-mocha-sky/50 bg-mocha-mantle flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.15)] overflow-hidden group">
+            <div className="text-mocha-sky text-3xl group-hover:scale-110 transition-transform duration-500">
               👁️‍🗨️
             </div>
           </div>
 
           <div className="flex items-center flex-col">
-            <p className="text-sm font-mono font-bold text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">
+            <p className="text-sm font-mono font-bold text-mocha-sky drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">
               CIPHER
             </p>
-            <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mt-1 text-center">
+            <p className="text-[10px] text-mocha-overlay1 font-mono uppercase tracking-widest mt-1 text-center">
               Rogue Daemon
             </p>
           </div>
         </div>
 
-        <div className="col-span-2 text-xs text-zinc-500 font-mono mt-1 text-left">
+        <div className="col-span-2 text-xs text-mocha-overlay1 font-mono mt-1 text-left">
           <TypeIt
             options={{
               speed: 25,

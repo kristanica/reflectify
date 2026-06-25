@@ -18,19 +18,21 @@ const TrueOrFalse = ({ answer }: TrueOrFalseType) => {
         const isSelected = selectedAnswer === option;
         const isCorrectChoice = option === answer;
         let optionStyle =
-          "border-zinc-800 bg-zinc-950/40 text-gray-300 hover:border-[#f0a500] hover:bg-[#f0a500]/10 hover:text-white";
+          "border-mocha-surface1 bg-mocha-base/40 text-mocha-subtext1 hover:border-mocha-yellow hover:bg-mocha-yellow/10 hover:text-mocha-text";
 
         if (hasAnswered) {
           if (isCorrectChoice) {
-            optionStyle = "border-emerald-500 bg-emerald-500/10 text-emerald-400";
+            optionStyle =
+              "border-mocha-green bg-mocha-green/10 text-mocha-green";
           } else if (isSelected && !isCorrectChoice) {
-            optionStyle = "border-red-500 bg-red-500/10 text-red-500";
+            optionStyle = "border-mocha-red bg-mocha-red/10 text-mocha-red";
           } else {
-            optionStyle = "border-zinc-900 bg-zinc-950/20 text-zinc-700 opacity-50";
+            optionStyle =
+              "border-mocha-surface2 bg-mocha-base/20 text-mocha-overlay0 opacity-50";
           }
         } else if (isSelected) {
           optionStyle =
-            "border-[#f0a500] bg-[#f0a500]/20 text-[#f0a500] shadow-[0_0_10px_rgba(240,165,0,0.2)]";
+            "border-mocha-yellow bg-mocha-yellow/20 text-mocha-yellow shadow-[0_0_10px_rgba(240,165,0,0.2)]";
         }
         return (
           <button

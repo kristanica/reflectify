@@ -13,11 +13,11 @@ const Toast = () => {
         {toasts.map((toast, index) => {
           const colors: Record<string, string> = {
             error:
-              "border-red-500 text-red-400 bg-red-950/80 shadow-[0_0_15px_rgba(239,68,68,0.2)]",
+              "border-mocha-red text-mocha-red bg-mocha-red/20 shadow-[0_0_15px_rgba(239,68,68,0.2)]",
             itemused:
-              "border-emerald-500 text-emerald-400 bg-emerald-950/80 shadow-[0_0_15px_rgba(16,185,129,0.2)]",
+              "border-mocha-green text-mocha-green bg-mocha-green/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]",
             system:
-              "border-amber-500 text-amber-400 bg-amber-950/80 shadow-[0_0_15px_rgba(245,158,11,0.2)]",
+              "border-mocha-yellow text-mocha-yellow bg-mocha-yellow/20 shadow-[0_0_15px_rgba(245,158,11,0.2)]",
           };
 
           return (

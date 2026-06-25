@@ -45,7 +45,7 @@ const page = async ({ searchParams }: PageProps) => {
     notFound();
   }
   return (
-    <div className="text-white h-full w-full flex-1 ">
+    <div className="text-mocha-text h-full w-full flex-1">
       <GameBoard
         baseXp={userStat.xp}
         baseLevel={userStat.level}
