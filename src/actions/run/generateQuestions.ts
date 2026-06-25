@@ -4,7 +4,11 @@ import { FORMAT_INSTRUCTIONS, questionSchema } from "@/schema/questionSchema";
 import { ConceptMasteries } from "./getConcepts"; // Make sure this type includes level and optionCount!
 import { generateText, Output } from "ai";
 import { openai } from "@ai-sdk/openai";
-
+import { createAnthropic } from "@ai-sdk/anthropic";
+export const anthropic = createAnthropic({
+  baseURL: "https://api.openmodel.ai/v1",
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 export default async function generateQuestions(tasks: ConceptMasteries) {
   try {
     // 1. Inject the dynamic parameters (level and optionCount) into each specific task!
@@ -23,7 +27,7 @@ export default async function generateQuestions(tasks: ConceptMasteries) {
       .join("\n\n");
 
     const generatedQuestions = await generateText({
-      model: openai("gpt-5-nano"),
+      model: anthropic("deepseek-v4-flash"),
       output: Output.array({
         element: questionSchema,
       }),

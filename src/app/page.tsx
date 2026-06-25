@@ -1,5 +1,3 @@
-"use client";
-
 import Balatro from "@/components/Balatro";
 import Navigation from "@/components/landingPage/Navigation";
 import PixelSnow from "@/components/PixelSnow";

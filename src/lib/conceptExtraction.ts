@@ -1,6 +1,6 @@
 import { generateText, Output } from "ai";
 import { array, string, z } from "zod";
-import { openai } from "@ai-sdk/openai";
+import { anthropic } from "@/actions/run/generateQuestions";
 
 export default async function conceptExtraction(
   rawText: string[] | undefined,
@@ -22,7 +22,7 @@ export default async function conceptExtraction(
   const activePrompt = isTopic ? topicPrompt : documentPrompt;
 
   const { output } = await generateText({
-    model: openai("gpt-5-nano"),
+    model: anthropic("deepseek-v4-flash"),
     output: Output.object({
       schema: z.object({
         concepts: array(string()).describe(
