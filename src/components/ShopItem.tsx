@@ -1,4 +1,5 @@
 import React from "react";
+import { Coins } from "lucide-react";
 
 const ShopItem = ({
   id,
@@ -37,7 +38,9 @@ const ShopItem = ({
 
       {/* Bottom Section */}
       <div className="flex items-center justify-between pt-3 border-t border-mocha-surface2">
-        <span className="text-mocha-yellow font-bold">🪙 {cost} GP</span>
+        <span className="text-mocha-yellow font-bold flex items-center gap-1">
+          <Coins className="w-3.5 h-3.5" /> {cost} GP
+        </span>
 
         <button
           onClick={onPurchase}

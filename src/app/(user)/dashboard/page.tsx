@@ -1,8 +1,69 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 // app/(app)/dashboard/page.tsx
 import Link from "next/link";
+import { Coins, Flame, Bot, TriangleAlert } from "lucide-react";
+import prisma from "@/lib/prisma";
+import checkSession from "@/lib/checkSession";
+import { NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const session = await checkSession();
+  if (session instanceof NextResponse) {
+    redirect("/api/auth/signin");
+  }
+
+  const [userStat, lastGameSession, decks] = await Promise.all([
+    prisma.user.findFirstOrThrow({
+      where: {
+        id: session.user.id,
+      },
+      select: {
+        id: true,
+        xp: true,
+        currency: true,
+        level: true,
+      },
+    }),
+
+    prisma.gameSession.findMany({
+      where: {
+        userId: session.user.id,
+      },
+      orderBy: {
+        startedAt: "desc",
+      },
+      take: 3,
+      select: {
+        endedAt: true,
+        id: true,
+        score: true,
+        deck: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    }),
+
+    prisma.deck.findMany({
+      where: {
+        userId: session.user.id,
+      },
+
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 3,
+
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+      },
+    }),
+  ]);
+
   return (
     <div className="w-full h-full flex flex-col p-6 space-y-6 text-mocha-text overflow-y-auto">
       {/* 1. Header & Character Status */}
@@ -18,17 +79,21 @@ export default function DashboardPage() {
 
         {/* Player Stats Block */}
         <div className="flex gap-4 text-xs font-mono">
-          <div className="border border-mocha-surface1 bg-foreground px-3 py-1.5 rounded">
-            <span className="text-mocha-overlay1">LEVEL:</span>{" "}
-            <span className="text-mocha-text">Lv. 4</span>
-          </div>
           <div className="border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5 rounded">
+            <span className="text-mocha-overlay1">LEVEL:</span>{" "}
+            <span className="text-mocha-text">Lv. {userStat.level}</span>
+          </div>
+          <div className="border border-mocha-surface1 bg-moch-mantle px-3 py-1.5 rounded">
             <span className="text-mocha-overlay1">GOLD:</span>{" "}
-            <span className="text-mocha-yellow">🪙 120</span>
+            <span className="text-mocha-yellow flex items-center gap-1">
+              <Coins className="w-3.5 h-3.5" /> {userStat.currency}
+            </span>
           </div>
           <div className="border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5 rounded">
             <span className="text-mocha-overlay1">STREAK:</span>{" "}
-            <span className="text-mocha-red">🔥 5 Days</span>
+            <span className="text-mocha-red flex items-center gap-1">
+              <Flame className="w-3.5 h-3.5" /> 5 Days
+            </span>
           </div>
         </div>
       </div>
@@ -51,7 +116,7 @@ export default function DashboardPage() {
           {/* Main Procedural Run Trigger */}
           <div className="border bg-card p-6 rounded flex flex-col justify-between h-[200px]">
             <div>
-              <h3 className="text-sm font-bold tracking-wider font-mono text-white uppercase">
+              <h3 className="text-sm font-bold tracking-wider font-mono text-mocha-text uppercase">
                 // PROCEDURAL RUN
               </h3>
               <p className="text-xs text-mocha-overlay2 mt-2 leading-relaxed">
@@ -80,14 +145,29 @@ export default function DashboardPage() {
           {/* AI Coach Card */}
           <div className="border bg-card p-5 rounded font-mono">
             <h4 className="text-xs text-mocha-yellow uppercase font-bold tracking-wider mb-2">
-              🤖 TACTICAL REPORT (AI COACH)
+              <Bot className="w-3.5 h-3.5 inline-block" /> TACTICAL REPORT (AI
+              COACH)
             </h4>
-            <p className="text-xs text-mocha-subtext1 leading-relaxed">
-              &quot;Your retention on the &apos;JavaScript Async&apos; seed has
-              decayed to 40%. The Spaced Repetition engine recommends running a
-              quick 5-question review on that deck to recover your ease
-              factor.&quot;
-            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {lastGameSession.map((item) => (
+                <div
+                  key={item.id}
+                  className="border bg-mocha-mantle p-3 tracking-tight"
+                >
+                  <p className="text-md font-bold text-primary font-mono">
+                    {item.deck.title}
+                  </p>
+                  <p className="text-xs text-mocha-text">
+                    <span className="text-mocha-yellow">Score: </span>
+                    {item.score}
+                  </p>
+                  <p className="text-xs text-mocha-text">
+                    <span className="text-mocha-yellow">Ended: </span>
+                    {item.endedAt?.toDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -99,25 +179,25 @@ export default function DashboardPage() {
               // REVIEW QUEUE
             </h3>
 
-            <div className="border bg-card p-3 rounded">
-              <p className="text-mocha-yellow font-bold">15 CARDS DUE TODAY</p>
-              <p className="text-mocha-overlay1 text-[10px] mt-1">
-                Based on SM-2 spacing calculations.
-              </p>
+            <div className="flex flex-col gap-2">
+              {decks.length === 0 && <p>No decks available.</p>}
+              {decks.map((deck) => (
+                <Link href={`/decks/${deck.id}`} key={deck.id}>
+                  <div className="border bg-card p-3 rounded">
+                    <p className="text-mocha-yellow font-bold">{deck.title}</p>
+                    <p className="text-mocha-overlay1 text-[10px] mt-1">
+                      {deck.createdAt.toDateString()}
+                    </p>
+                  </div>
+                </Link>
+              ))}
             </div>
-
-            <Link
-              href="/review"
-              className="block text-center border border-mocha-surface2 hover:border-mocha-yellow text-mocha-overlay2 hover:text-mocha-yellow py-2 transition-all uppercase font-bold text-[10px]"
-            >
-              Start Review Session
-            </Link>
           </div>
 
           {/* Weak Spots */}
           <div className="border bg-card p-5 rounded space-y-3 font-mono text-xs">
-            <h3 className="font-bold text-mocha-red tracking-wider uppercase">
-              🚨 THREAT LIST (WEAK SPOTS)
+            <h3 className="font-bold text-mocha-red tracking-wider uppercase flex items-center gap-1.5">
+              <TriangleAlert className="w-3.5 h-3.5" /> THREAT LIST (WEAK SPOTS)
             </h3>
             <div className="space-y-2">
               <div className="flex justify-between items-center border-b border-mocha-crust pb-1.5">

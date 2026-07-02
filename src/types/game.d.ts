@@ -13,3 +13,10 @@ type GeneratedQuestion = {
   answer: string;
   explanation: string;
 };
+
+type GetConceptsType = {
+  userId: string;
+  deckId: string;
+  questionQueues: string[];
+  depth: number;
+};

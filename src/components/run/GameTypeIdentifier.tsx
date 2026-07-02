@@ -21,6 +21,9 @@ const GameTypeIdentifier = ({
     ),
     TRUE_OR_FALSE: <TrueOrFalse answer={answer}></TrueOrFalse>,
     IDENTIFICATION: <Identification></Identification>,
+    BOSS_SCENARIO: (
+      <MultipleChoice choices={choices} answer={answer}></MultipleChoice>
+    ),
   };
 
   return board[type] || null;

@@ -7,6 +7,7 @@ type Augments = {
 const Augments = ({ handleConsumable }: Augments) => {
   const jokers = useGameEngineStore((state) => state.jokers);
   const consumables = useGameEngineStore((state) => state.consumables);
+
   return (
     <>
       <div className="flex-1 border bg-card p-5 rounded space-y-4  font-mono text-xs h-full ">

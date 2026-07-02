@@ -62,12 +62,12 @@ const Stats = () => {
               y: 10,
               filter: "blur(5px)",
             }}
-            className={`flex items-center gap-2 border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 rounded h-full`}
+            className={`flex items-center gap-2 border border-mocha-yellow/30 bg-mocha-yellow/10 px-3 py-1.5 rounded h-full`}
           >
-            <span className="text-amber-500 font-mono text-[10px] tracking-wider uppercase animate-pulse">
+            <span className="text-mocha-yellow font-mono text-[10px] tracking-wider uppercase animate-pulse">
               COMBO:
             </span>
-            <span className="text-amber-400 font-bold font-mono text-xs leading-none">
+            <span className="text-mocha-yellow font-bold font-mono text-xs leading-none">
               x{streak}
             </span>
           </motion.section>
@@ -82,7 +82,7 @@ const Stats = () => {
         <motion.div
           key={score}
           initial={{ scale: 1.2, color: "#fff" }}
-          animate={{ scale: 1, color: "#22d3ee" }} // cyan-400 hex
+          animate={{ scale: 1, color: "#89b4fa" }} // mocha-blue hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
           <motion.span className="font-mono text-xs text-mocha-sky  leading-none">
@@ -98,10 +98,10 @@ const Stats = () => {
         <motion.div
           key={credits}
           initial={{ scale: 1.2, color: "#fff" }}
-          animate={{ scale: 1, color: "gold" }} // cyan-400 hex
+          animate={{ scale: 1, color: "#f9e2af" }} // mocha-yellow hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          <motion.span className="text-mocha-sky font-mono text-xs  leading-none">
+          <motion.span className="text-mocha-yellow font-mono text-xs  leading-none">
             {animatedCredits}
           </motion.span>
         </motion.div>

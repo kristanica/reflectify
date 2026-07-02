@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import InitialLoading from "./InitialLoading";
+import { Bot } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import useGenerateQuestions from "@/hooks/useGenerateQuestions";
 import GameTypeIdentifier from "./GameTypeIdentifier";
@@ -61,6 +62,9 @@ export default function GameBoard({
     })),
   );
 
+  const isBossEncounter = questionQueues[0]?.type === "BOSS_SCENARIO";
+  const [showWarning, setShowWarning] = useState<boolean>(false);
+
   const hasInitialized = useRef<boolean>(false);
 
   useEffect(() => {
@@ -102,6 +106,17 @@ export default function GameBoard({
 
     submitAnswer(timeElapsedInSecond);
   }, [submitAnswer]);
+
+  useEffect(() => {
+    if (isBossEncounter && !hasAnswered) {
+      const showTimer = setTimeout(() => setShowWarning(true), 0);
+      const hideTimer = setTimeout(() => setShowWarning(false), 3000);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [isBossEncounter, hasAnswered]);
 
   // Background fetching
   useEffect(() => {
@@ -151,7 +166,7 @@ export default function GameBoard({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="text-gray-400 h-full flex  flex-1 items-center justify-center"
+        className="text-mocha-overlay2 h-full flex flex-1 items-center justify-center"
       >
         <InitialLoading></InitialLoading>
       </motion.div>
@@ -161,6 +176,9 @@ export default function GameBoard({
   if (isShopOpen) {
     return <BlackMarket />;
   }
+
+
+
   return (
     <div className="w-full h-full flex flex-col pt-2 p-6 overflow-hidden">
       <AnimatePresence mode="wait">
@@ -172,28 +190,36 @@ export default function GameBoard({
           className="flex flex-col flex-1 relative w-full max-w-5xl mx-auto h-full space-y-6 min-h-0"
         >
           {/* Header Block */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b  pb-4 gap-4 ">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 gap-4">
             <div>
-              <h2 className="text-xl font-bold font-mono tracking-widest text-primary uppercase">
-                [ ACTIVE RUN ]
+              <h2
+                className={`text-xl font-bold font-mono tracking-widest uppercase ${
+                  isBossEncounter
+                    ? "text-destructive animate-pulse"
+                    : "text-primary"
+                }`}
+              >
+                {isBossEncounter
+                  ? "[ CRITICAL BOSS ENCOUNTER ]"
+                  : "[ ACTIVE RUN ]"}
               </h2>
               <p className="text-xs text-mocha-subtext0 font-mono mt-1">
                 DEPTH: {depth}
               </p>
             </div>
 
-            <div className="flex  gap-4 text-xs font-mono items-center  flex-row">
+            <div className="flex gap-4 text-xs font-mono items-center flex-row">
               <Stats />
             </div>
           </div>
 
           {/* Main Layout Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0 ">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
             {/* LEFT COLUMN: Question & Answers (3/4 Width) */}
-            <div className="lg:col-span-3 row-span-4 flex flex-col space-y-6 overflow-y-auto pr-2 pb-6 ">
+            <div className="lg:col-span-3 row-span-4 flex flex-col space-y-6 overflow-y-auto pr-2 pb-6">
               {/* Question Block */}
               <div className="border bg-card p-6 rounded flex flex-col space-y-4">
-                <div className="flex justify-between items-start border-b  pb-4">
+                <div className="flex justify-between items-start border-b pb-4">
                   <div>
                     <h3 className="text-sm font-bold tracking-wider font-mono text-mocha-text uppercase">
                       CURRENT QUERY
@@ -205,7 +231,7 @@ export default function GameBoard({
                       <button
                         disabled={!hasAnswered}
                         onClick={() => handleNextQuestion()}
-                        className="px-6 py-2 border  bg-transparent  text-mocha-text border-primary hover:bg-primary font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
+                        className="px-6 py-2 border bg-transparent text-mocha-text border-primary hover:bg-primary font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-mocha-surface2 disabled:text-mocha-overlay0 disabled:pointer-events-none rounded-sm"
                       >
                         NEXT
                       </button>
@@ -214,7 +240,7 @@ export default function GameBoard({
                         <button
                           disabled={!selectedAnswer}
                           onClick={answerQuestion}
-                          className="px-6 py-2 border  bg-transparent  text-mocha-text border-primary hover:bg-primary hover:text-muted font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-zinc-700 disabled:text-zinc-600 disabled:pointer-events-none rounded-sm"
+                          className="px-6 py-2 border bg-transparent text-mocha-text border-primary hover:bg-primary hover:text-muted font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-mocha-surface2 disabled:text-mocha-overlay0 disabled:pointer-events-none rounded-sm"
                         >
                           ANSWER
                         </button>
@@ -224,7 +250,7 @@ export default function GameBoard({
                 </div>
 
                 <div>
-                  <p className="ttext-mocha-subtext1 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+                  <p className="text-mocha-subtext1 font-mono text-sm leading-relaxed whitespace-pre-wrap">
                     {questionQueues[0].question}
                   </p>
                 </div>
@@ -241,7 +267,7 @@ export default function GameBoard({
 
               <div className="border bg-card p-5 rounded font-mono mt-4">
                 <h4 className="text-xs text-mocha-text uppercase font-bold tracking-wider mb-3">
-                  🤖 AI EXPLANATION
+                  <Bot className="w-3.5 h-3.5 inline-block" /> AI EXPLANATION
                 </h4>
 
                 {/* Explanation Block */}
@@ -265,7 +291,7 @@ export default function GameBoard({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 20 }}
                     >
-                      <p className="text-zinc-500 font-mono text-xs leading-relaxed whitespace-pre-wrap">
+                      <p className="text-mocha-overlay1 font-mono text-xs leading-relaxed whitespace-pre-wrap">
                         THE AI IS WAITING FOR YOUR ANSWER....
                       </p>
                     </motion.div>
@@ -273,13 +299,13 @@ export default function GameBoard({
                 </AnimatePresence>
               </div>
 
-              <div className="  grid  gap-2 md:grid-cols-2 rounded font-mono mt-4">
+              <div className="grid gap-2 md:grid-cols-2 rounded font-mono mt-4">
                 <Augments handleConsumable={handleConsumable}></Augments>
               </div>
             </div>
 
             {/* RIGHT COLUMN: Augments & Consumables (1/4 Width) */}
-            <div className="flex  flex-1 flex-col space-x-6 md:space-x-0 border-t row-span-1 pt-5 md:pt-0 md:border-none md:row-span-4 space-y-6 overflow-y-auto pr-2 pb-6">
+            <div className="flex flex-1 flex-col space-x-6 md:space-x-0 border-t row-span-1 pt-5 md:pt-0 md:border-none md:row-span-4 space-y-6 overflow-y-auto pr-2 pb-6">
               <Logs></Logs>
             </div>
           </div>

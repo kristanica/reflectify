@@ -1,6 +1,6 @@
+import { openai } from "@ai-sdk/openai";
 import { generateText, Output } from "ai";
 import { array, string, z } from "zod";
-import { anthropic } from "@/actions/run/generateQuestions";
 
 export default async function conceptExtraction(
   rawText: string[] | undefined,
@@ -8,7 +8,7 @@ export default async function conceptExtraction(
 ) {
   const documentPrompt = `
       You are an expert curriculum designer. Analyze the following text and extract its core knowledge into a list of atomic concepts.
-      
+
       Source Text:
       """
       ${rawText}
@@ -22,7 +22,7 @@ export default async function conceptExtraction(
   const activePrompt = isTopic ? topicPrompt : documentPrompt;
 
   const { output } = await generateText({
-    model: anthropic("deepseek-v4-flash"),
+    model: openai("gpt-5-nano"),
     output: Output.object({
       schema: z.object({
         concepts: array(string()).describe(
@@ -33,15 +33,15 @@ export default async function conceptExtraction(
     prompt: `
        ${activePrompt}
 
-      Follow these strict rules for extraction:      
+      Follow these strict rules for extraction:
       1. ATOMICITY: Each concept must contain exactly one distinct, testable idea. Do not combine multiple facts using "and", "but", or "because". If a sentence has multiple facts, split it into multiple distinct concepts.
-      
-      2. CONTEXT INDEPENDENCE: Each concept must stand completely on its own. Do not use pronouns like "He", "It", or "They" if the subject isn't clear. Always use specific names and nouns. 
+
+      2. CONTEXT INDEPENDENCE: Each concept must stand completely on its own. Do not use pronouns like "He", "It", or "They" if the subject isn't clear. Always use specific names and nouns.
          - BAD: "It was established to create a fake signal."
          - GOOD: "Project YoRHa was established to create a fake signal."
-      
+
       3. FACTUAL AND DECLARATIVE: Write concepts as declarative statements of fact. Do not format them as questions or opinions.
-      
+
       4. NO FLUFF: Ignore introductory paragraphs, meta-text, page numbers, or conversational transitions. Extract only the raw knowledge.
 
     `,

@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { BookOpen, FileText, Lightbulb } from "lucide-react";
 
 const MAX_ITEM_PER_PAGE = 4;
 
@@ -39,7 +40,7 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
   if (decks.length === 0 && currentPage === 1) {
     return (
       <div className="flex flex-col items-center justify-center rounded border border-dashed border-mocha-surface1 bg-mocha-base/10 py-20 text-center font-mono">
-        <span className="text-3xl mb-4">📖</span>
+        <BookOpen className="w-8 h-8 mb-4 text-mocha-overlay1" />
         <h3 className="text-sm font-bold text-mocha-text uppercase">
           No Seeds Found
         </h3>
@@ -69,9 +70,16 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
             <div className="space-y-2">
               <div className="flex justify-between items-start">
                 <span className="text-[10px] text-mocha-overlay1 uppercase tracking-wider">
-                  {seed.sourceType === "FILE"
-                    ? "📄 DOCUMENT SEED"
-                    : "💡 TOPIC SEED"}
+                  {seed.sourceType === "FILE" ? (
+                    <>
+                      <FileText className="w-3 h-3 inline-block" /> DOCUMENT
+                      SEED
+                    </>
+                  ) : (
+                    <>
+                      <Lightbulb className="w-3 h-3 inline-block" /> TOPIC SEED
+                    </>
+                  )}
                 </span>
               </div>
               <h3 className="text-sm font-bold text-mocha-text tracking-wide">

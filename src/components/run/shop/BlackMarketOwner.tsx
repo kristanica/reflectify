@@ -1,5 +1,6 @@
 "use client";
 import TypeIt from "typeit-react";
+import { Eye } from "lucide-react";
 
 const BlackMarketOwner = () => {
   return (
@@ -7,9 +8,7 @@ const BlackMarketOwner = () => {
       <div className="grid grid-cols-3 place-items-center">
         <div className="flex items-center flex-col space-y-2">
           <div className="relative w-20 h-20 rounded-md border border-mocha-sky/50 bg-mocha-mantle flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.15)] overflow-hidden group">
-            <div className="text-mocha-sky text-3xl group-hover:scale-110 transition-transform duration-500">
-              👁️‍🗨️
-            </div>
+            <Eye className="w-8 h-8 text-mocha-sky group-hover:scale-110 transition-transform duration-500" />
           </div>
 
           <div className="flex items-center flex-col">

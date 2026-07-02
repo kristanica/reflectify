@@ -95,4 +95,35 @@ type GameLoopAction = {
 
 type GameLoopSlice = GameLoopState & GameLoopAction;
 
-type GameEngineStore = SystemSlice & EconomySlice & PlayerSlice & GameLoopSlice;
+type ShopAction = {
+  consumblesBrought: ShopItem[];
+  maxJokerShuffle: number;
+  maxConsumablesShuffle: number;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  availableJokers: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  availableConsumables: any[];
+};
+
+type ShopState = {
+  addConsumablesBrought: (ShopItem: ShopItem) => void;
+  setMaxJokerShuffle: (val: number) => void;
+  setMaxConsumablesShuffle: (val: number) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setAvailableJokers: (val: any) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setAvailableConsumables: (val: any) => void;
+  shuffleJokers: () => void;
+  shuffleConsumables: () => void;
+  purchase: (item: ShopItem) => void;
+
+  shakeTrigger: number;
+};
+type ShopSlice = ShopState & ShopAction;
+
+type GameEngineStore = SystemSlice &
+  EconomySlice &
+  PlayerSlice &
+  GameLoopSlice &
+  ShopSlice;

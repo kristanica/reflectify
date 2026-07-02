@@ -2,6 +2,20 @@
 "use client";
 
 import React from "react";
+import {
+  Target,
+  Flame,
+  BookOpen,
+  Skull,
+  Dices,
+  Gem,
+  Zap,
+  Coins,
+  Sword,
+  Trophy,
+  Lock,
+  ScrollText,
+} from "lucide-react";
 
 // Mock Achievements list from the database specs
 const ACHIEVEMENTS = [
@@ -9,42 +23,42 @@ const ACHIEVEMENTS = [
     key: "first_run",
     name: "First Step",
     description: "Complete your first study run",
-    icon: "🎯",
+    icon: Target,
     unlocked: true,
   },
   {
     key: "streak_lord",
     name: "Streak Lord",
     description: "Achieve a 10-question streak",
-    icon: "🔥",
+    icon: Flame,
     unlocked: true,
   },
   {
     key: "scholar",
     name: "Scholar",
     description: "Master 100 cards across all decks",
-    icon: "📚",
+    icon: BookOpen,
     unlocked: false,
   },
   {
     key: "iron_mind",
     name: "Iron Mind",
     description: "Complete a Nightmare mode run",
-    icon: "💀",
+    icon: Skull,
     unlocked: false,
   },
   {
     key: "high_roller",
     name: "High Roller",
     description: "Win a High Risk Mode run",
-    icon: "🎲",
+    icon: Dices,
     unlocked: true,
   },
   {
     key: "perfectionist",
     name: "Perfectionist",
     description: "Complete 3 Perfect Runs",
-    icon: "💎",
+    icon: Gem,
     unlocked: false,
   },
 ];
@@ -96,7 +110,7 @@ export default function PlayerProfilePage() {
         <div className="border border-mocha-surface1 bg-mocha-base/40 p-6 rounded flex flex-col items-center justify-center text-center space-y-4 font-mono">
           {/* Retro Avatar Circle */}
           <div className="relative w-24 h-24 rounded-full border-2 border-mocha-yellow bg-mocha-surface1 flex items-center justify-center shadow-[0_0_15px_rgba(240,165,0,0.2)]">
-            <span className="text-4xl">⚡</span>
+            <Zap className="w-8 h-8 text-mocha-yellow" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-mocha-text uppercase tracking-wider">
@@ -129,27 +143,47 @@ export default function PlayerProfilePage() {
               },
               {
                 label: "GOLD INVENTORY",
-                val: "🪙 120 GP",
+                val: (
+                  <span className="flex items-center gap-1">
+                    <Coins className="w-3.5 h-3.5" /> 120 GP
+                  </span>
+                ),
                 color: "text-mocha-yellow",
               },
               {
                 label: "BEST SHARD STREAK",
-                val: "🔥 15",
+                val: (
+                  <span className="flex items-center gap-1">
+                    <Flame className="w-3.5 h-3.5" /> 15
+                  </span>
+                ),
                 color: "text-mocha-red",
               },
               {
                 label: "TOTAL CARDS MASTERED",
-                val: "📚 45 / 150",
+                val: (
+                  <span className="flex items-center gap-1">
+                    <BookOpen className="w-3.5 h-3.5" /> 45 / 150
+                  </span>
+                ),
                 color: "text-mocha-blue",
               },
               {
                 label: "COMPLETED RUNS",
-                val: "⚔️ 12 Runs",
+                val: (
+                  <span className="flex items-center gap-1">
+                    <Sword className="w-3.5 h-3.5" /> 12 Runs
+                  </span>
+                ),
                 color: "text-mocha-green",
               },
               {
                 label: "AVERAGE ACCURACY",
-                val: "🎯 72%",
+                val: (
+                  <span className="flex items-center gap-1">
+                    <Target className="w-3.5 h-3.5" /> 72%
+                  </span>
+                ),
                 color: "text-mocha-mauve",
               },
             ].map((stat) => (
@@ -174,7 +208,8 @@ export default function PlayerProfilePage() {
         {/* Achievements Gallery (2/3 Width) */}
         <div className="md:col-span-2 border border-mocha-surface1 bg-mocha-base/40 p-6 rounded space-y-4 font-mono text-xs">
           <h4 className="font-bold text-mocha-text uppercase tracking-wider border-b border-mocha-surface2 pb-2">
-            🏆 UNLOCKED RECOLLECTIONS (ACHIEVEMENTS)
+            <Trophy className="w-3.5 h-3.5 inline-block" /> UNLOCKED
+            RECOLLECTIONS (ACHIEVEMENTS)
           </h4>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -189,7 +224,11 @@ export default function PlayerProfilePage() {
               >
                 <div className="flex items-center gap-2">
                   <span className="text-xl">
-                    {badge.unlocked ? badge.icon : "🔒"}
+                    {badge.unlocked ? (
+                      <badge.icon className="w-5 h-5 text-mocha-yellow" />
+                    ) : (
+                      <Lock className="w-5 h-5 text-mocha-overlay1" />
+                    )}
                   </span>
                   <span
                     className={`font-bold ${badge.unlocked ? "text-mocha-text" : "text-mocha-overlay1"}`}
@@ -208,7 +247,8 @@ export default function PlayerProfilePage() {
         {/* Campaign Log (1/3 Width) */}
         <div className="border border-mocha-surface1 bg-mocha-base/40 p-6 rounded space-y-4 font-mono text-xs">
           <h4 className="font-bold text-mocha-text uppercase tracking-wider border-b border-mocha-surface2 pb-2">
-            📜 CAMPAIGN LOG (RECENT RUNS)
+            <ScrollText className="w-3.5 h-3.5 inline-block" /> CAMPAIGN LOG
+            (RECENT RUNS)
           </h4>
 
           <div className="space-y-3">

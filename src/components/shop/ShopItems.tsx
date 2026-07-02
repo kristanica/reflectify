@@ -2,6 +2,14 @@
 "use client";
 
 import React, { useState } from "react";
+import {
+  Heart,
+  SkipForward,
+  Lightbulb,
+  Snowflake,
+  ScrollText,
+  Coins,
+} from "lucide-react";
 
 const SHOP_ITEMS = [
   {
@@ -9,35 +17,35 @@ const SHOP_ITEMS = [
     name: "Extra Life",
     description: "Gain +1 life for your current study run.",
     cost: 50,
-    icon: "❤️",
+    icon: Heart,
   },
   {
     id: "skip_card",
     name: "Skip Card",
     description: "Skip a difficult question with no score penalty.",
     cost: 30,
-    icon: "⏭️",
+    icon: SkipForward,
   },
   {
     id: "hint_reveal",
     name: "AI Clue Hint",
     description: "AI reveals a clue about the correct answer.",
     cost: 20,
-    icon: "💡",
+    icon: Lightbulb,
   },
   {
     id: "freeze_timer",
     name: "Freeze Timer",
     description: "Add 10 seconds to the current question timer.",
     cost: 40,
-    icon: "❄️",
+    icon: Snowflake,
   },
   {
     id: "double_xp",
     name: "Double XP Scroll",
     description: "Earn 2x XP for the next 10 questions in a run.",
     cost: 100,
-    icon: "📜",
+    icon: ScrollText,
   },
 ];
 
@@ -58,8 +66,8 @@ export default function ShopItems() {
     <div className="space-y-6">
       {/* Dynamic Gold Status HUD */}
       <div className="flex justify-end pr-2">
-        <div className="border border-mocha-yellow/40 bg-mocha-mantle px-4 py-2 rounded text-xs font-mono text-mocha-yellow shadow-[0_0_10px_rgba(240,165,0,0.1)]">
-          🪙 INVENTORY GOLD:{" "}
+        <div className="border border-mocha-yellow/40 bg-mocha-mantle px-4 py-2 rounded text-xs font-mono text-mocha-yellow shadow-[0_0_10px_rgba(240,165,0,0.1)] flex items-center gap-1.5">
+          <Coins className="w-3.5 h-3.5" /> INVENTORY GOLD:{" "}
           <span className="text-mocha-text font-bold">{gold} GP</span>
         </div>
       </div>
@@ -76,9 +84,7 @@ export default function ShopItems() {
               {/* Top Section */}
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl group-hover:scale-110 transition-transform">
-                    {item.icon}
-                  </span>
+                  <item.icon className="w-6 h-6 group-hover:scale-110 transition-transform text-mocha-yellow" />
                   <h3 className="text-sm font-bold text-mocha-text tracking-wide uppercase">
                     {item.name}
                   </h3>

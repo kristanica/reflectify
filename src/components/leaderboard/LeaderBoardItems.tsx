@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Trophy } from "lucide-react";
 
 // Mock data representing the top performers in the database
 const LEADERBOARD_DATA = {
@@ -222,13 +223,11 @@ export default function LeaderboardPage() {
                   {/* Rank Column */}
                   <td className="py-3.5 px-4 font-bold">
                     <span className={rankColor}>
-                      {row.rank === 1
-                        ? "🥇 "
-                        : row.rank === 2
-                          ? "🥈 "
-                          : row.rank === 3
-                            ? "🥉 "
-                            : ""}
+                      {row.rank <= 3 && (
+                        <Trophy
+                          className={`w-3.5 h-3.5 inline-block mr-1 ${row.rank === 1 ? "text-mocha-yellow" : row.rank === 2 ? "text-mocha-subtext0" : "text-mocha-maroon"}`}
+                        />
+                      )}
                       {row.rank}
                     </span>
                   </td>

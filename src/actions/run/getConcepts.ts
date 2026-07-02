@@ -2,17 +2,10 @@
 
 import prisma from "@/lib/prisma";
 
-type GetConceptsType = {
-  userId: string;
-  deckId: string;
-  questionQueues: string[];
-  depth: number;
-};
-
 export type ConceptMasteries = {
   conceptId: string;
   content: string;
-  format: "MULTIPLE_CHOICE" | "TRUE_OR_FALSE";
+  format: "MULTIPLE_CHOICE" | "TRUE_OR_FALSE" | "BOSS_SCENARIO";
   level: number;
   optionCount: number;
 }[];
@@ -53,7 +46,7 @@ export default async function getConcepts({
         notIn: questionQueues,
       },
     },
-    take: 10,
+    take: 9,
   });
 
   const conceptMasteries = pendingMasteries.map((mastery) => {

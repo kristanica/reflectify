@@ -1,5 +1,6 @@
 "use client";
 import { ReflectifyLogo } from "../ReflectifyLogo";
+import { Compass } from "lucide-react";
 import TypeIt from "typeit-react";
 
 const ShopOwner = () => {
@@ -8,7 +9,7 @@ const ShopOwner = () => {
       <div className="grid grid-cols-3 place-items-center">
         <div className="flex items-center flex-col space-y-2">
           <div className="relative w-20 h-20 rounded-full border border-mocha-yellow bg-mocha-mantle flex items-center justify-center shadow-[0_0_15px_rgba(240,165,0,0.15)] overflow-hidden">
-            <div className="text-mocha-yellow text-3xl">🧭</div>
+            <Compass className="w-8 h-8 text-mocha-yellow" />
           </div>
 
           <div className="flex items-center flex-col">
