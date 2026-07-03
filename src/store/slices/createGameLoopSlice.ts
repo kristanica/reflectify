@@ -38,6 +38,7 @@ const createGameLoopSlice: StateCreator<
       score: 0,
       selectedAnswer: undefined,
       hasAnswered: false,
+      logs: [],
     })),
   submitAnswer: (timeElapsedInSecond) => {
     // random logs
@@ -53,12 +54,11 @@ const createGameLoopSlice: StateCreator<
         incorrectAnswerCount: state.incorrectAnswerCount + 1,
       }));
 
-      const randomFail =
-        failLogs[Math.floor(Math.random() * successLogs.length)];
+      const randomFail = failLogs[Math.floor(Math.random() * failLogs.length)];
 
-      state.addLogs(`> ${randomFail} `);
+      state.addLogs(`${randomFail}`);
       state.addLogs(
-        `> MISMATCH DETAILS: EXPECTED [${currentQuestion.answer}] | RECEIVED [${state.selectedAnswer || "NONE"}]`,
+        `Expected: [${currentQuestion.answer}] | Received: [${state.selectedAnswer || "NONE"}]`,
       );
 
       const hasScapeGoat = state.jokers.find(
@@ -80,15 +80,13 @@ const createGameLoopSlice: StateCreator<
 
       // Fires damage synthesis
       if (hasDamageSynthesis) {
-        state.addLogs(
-          `> DAMAGE SYNTHESIS: CONVERTING SYSTEM SHOCK INTO CONTRABAND...`,
-        );
+        state.addLogs(`Damage Synthesis converted HP loss into an item.`);
         const randomNumber = Math.floor(
           Math.random() * CONSUMABLE_DATABASE.length,
         );
 
         const randomItem = CONSUMABLE_DATABASE[randomNumber];
-        state.addLogs(`> DAMAGE SYNTHESIS: RECEIVED ${randomItem.name}`);
+        state.addLogs(`Item received: ${randomItem.name}`);
 
         const doesItemExistIndex = state.consumables.findIndex(
           (c) => c.id === randomItem.id,
@@ -112,9 +110,7 @@ const createGameLoopSlice: StateCreator<
 
       // fires scapegoat if it will kill the player
       if (hasScapeGoat && state.lives <= damageDealth) {
-        state.addLogs(
-          `> CRITICAL HIT INTERCEPTED. SCAPEGOAT PROTOCOL EXECUTED.`,
-        );
+        state.addLogs(`Fatal blow blocked by Scapegoat.`);
         set(() => ({
           lives: hasScapeGoat.value,
           score: state.score - 50,
@@ -147,13 +143,10 @@ const createGameLoopSlice: StateCreator<
 
     const newCalculatedLevel = calculateNewLevel(newTotalXp);
 
-    state.addLogs(
-      `> DATA HARVESTED: +${xpEarnedThisQuestion} XP | TOTAL: ${newTotalXp} XP`,
-    );
+    state.addLogs(`Earned ${xpEarnedThisQuestion} XP. (Total: ${newTotalXp})`);
+
     if (newCalculatedLevel > state.currentLevel) {
-      state.addLogs(
-        `> ⚠️ SYSTEM UPGRADE: LEVEL ${newCalculatedLevel} ACHIEVED.`,
-      );
+      state.addLogs(`Level up! Reached Level ${newCalculatedLevel}.`);
       get().addToast("system", `LEVEL UP: ${newCalculatedLevel}!`);
     }
 
@@ -162,7 +155,7 @@ const createGameLoopSlice: StateCreator<
     state.jokers.forEach((joker) => {
       if (joker.effect === "SPEED_PAYOUT") {
         if (timeElapsedInSecond < 3) {
-          state.addLogs(`> RAPID INJECTION DETECTED. SPEED BONUS APPLIED.`);
+          state.addLogs(`Speed bonus applied.`);
           earnCredits += joker.value;
         } else if (timeElapsedInSecond > 10) {
           earnCredits -= 5;
@@ -174,16 +167,16 @@ const createGameLoopSlice: StateCreator<
       }
 
       if (joker.effect === "ADRENALINE_MULTIPLIER" && state.lives === 1) {
-        state.addLogs(`> ADRENALINE MULTIPLIER ACTIVE: CREDITS DOUBLED.`);
+        state.addLogs(`Adrenaline multiplier: Credits doubled.`);
         earnCredits *= 2;
       }
     });
 
     const randomSuccess =
       successLogs[Math.floor(Math.random() * successLogs.length)];
-    state.addLogs(`> ${randomSuccess}`);
+    state.addLogs(`${randomSuccess}`);
     state.addLogs(
-      `> DECRYPTED PAYLOAD: [${state.selectedAnswer}] | NET GAIN: +$${earnCredits} CR`,
+      `Selected: [${state.selectedAnswer}] | Earned: $${earnCredits} CR`,
     );
 
     const newStreak = state.streak + 1;

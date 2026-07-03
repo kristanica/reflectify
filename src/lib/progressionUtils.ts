@@ -11,3 +11,9 @@ export const calculateNewLevel = (newTotalXp: number) => {
   const GROWTH_EXPONENT = 1.5;
   return Math.floor(Math.pow(newTotalXp / BASE_EXP, 1 / GROWTH_EXPONENT)) + 1;
 };
+
+export const calculateXpForLevel = (level: number) => {
+  const BASE_EXP = 100;
+  const GROWTH_EXPONENT = 1.5;
+  return Math.ceil(BASE_EXP * Math.pow(level - 1, GROWTH_EXPONENT));
+};
