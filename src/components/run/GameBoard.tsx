@@ -63,6 +63,8 @@ export default function GameBoard({
   );
 
   const isBossEncounter = questionQueues[0]?.type === "BOSS_SCENARIO";
+  const [hasLoadedInitialQuestions , sethasLoadedInitialQuestions ] = useState<boolean>(false);
+
   const [showWarning, setShowWarning] = useState<boolean>(false);
 
   const hasInitialized = useRef<boolean>(false);
@@ -120,7 +122,7 @@ export default function GameBoard({
 
   // Background fetching
   useEffect(() => {
-    if (questionQueues.length < 10 && !isFetchingQuestion) {
+    if (questionQueues.length < 15 && !isFetchingQuestion) {
       const conceptIds = questionQueues.map((concept) => concept.conceptId);
       fetchMoreQuestion({ currentIds: conceptIds, depth: depth });
     }
@@ -156,6 +158,14 @@ export default function GameBoard({
     }
   }, [depth, lastShopDepth, openShop]);
 
+  useEffect(() => {
+    if (questionQueues.length > 0 && !hasLoadedInitialQuestions) {
+      setTimeout(() => {
+        sethasLoadedInitialQuestions(true);
+      }, 200);
+    }
+  }, [sethasLoadedInitialQuestions, questionQueues.length, hasLoadedInitialQuestions]);
+
   if (lives <= 0) {
     return <GameOver></GameOver>;
   }
@@ -168,7 +178,10 @@ export default function GameBoard({
         exit={{ opacity: 0 }}
         className="text-mocha-overlay2 h-full flex flex-1 items-center justify-center"
       >
-        <InitialLoading></InitialLoading>
+
+        <InitialLoading isFillingQueue={hasLoadedInitialQuestions} />
+
+
       </motion.div>
     );
   }
@@ -222,7 +235,7 @@ export default function GameBoard({
                 <div className="flex justify-between items-start border-b pb-4">
                   <div>
                     <h3 className="text-sm font-bold tracking-wider font-mono text-mocha-text uppercase">
-                      CURRENT QUERY
+                      CURRENT QUERY { questionQueues.length}
                     </h3>
                   </div>
 

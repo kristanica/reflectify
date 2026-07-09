@@ -34,7 +34,7 @@ const Logs = () => {
         <AnimatePresence initial={false}>
           {[...logs].reverse().map((item, index) => {
             const isLatest = index === 0;
-            const opacity = Math.max(0.15, 1 - index * 0.2);
+
 
             return (
               <motion.div
@@ -44,7 +44,7 @@ const Logs = () => {
                 initial="hidden"
                 animate="show"
                 className={`flex gap-3 mb-2 transition-colors duration-300 ease-in-out`}
-                style={{ opacity }}
+
               >
                 <p
                   className={`${isLatest ? "text-mocha-text tracking-wide" : "text-mocha-overlay1"}`}

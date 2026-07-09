@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Spinner } from "../ui/spinner";
 
-const InitialLoading = () => {
+const InitialLoading = ({ isFillingQueue }: {isFillingQueue: boolean}) => {
   const LOADING_QUOTES = useMemo(
     () => [
       "Polishing the mirrors of memory...",
@@ -33,7 +33,8 @@ const InitialLoading = () => {
   return (
     <div className="text-mocha-yellow font-mono text-xs uppercase tracking-[0.3em] animate-pulse text-center px-4">
       <Spinner className="mx-auto my-10 h-10 w-10"></Spinner>
-      {quote}
+      {isFillingQueue ? <p>Filling queue</p> : <p>{quote}</p> }
+
     </div>
   );
 };
