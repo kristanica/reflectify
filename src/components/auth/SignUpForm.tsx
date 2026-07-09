@@ -47,97 +47,119 @@ const SignUpForm = ({
     }
   }, [state, router, toggleAuthForm]);
 
-  return (
-    <div className="w-full bg-transparent border-none border-0 ">
-      <form action={formAction} className="md:w-xl mx-auto">
-        <FieldGroup className="text-foreground">
-          <div className="flex flex-col items-center gap-1 text-center">
-            <ReflectifyLogo className="h-auto w-25"></ReflectifyLogo>
+  const inputGroupClass =
+    "border-mocha-surface1 bg-mocha-crust/70 text-mocha-text focus-within:border-mocha-mauve/70";
+  const iconClass = "text-mocha-overlay1";
 
-            <h1 className="text-2xl font-bold text-foreground">
+  return (
+    <div className="w-full border-0 bg-transparent">
+      <form action={formAction} className="mx-auto w-full">
+        <FieldGroup className="text-mocha-text">
+          <div className="flex flex-col items-center gap-2 text-center">
+            <div className="flex size-20 items-center justify-center border border-mocha-mauve/35 bg-mocha-crust shadow-[0_0_22px_rgba(203,166,247,0.12)]">
+              <ReflectifyLogo className="size-14" />
+            </div>
+
+            <h1 className="text-2xl font-black uppercase tracking-[0.08em] text-mocha-text">
               Create an Account
             </h1>
-            <p className="text-sm text-balance text-muted-foreground">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <p className="max-w-sm text-balance text-sm leading-6 text-mocha-overlay1">
+              Create a profile, build seed archives, and start your first run.
             </p>
           </div>
           <Field>
-            <FieldLabel htmlFor="name" className="text-foreground">
+            <FieldLabel
+              htmlFor="name"
+              className="font-mono text-xs uppercase tracking-[0.14em] text-mocha-subtext0"
+            >
               Username
             </FieldLabel>
 
-            <InputGroup>
+            <InputGroup className={inputGroupClass}>
               <InputGroupInput placeholder="Username" id="name" name="name" />
-              <InputGroupAddon>
-                <User></User>
+              <InputGroupAddon className={iconClass}>
+                <User />
               </InputGroupAddon>
             </InputGroup>
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="email" className="text-foreground">
+            <FieldLabel
+              htmlFor="email"
+              className="font-mono text-xs uppercase tracking-[0.14em] text-mocha-subtext0"
+            >
               Email
             </FieldLabel>
 
-            <InputGroup>
+            <InputGroup className={inputGroupClass}>
               <InputGroupInput placeholder="Email" id="email" name="email" />
-              <InputGroupAddon>
-                <Mail></Mail>
+              <InputGroupAddon className={iconClass}>
+                <Mail />
               </InputGroupAddon>
             </InputGroup>
           </Field>
           <Field>
-            <FieldLabel htmlFor="password" className="text-foreground">
+            <FieldLabel
+              htmlFor="password"
+              className="font-mono text-xs uppercase tracking-[0.14em] text-mocha-subtext0"
+            >
               Password
             </FieldLabel>
-            <InputGroup>
+            <InputGroup className={inputGroupClass}>
               <InputGroupInput
                 placeholder="********"
                 type={isPasswordShown ? "text " : "password"}
                 id="password"
                 name="password"
               />
-              <InputGroupAddon>
-                <Lock></Lock>
+              <InputGroupAddon className={iconClass}>
+                <Lock />
               </InputGroupAddon>
 
               <InputGroupButton
                 variant="ghost"
-                className="text-foreground"
+                className="text-mocha-overlay1 hover:text-mocha-lavender"
                 onClick={() => setIsPasswordShown((prev) => !prev)}
               >
-                {isPasswordShown ? <Eye></Eye> : <EyeClosed></EyeClosed>}
+                {isPasswordShown ? <Eye /> : <EyeClosed />}
               </InputGroupButton>
             </InputGroup>
           </Field>
           <Field>
-            <FieldLabel htmlFor="confirmPassword" className="text-foreground">
+            <FieldLabel
+              htmlFor="confirmPassword"
+              className="font-mono text-xs uppercase tracking-[0.14em] text-mocha-subtext0"
+            >
               Confirm Password
             </FieldLabel>
-            <InputGroup>
+            <InputGroup className={inputGroupClass}>
               <InputGroupInput
                 placeholder="********"
                 type={isConfirmPasswordShown ? "text " : "password"}
                 name="confirmPassword"
                 id="confirmPassword"
               />
-              <InputGroupAddon>
-                <Lock></Lock>
+              <InputGroupAddon className={iconClass}>
+                <Lock />
               </InputGroupAddon>
 
               <InputGroupButton
                 variant="ghost"
-                className="text-foreground"
+                className="text-mocha-overlay1 hover:text-mocha-lavender"
                 onClick={() => setIsConfirmPasswordShown((prev) => !prev)}
               >
-                {isConfirmPasswordShown ? <Eye></Eye> : <EyeClosed></EyeClosed>}
+                {isConfirmPasswordShown ? <Eye /> : <EyeClosed />}
               </InputGroupButton>
             </InputGroup>
           </Field>
 
           <Field>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? <Spinner></Spinner> : "Register"}
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="h-11 border-mocha-mauve bg-mocha-mauve font-mono text-xs font-black uppercase tracking-[0.16em] text-mocha-crust hover:bg-mocha-lavender"
+            >
+              {isPending ? <Spinner /> : "Register"}
             </Button>
           </Field>
         </FieldGroup>

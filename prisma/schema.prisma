@@ -102,7 +102,7 @@ model Purchase {
 
 model Card {
   id String @id @default(cuid())
-  deckId String 
+  deckId String
   options String[]
   answer String
   difficulty Int @default(1)
@@ -112,7 +112,7 @@ model Card {
 
 model GameSession {
   id String @id @default(cuid())
-  userId String 
+  userId String
   deckId String
 
 
@@ -130,8 +130,8 @@ model GameSession {
   streak Int @default(0)
 
 
-  user User @relation(fields: [userId], references: [id])
-  deck Deck @relation(fields: [deckId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deck Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
 
 
   purchases Purchase[]
@@ -185,4 +185,3 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
-

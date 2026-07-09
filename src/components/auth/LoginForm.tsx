@@ -32,67 +32,86 @@ const LoginForm = () => {
     router.push("/dashboard");
   }, [router, state.success]);
 
-  return (
-    <form action={formAction} className="  w-full md:w-xl ">
-      <FieldGroup className="text-foreground">
-        <div className="flex flex-col items-center gap-1 text-center">
-          <ReflectifyLogo className="h-auto w-25"></ReflectifyLogo>
+  const inputGroupClass =
+    "border-mocha-surface1 bg-mocha-crust/70 text-mocha-text focus-within:border-mocha-mauve/70";
+  const iconClass = "text-mocha-overlay1";
 
-          <h1 className="text-2xl font-bold text-foreground">
+  return (
+    <form action={formAction} className="w-full">
+      <FieldGroup className="text-mocha-text">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <div className="flex size-20 items-center justify-center border border-mocha-mauve/35 bg-mocha-crust shadow-[0_0_22px_rgba(203,166,247,0.12)]">
+            <ReflectifyLogo className="size-14" />
+          </div>
+
+          <h1 className="text-2xl font-black uppercase tracking-[0.08em] text-mocha-text">
             Login to your account
           </h1>
-          <p className="text-sm text-balance text-muted-foreground">
-            Enter your email below to login to your account
+          <p className="max-w-sm text-balance text-sm leading-6 text-mocha-overlay1">
+            Restore your session and return to the archive.
           </p>
         </div>
         <Field>
-          <FieldLabel htmlFor="email" className="text-foreground">
+          <FieldLabel
+            htmlFor="email"
+            className="font-mono text-xs uppercase tracking-[0.14em] text-mocha-subtext0"
+          >
             Email
           </FieldLabel>
 
-          <InputGroup>
+          <InputGroup className={inputGroupClass}>
             <InputGroupInput placeholder="Email" id="email" name="email" />
-            <InputGroupAddon>
-              <Mail></Mail>
+            <InputGroupAddon className={iconClass}>
+              <Mail />
             </InputGroupAddon>
           </InputGroup>
         </Field>
         <Field>
-          <FieldLabel htmlFor="password" className="text-foreground">
+          <FieldLabel
+            htmlFor="password"
+            className="font-mono text-xs uppercase tracking-[0.14em] text-mocha-subtext0"
+          >
             Password
           </FieldLabel>
-          <InputGroup>
+          <InputGroup className={inputGroupClass}>
             <InputGroupInput
               placeholder="********"
               name="password"
               type={isPasswordShown ? "text " : "password"}
               id="password"
             />
-            <InputGroupAddon>
-              <Lock></Lock>
+            <InputGroupAddon className={iconClass}>
+              <Lock />
             </InputGroupAddon>
 
             <InputGroupButton
               variant="ghost"
-              className="text-foreground"
+              className="text-mocha-overlay1 hover:text-mocha-lavender"
               onClick={() => setPasswordShown((prev) => !prev)}
             >
-              {isPasswordShown ? <Eye></Eye> : <EyeClosed></EyeClosed>}
+              {isPasswordShown ? <Eye /> : <EyeClosed />}
             </InputGroupButton>
           </InputGroup>
         </Field>
         <Field>
-          <Button type="submit" disabled={isPending}>
-            {isPending ? <Spinner></Spinner> : "Login"}
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="h-11 border-mocha-mauve bg-mocha-mauve font-mono text-xs font-black uppercase tracking-[0.16em] text-mocha-crust hover:bg-mocha-lavender"
+          >
+            {isPending ? <Spinner /> : "Login"}
           </Button>
         </Field>
-        <FieldSeparator>Or continue with</FieldSeparator>
+        <FieldSeparator className="text-mocha-overlay1">
+          Or continue with
+        </FieldSeparator>
 
-        <FieldGroup className="flex flex-col md:flex-row ">
+        <FieldGroup className="flex flex-col md:flex-row">
           <Field>
             <Button
               type="button"
               variant="ghost"
+              className="h-11 border border-mocha-surface1 bg-mocha-crust/60 font-mono text-xs uppercase tracking-[0.08em] text-mocha-subtext0 hover:bg-mocha-surface0 hover:text-mocha-text"
               onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
             >
               <svg
@@ -124,6 +143,7 @@ const LoginForm = () => {
             <Button
               type="button"
               variant="ghost"
+              className="h-11 border border-mocha-surface1 bg-mocha-crust/60 font-mono text-xs uppercase tracking-[0.08em] text-mocha-subtext0 hover:bg-mocha-surface0 hover:text-mocha-text"
               onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
             >
               <svg

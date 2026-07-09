@@ -6,18 +6,28 @@ export default async function conceptExtraction(
   rawText: string[] | undefined,
   isTopic: boolean,
 ) {
+  const sourceText = rawText?.join("\n\n") ?? "";
   const documentPrompt = `
-      You are an expert curriculum designer. Analyze the following text and extract its core knowledge into a list of atomic concepts.
+You are an expert curriculum designer preparing study material for Reflectify, a roguelike educational quiz game.
 
-      Source Text:
-      """
-      ${rawText}
-      """
-  `;
+Analyze the source text and extract its core knowledge into atomic, testable concepts that can later be transformed into quiz questions, boss encounters, and scenario-based challenges.
+
+Source Text:
+"""
+${sourceText}
+"""
+`;
+
   const topicPrompt = `
-      You are an expert curriculum designer. The user wants to study the following topic: "${rawText}".
-      Generate a comprehensive list of 15 to 20 core facts, rules, and important details about this topic.
-  `;
+You are an expert curriculum designer preparing study material for Reflectify, a roguelike educational quiz game.
+
+The user wants to study this topic:
+"""
+${sourceText}
+"""
+
+Generate a comprehensive set of core facts, rules, definitions, relationships, and important details that would be useful for quiz generation.
+`;
 
   const activePrompt = isTopic ? topicPrompt : documentPrompt;
 
@@ -31,19 +41,46 @@ export default async function conceptExtraction(
       }),
     }),
     prompt: `
-       ${activePrompt}
+    ${activePrompt}
 
-      Follow these strict rules for extraction:
-      1. ATOMICITY: Each concept must contain exactly one distinct, testable idea. Do not combine multiple facts using "and", "but", or "because". If a sentence has multiple facts, split it into multiple distinct concepts.
+    Extract concepts using these strict rules:
 
-      2. CONTEXT INDEPENDENCE: Each concept must stand completely on its own. Do not use pronouns like "He", "It", or "They" if the subject isn't clear. Always use specific names and nouns.
-         - BAD: "It was established to create a fake signal."
-         - GOOD: "Project YoRHa was established to create a fake signal."
+    1. ATOMIC BUT MEANINGFUL
+    Each concept must contain one clearly testable idea. Do not combine unrelated facts.
+    However, do not split so aggressively that the concept loses educational meaning.
 
-      3. FACTUAL AND DECLARATIVE: Write concepts as declarative statements of fact. Do not format them as questions or opinions.
+    2. STANDALONE CONTEXT
+    Each concept must make sense without reading the original source.
+    Avoid unclear pronouns such as "it", "they", "this", or "that" unless the noun is explicit.
 
-      4. NO FLUFF: Ignore introductory paragraphs, meta-text, page numbers, or conversational transitions. Extract only the raw knowledge.
+    BAD: "It is used to neutralize bases."
+    GOOD: "An acid can neutralize a base by donating hydrogen ions."
 
+    3. QUIZ-READY FACTS
+    Write each concept as a declarative fact that can be turned into a question.
+    Do not write questions. Do not write commands. Do not write vague summaries.
+
+    4. PRESERVE IMPORTANT TERMS
+    Keep key technical terms, names, formulas, dates, classifications, and relationships.
+    If a term has a definition, include the term and the definition in the same concept.
+
+    5. PRIORITIZE TESTABLE KNOWLEDGE
+    Extract definitions, causes, effects, rules, comparisons, processes, classifications, formulas, examples, and common misconceptions.
+    Ignore filler, page numbers, headers, footers, citations, introductions, learning objectives, and conversational text.
+
+    6. FAIRNESS FOR QUESTION GENERATION
+    Every concept must contain enough information for a future AI system to generate a fair quiz question from that concept alone.
+    Do not create concepts that require hidden context from the source.
+
+    7. NO META-LANGUAGE
+    Do not say "the text states", "the passage explains", "according to the document", or "this chapter discusses".
+    State the knowledge directly as if it is generally true.
+
+    8. COVERAGE
+    For documents, extract all major testable ideas from the source.
+    For topics, generate 15 to 25 high-value concepts unless the topic is narrow.
+
+    Return only the structured output.
     `,
   });
 

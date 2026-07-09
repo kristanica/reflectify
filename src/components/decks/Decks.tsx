@@ -3,7 +3,8 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { BookOpen, FileText, Lightbulb } from "lucide-react";
+import { BookOpen, FileText, Lightbulb, Trash } from "lucide-react";
+import { DeleteAction } from "./DeleteAction";
 
 const MAX_ITEM_PER_PAGE = 4;
 
@@ -67,7 +68,8 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
             className="border border-mocha-surface1 bg-mocha-base/40 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-4 hover:border-mocha-surface2 transition-all"
           >
             {/* Seed Info Header */}
-            <div className="space-y-2">
+            <div className="space-y-2 relative">
+              <DeleteAction deckId={seed.id} title={seed.title} />
               <div className="flex justify-between items-start">
                 <span className="text-[10px] text-mocha-overlay1 uppercase tracking-wider">
                   {seed.sourceType === "FILE" ? (
@@ -94,10 +96,6 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
                 <p className="text-mocha-subtext1 mt-0.5">
                   {seed.createdAt.toDateString()}
                 </p>
-              </div>
-              <div>
-                <span className="text-mocha-green">ACCURACY:</span>
-                <p>100% </p>
               </div>
             </div>
 

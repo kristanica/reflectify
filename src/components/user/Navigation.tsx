@@ -35,7 +35,7 @@ const Navigation = () => {
               return (
                 <Link key={index} href={item.href}>
                   <li
-                    className={`flex flex-row px-3 py-1 border-x  items-center justify-center transition-all hover:text-white ${
+                    className={`flex flex-row px-3 py-1   items-center justify-center transition-all hover:text-white ${
                       activeUrl
                         ? "text-primary font-bold border-primary  "
                         : "text-foreground border-muted "

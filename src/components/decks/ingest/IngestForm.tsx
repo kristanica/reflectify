@@ -12,7 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import validateFile from "@/hooks/ingest/validateFile";
 import { toast } from "sonner";
 import useIngestForm from "@/hooks/ingest/useIngestForm";
-import useSubmitIngestForm from "@/hooks/ingest/useSubmitIngestForm";
+import { ingestForm } from "@/actions/ingestForm";
+import { Spinner } from "@/components/ui/spinner";
+import { validateTopicText } from "@/lib/utils";
 
 const IngestForm = () => {
   const toggleType = ["File", "Topic"] as const;
@@ -21,8 +23,8 @@ const IngestForm = () => {
 
   const { state, dispatch } = useIngestForm();
 
-  const [progress, setProgress] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
 
   const [isDragging, setDragging] = useState<boolean>(false);
 
@@ -69,16 +71,37 @@ const IngestForm = () => {
     e.stopPropagation();
 
     setIsSubmitting(true);
-    setProgress(0);
+    setProgress(8);
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 92) return prev;
+        const next = prev + 4;
+        return Math.min(next, 92);
+      });
+    }, 600);
 
-    const res = await useSubmitIngestForm(dispatch, state, (e) => {
-      setProgress(e);
-    });
+    if (state.ingestType === "Topic" && !validateTopicText(state.topic)) {
+      toast.error("Topic must be at least 15 characters long.");
+      setIsSubmitting(false);
+      setProgress(0);
+      return;
+    }
 
-    setIsSubmitting(false);
+    // server action to ingest the form data
+    const res = await ingestForm(state);
 
-    if (res) {
-      toast.success("Ingestion complete!");
+    clearInterval(timer);
+    setProgress(100);
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setProgress(0);
+    }, 600);
+
+    if (res.ok) {
+      toast.success(res.message);
+    } else {
+      toast.error(res.message);
     }
   };
 
@@ -86,22 +109,16 @@ const IngestForm = () => {
     <section className=" w-1/2 mx-auto  ">
       {isSubmitting ? (
         <div className="flex flex-col items-center gap-4 mt-4 justify-center border border-mocha-surface1 bg-mocha-mantle p-6 rounded font-mono text-xs text-mocha-overlay2">
-          <div className="flex items-center gap-3">
-            <span>
-              {progress < 100
-                ? `TRANSMITTING SEED MATRIX: ${progress}%`
-                : "LORE UPLOADED"}
-            </span>
-          </div>
-          <div className="w-full max-w-xs h-1 bg-mocha-surface1 rounded-full overflow-hidden">
+          <Spinner></Spinner>
+
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-mocha-surface1">
             <motion.div
-              className="h-full bg-mocha-overlay2"
+              className="h-full bg-mocha-yellow"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              transition={{ ease: "linear", duration: 0.2 }}
-            />
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            ></motion.div>
           </div>
-          <Button onClick={() => setIsSubmitting(false)}>Upload another</Button>
         </div>
       ) : (
         <form
