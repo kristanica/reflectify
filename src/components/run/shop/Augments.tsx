@@ -1,10 +1,6 @@
 import ShopItem from "@/components/ShopItem";
-import { motion, useAnimation } from "motion/react";
-import { Coins } from "lucide-react";
-import useAnimatedNumber from "@/hooks/useAnimatedNumber";
 import { useGameEngineStore } from "@/store/useGameEngineStore";
 import { useShallow } from "zustand/react/shallow";
-import { useEffect } from "react";
 
 const Augments = () => {
   const {
@@ -15,7 +11,7 @@ const Augments = () => {
     purchase,
     shuffleJokers,
     maxJokerShuffle,
-    shakeTrigger,
+
   } = useGameEngineStore(
     useShallow((state) => ({
       credits: state.credits,
@@ -25,7 +21,6 @@ const Augments = () => {
       purchase: state.purchase,
       shuffleJokers: state.shuffleJokers,
       maxJokerShuffle: state.maxJokerShuffle,
-      shakeTrigger: state.shakeTrigger,
     })),
   );
 

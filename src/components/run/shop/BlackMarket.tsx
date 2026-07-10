@@ -3,10 +3,6 @@
 import { AUGMENTS, CONSUMABLE_DATABASE } from "@/lib/mockData";
 import BlackMarketOwner from "./BlackMarketOwner";
 import Header from "@/components/Header";
-import { useState } from "react";
-import { useGameEngineStore } from "@/store/useGameEngineStore";
-import { useAnimation } from "motion/react";
-import ShopItem from "@/components/ShopItem";
 import Augments from "./Augments";
 import Consumables from "./Consumables";
 import Inventory from "./Inventory";

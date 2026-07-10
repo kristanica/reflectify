@@ -74,7 +74,16 @@ const createEconomySlice: StateCreator<
         lastOpenedShop: state.questionsAnswered,
       };
     }),
-  closeShop: () => set(() => ({ isShopOpen: false })),
+  closeShop: () => {
+
+
+    // Reset shuffle counts
+    get().setMaxJokerShuffle(3)
+    get().setMaxConsumablesShuffle(3)
+
+    set(() => ({ isShopOpen: false }));
+
+  },
   useConsumable: (consumableId) => {
     const consumables = get().consumables;
     const itemIndex = consumables.findIndex((c) => c.id === consumableId);

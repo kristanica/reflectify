@@ -1,5 +1,7 @@
 import ShopItem from "@/components/ShopItem";
 import { useGameEngineStore } from "@/store/useGameEngineStore";
+import { useState } from "react";
+import { set } from "zod/v3";
 import { useShallow } from "zustand/react/shallow";
 
 const Consumables = () => {
@@ -23,6 +25,9 @@ const Consumables = () => {
     })),
   );
 
+
+  const [broughtLocally, setBroughtLocally] = useState<string[]>([]);
+
   return (
     <div className="">
       <div className="flex justify-between items-center border-b border-mocha-surface1 pb-4">
@@ -33,8 +38,8 @@ const Consumables = () => {
 
       <div className="flex flex-col gap-2">
         {availableConsumables.map((item) => {
-          const hasBeenBroughtLocally = consumablesBrought.some(
-            (c) => c.id === item.id,
+          const hasBeenBroughtLocally = broughtLocally.some(
+            (c) => c === item.id,
           );
 
           const isBroke = credits < item.cost;
@@ -46,6 +51,7 @@ const Consumables = () => {
               onPurchase={async () => {
                 if (hasBeenBroughtLocally) return;
                 addConsumablesBrought(item);
+                setBroughtLocally((prev) => [...prev, item.id]);
                 purchase(item);
               }}
               key={item.id}
