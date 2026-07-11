@@ -8,12 +8,21 @@ const createGameLoopSlice: StateCreator<
   [],
   [],
   GameLoopSlice
-> = (set, get) => ({
+  > = (set, get) => ({
+  shownQuestions: [],
   selectedAnswer: undefined,
   hasAnswered: false,
   questionQueues: [],
   questionsAnswered: 0,
   is5050Active: false,
+
+  appendShownQuestion: (shownQuestions: ShownQuestionState) => {
+    set((state) => {
+      return {
+        shownQuestions: [...state.shownQuestions, shownQuestions],
+      }
+    })
+  },
   setSelectedAnswer: (val) => set(() => ({ selectedAnswer: val })),
   setHasAnswered: (val) => set(() => ({ hasAnswered: val })),
   setQuestionQueues: (newQuestions) =>
@@ -48,6 +57,14 @@ const createGameLoopSlice: StateCreator<
     const currentQuestion = state.questionQueues[0];
 
     const isCorrect = state.selectedAnswer === state.questionQueues[0].answer;
+
+
+    // append shown question for flashcard
+    state.appendShownQuestion({
+      question: currentQuestion.question,
+      correctAnswer: currentQuestion.answer,
+    });
+
 
     if (!isCorrect) {
       set((state) => ({

@@ -1,29 +1,30 @@
 "use client";
 
-import { deleteDeck } from "@/actions/deleteDeck";
 import useModal from "@/hooks/useModal";
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
 
+type DeleteResultProps = {
+  message: string;
+  ok: boolean;
+};
+
 export function DeleteAction({
-  deckId,
   title,
+  onDeleteAction,
 }: {
-  deckId: string;
   title: string;
+  onDeleteAction: () => Promise<DeleteResultProps>;
 }) {
   const { modalVisibility, openModal, closeModal } = useModal();
 
   const handleDelete = async () => {
-    const res = await deleteDeck(deckId);
-
+    const res = await onDeleteAction();
     if (res.ok) {
-      toast.success("Deck deleted successfully");
+      toast.success(res.message);
       closeModal();
     } else {
-      toast.error("Failed to delete deck", {
-        description: res.message,
-      });
+      toast.error(res.message);
     }
   };
 

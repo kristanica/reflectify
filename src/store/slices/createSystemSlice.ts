@@ -6,12 +6,18 @@ const createSystemSlice: StateCreator<GameEngineStore, [], [], SystemSlice> = (
 ) => ({
   toasts: [],
   sessionId: "",
+  deckId: "",
+  setDeckId: (deckId: string) => {
+    set(() => ({
+      deckId,
+    }));
+  },
   logs: [
     `[${new Date().toLocaleTimeString("en-US", { hour12: false })}] > WELCOME TO REFLECTIFY_OS. AWAITING INPUT.`,
   ],
   setSessionId: (sessionId) => {
     set(() => ({
-      sessionId: sessionId,
+      sessionId,
     }));
   },
   addToast: (type, message) => {

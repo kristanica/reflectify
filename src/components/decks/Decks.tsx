@@ -5,6 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { BookOpen, FileText, Lightbulb, Trash } from "lucide-react";
 import { DeleteAction } from "./DeleteAction";
+import { deleteDeck } from "@/actions/deleteDeck";
 
 const MAX_ITEM_PER_PAGE = 4;
 
@@ -40,7 +41,7 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
 
   if (decks.length === 0 && currentPage === 1) {
     return (
-      <div className="flex flex-col items-center justify-center rounded border border-dashed border-mocha-surface1 bg-mocha-base/10 py-20 text-center font-mono">
+      <div className="flex flex-col items-center justify-center rounded border w-full h-full border-mocha-surface1 bg-mocha-base/10 py-20 text-center font-mono">
         <BookOpen className="w-8 h-8 mb-4 text-mocha-overlay1" />
         <h3 className="text-sm font-bold text-mocha-text uppercase">
           No Seeds Found
@@ -69,7 +70,10 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
           >
             {/* Seed Info Header */}
             <div className="space-y-2 relative">
-              <DeleteAction deckId={seed.id} title={seed.title} />
+              <DeleteAction
+                onDeleteAction={deleteDeck.bind(null, seed.id)}
+                title={seed.title}
+              />
               <div className="flex justify-between items-start">
                 <span className="text-[10px] text-mocha-overlay1 uppercase tracking-wider">
                   {seed.sourceType === "FILE" ? (
@@ -108,7 +112,7 @@ export default async function Decks({ currentPage }: { currentPage: number }) {
                 START RUN
               </Link>
               <Link
-                href={`/flashcards/${seed.id}`}
+                href={`/flashcards/${seed.id}?page=1`}
                 className="flex-1 text-center border border-mocha-surface1 hover:border-mocha-text text-mocha-overlay2 hover:text-mocha-text py-1.5 transition-all uppercase font-bold text-[10px] rounded-sm"
               >
                 STUDY CARDS

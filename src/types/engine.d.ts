@@ -1,3 +1,8 @@
+type ShownQuestionState = {
+  question: string;
+  correctAnswer: string;
+};
+
 type EconomyState = {
   credits: number;
   jokers: ShopItem[];
@@ -48,9 +53,11 @@ type SystemState = {
   sessionId: string;
   toasts: ToastItem[];
   logs: string[];
+  deckId: string;
 };
 
 type SystemAction = {
+  setDeckId: (deckId: string) => void;
   setSessionId: (sessionId: string) => void;
   addToast: (type: ToastType, message: string) => void;
   removeToast: (id: string) => void;
@@ -82,8 +89,9 @@ type GameLoopState = {
   questionQueues: GeneratedQuestion[];
   questionsAnswered: number;
   is5050Active: boolean;
-};
 
+  shownQuestions: ShownQuestionState[];
+};
 type GameLoopAction = {
   setSelectedAnswer: (val: string) => void;
   setHasAnswered: (val: boolean) => void;
@@ -91,6 +99,7 @@ type GameLoopAction = {
   handleNextQuestion: () => void;
   resetGame: () => void;
   submitAnswer: (timeElapsedInSecond: number) => void;
+  appendShownQuestion: (question: ShownQuestionState) => void;
 };
 
 type GameLoopSlice = GameLoopState & GameLoopAction;

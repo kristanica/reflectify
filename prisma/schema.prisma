@@ -45,12 +45,11 @@ model Deck {
   updatedAt DateTime @default(now())
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  cards Card[]
+flashCards FlashCard[]
   sessions GameSession[]
   Concept Concept[]
   @@index([userId])
 }
-
 model Concept{
   id String @id @default(cuid())
   deckId String
@@ -62,14 +61,11 @@ model Concept{
 }
 
 
-
-
 model Inventory {
   id String @id @default(cuid())
-userId String @unique
+  userId String @unique
 
-
-user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
 inventoryItems InventoryItem[]
 }
@@ -100,14 +96,15 @@ model Purchase {
 }
 
 
-model Card {
+model FlashCard {
   id String @id @default(cuid())
   deckId String
-  options String[]
-  answer String
-  difficulty Int @default(1)
+  question String
+  correctAnswer String
+  gameSessionId String
+  gameSession GameSession @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
   deck Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
-@@index([deckId])
+  @@index([deckId])
 }
 
 model GameSession {
@@ -115,12 +112,10 @@ model GameSession {
   userId String
   deckId String
 
-
-
   startedAt DateTime @default(now())
   endedAt DateTime?
 
-
+  title String @default("New Session")
 
   score Int @default(0)
   xpEarned Int @default(0)
@@ -129,16 +124,17 @@ model GameSession {
   incorrectCount Int @default(0)
   streak Int @default(0)
 
-
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   deck Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
 
+  flashCards FlashCard[]
 
   purchases Purchase[]
 
 @@index([userId])
 @@index([deckId])
 }
+
 
 
 

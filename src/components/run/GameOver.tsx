@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import saveToGameSession from "@/actions/run/saveGameSession";
 import { useRouter } from "next/navigation";
+import saveAsFlashCard from "@/actions/run/saveAsFlashCard";
+import { add } from "three/src/nodes/math/OperatorNode.js";
 
 const GameOver = () => {
   const router = useRouter();
@@ -20,6 +22,8 @@ const GameOver = () => {
     sessionId,
     sessionExpEarned,
     addToast,
+    shownQuestions,
+    deckId,
   } = useGameEngineStore(
     useShallow((state) => ({
       depth: state.questionsAnswered,
@@ -34,14 +38,33 @@ const GameOver = () => {
       newLevel: state.currentLevel,
       sessionId: state.sessionId,
       addToast: state.addToast,
+      shownQuestions: state.shownQuestions,
+      deckId: state.deckId,
     })),
   );
 
   const hasSaved = useRef<boolean>(false);
+  const hasSavedFlashCard = useRef<boolean>(false);
 
   const handleReset = () => {
     resetGame();
     router.push("/decks");
+  };
+
+  const handleFlashCardSave = async () => {
+    if (hasSavedFlashCard.current) {
+      addToast("system", "Flash card already saved");
+      return;
+    }
+
+    const res = await saveAsFlashCard({
+      shownQuestions,
+      sessionId,
+      deckId: deckId,
+    });
+
+    addToast("system", res.message);
+    hasSavedFlashCard.current = true;
   };
 
   useEffect(() => {
@@ -87,7 +110,6 @@ const GameOver = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="w-full flex flex-col items-center"
         >
-          {/* --- HEADER --- */}
           <p className="text-mocha-red/80 font-mono tracking-[0.5em] text-xs mb-3 uppercase animate-pulse">
             Fatal Error
           </p>
@@ -127,12 +149,18 @@ const GameOver = () => {
             </div>
           </div>
           {/* --- ACTION BUTTONS --- */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md">
+          <div className="flex flex-col  gap-4 justify-center w-full max-w-md">
             <button
               onClick={handleReset}
               className="w-full py-3 px-8 border border-mocha-surface2 text-mocha-subtext1 hover:bg-mocha-yellow hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase rounded-sm"
             >
               Return to Base
+            </button>
+            <button
+              onClick={handleFlashCardSave}
+              className="text-mocha-subtext0 hover:text-mocha-subtext1 transition-all hover:underline text-sm "
+            >
+              Save as Flash Card set
             </button>
           </div>
         </motion.div>

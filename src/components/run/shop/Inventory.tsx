@@ -14,6 +14,7 @@ const Inventory = () => {
         closeShop: state.closeShop,
         shakeTrigger: state.shakeTrigger,
         credits: state.credits,
+
       })),
     );
 

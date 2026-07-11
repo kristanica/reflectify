@@ -42,6 +42,7 @@ export default function GameBoard({
     setQuestionQueues,
     handleNextQuestion,
     setSessionId,
+    setDeckId,
   } = useGameEngineStore(
     useShallow((state) => ({
       selectedAnswer: state.selectedAnswer,
@@ -59,22 +60,34 @@ export default function GameBoard({
       setQuestionQueues: state.setQuestionQueues,
       handleNextQuestion: state.handleNextQuestion,
       setSessionId: state.setSessionId,
+      setDeckId: state.setDeckId,
     })),
   );
 
   const isBossEncounter = questionQueues[0]?.type === "BOSS_SCENARIO";
-  const [hasLoadedInitialQuestions , sethasLoadedInitialQuestions ] = useState<boolean>(false);
+  const [hasLoadedInitialQuestions, sethasLoadedInitialQuestions] =
+    useState<boolean>(false);
 
   const [showWarning, setShowWarning] = useState<boolean>(false);
 
   const hasInitialized = useRef<boolean>(false);
 
+  // Init base stat/
   useEffect(() => {
     if (hasInitialized.current) return;
     initPlayerStat(baseXp, baseLevel);
     setSessionId(sessionId);
+    setDeckId(deckId);
     hasInitialized.current = true;
-  }, [baseXp, baseLevel, initPlayerStat, setSessionId, sessionId]);
+  }, [
+    baseXp,
+    baseLevel,
+    initPlayerStat,
+    setSessionId,
+    sessionId,
+    setDeckId,
+    deckId,
+  ]);
 
   const handleConsumable = useCallback(
     (consumableId: string) => {
@@ -164,7 +177,11 @@ export default function GameBoard({
         sethasLoadedInitialQuestions(true);
       }, 200);
     }
-  }, [sethasLoadedInitialQuestions, questionQueues.length, hasLoadedInitialQuestions]);
+  }, [
+    sethasLoadedInitialQuestions,
+    questionQueues.length,
+    hasLoadedInitialQuestions,
+  ]);
 
   if (lives <= 0) {
     return <GameOver></GameOver>;
@@ -178,10 +195,7 @@ export default function GameBoard({
         exit={{ opacity: 0 }}
         className="text-mocha-overlay2 h-full flex flex-1 items-center justify-center"
       >
-
         <InitialLoading isFillingQueue={hasLoadedInitialQuestions} />
-
-
       </motion.div>
     );
   }
@@ -189,8 +203,6 @@ export default function GameBoard({
   if (isShopOpen) {
     return <BlackMarket />;
   }
-
-
 
   return (
     <div className="w-full h-full flex flex-col pt-2 p-6 overflow-hidden">
@@ -235,7 +247,7 @@ export default function GameBoard({
                 <div className="flex justify-between items-start border-b pb-4">
                   <div>
                     <h3 className="text-sm font-bold tracking-wider font-mono text-mocha-text uppercase">
-                      CURRENT QUERY { questionQueues.length}
+                      CURRENT QUERY {questionQueues.length}
                     </h3>
                   </div>
 
