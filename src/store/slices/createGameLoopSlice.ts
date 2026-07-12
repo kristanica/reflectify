@@ -8,7 +8,7 @@ const createGameLoopSlice: StateCreator<
   [],
   [],
   GameLoopSlice
-  > = (set, get) => ({
+> = (set, get) => ({
   shownQuestions: [],
   selectedAnswer: undefined,
   hasAnswered: false,
@@ -20,8 +20,8 @@ const createGameLoopSlice: StateCreator<
     set((state) => {
       return {
         shownQuestions: [...state.shownQuestions, shownQuestions],
-      }
-    })
+      };
+    });
   },
   setSelectedAnswer: (val) => set(() => ({ selectedAnswer: val })),
   setHasAnswered: (val) => set(() => ({ hasAnswered: val })),
@@ -39,6 +39,7 @@ const createGameLoopSlice: StateCreator<
     })),
   resetGame: () =>
     set(() => ({
+      attempts: [],
       questionQueues: [],
       questionsAnswered: 0,
       lives: 3,
@@ -58,15 +59,21 @@ const createGameLoopSlice: StateCreator<
 
     const isCorrect = state.selectedAnswer === state.questionQueues[0].answer;
 
-
     // append shown question for flashcard
     state.appendShownQuestion({
       question: currentQuestion.question,
       correctAnswer: currentQuestion.answer,
     });
 
-
     if (!isCorrect) {
+      state.setAttempts({
+        conceptId: currentQuestion.conceptId,
+        answeredAt: new Date().toISOString(),
+        isCorrect: false,
+        usedHint: false,
+        responseMs: timeElapsedInSecond * 1000,
+      });
+
       set((state) => ({
         incorrectAnswerCount: state.incorrectAnswerCount + 1,
       }));
@@ -149,6 +156,13 @@ const createGameLoopSlice: StateCreator<
       return;
     } // is incorrect ends here
 
+    state.setAttempts({
+      conceptId: currentQuestion.conceptId,
+      answeredAt: new Date().toISOString(),
+      isCorrect: true,
+      usedHint: false,
+      responseMs: timeElapsedInSecond * 1000,
+    });
     set((state) => ({ correctAnswerCount: state.correctAnswerCount + 1 }));
     //  -- EXP/ LEVEL CALCULATION --
     const currentDepth = state.questionsAnswered + 1;

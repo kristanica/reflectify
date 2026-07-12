@@ -18,7 +18,12 @@ const Navigation = () => {
   return (
     <aside className="w-full md:flex md:items-center md:justify-between my-1 px-7 border-b py-2">
       <div className="hidden md:block ">
-        <p className="text-foreground font-bold tracking-widest">REFLECTIFY</p>
+        <Link
+          href="/dashboard"
+          className="text-foreground font-bold tracking-widest"
+        >
+          REFLECTIFY
+        </Link>
       </div>
 
       <nav className="hidden md:block">

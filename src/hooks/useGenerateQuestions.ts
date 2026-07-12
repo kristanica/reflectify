@@ -27,29 +27,29 @@ const useGenerateQuestions = ({
       currentIds: string[];
       depth: number;
     }) => {
-      // const tasks = await getConcepts({
-      //   userId: userId,
-      //   deckId: deckId,
-      //   questionQueues: currentIds,
-      //   depth,
-      // });
+      const tasks = await getConcepts({
+        userId: userId,
+        deckId: deckId,
+        questionQueues: currentIds,
+        depth,
+      });
 
-      // if (!tasks || tasks.length === 0) return [];
+      if (!tasks || tasks.length === 0) return [];
 
-      // const bossTasks = await getMultipleConcepts({
-      //   deckId: deckId,
-      //   questionQueues: [...currentIds, ...tasks.map((t) => t.conceptId)],
-      // });
+      const bossTasks = await getMultipleConcepts({
+        deckId: deckId,
+        questionQueues: [...currentIds, ...tasks.map((t) => t.conceptId)],
+      });
 
-      // const [normalQuestion, bossQuestion] = await Promise.all([
-      //   generateQuestions(tasks),
-      //   generateBossQuestion(bossTasks),
-      // ]);
+      const [normalQuestion, bossQuestion] = await Promise.all([
+        generateQuestions(tasks),
+        generateBossQuestion(bossTasks),
+      ]);
 
-      // if (!normalQuestion || !bossQuestion) return [];
+      if (!normalQuestion || !bossQuestion) return [];
 
-      // return [...normalQuestion, ...bossQuestion];
-return MOCK_QUESTIONS
+      return [...normalQuestion, ...bossQuestion];
+      // return MOCK_QUESTIONS;
     },
     onSettled: () => {},
     onSuccess: (data) => {

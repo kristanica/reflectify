@@ -6,6 +6,7 @@ import saveToGameSession from "@/actions/run/saveGameSession";
 import { useRouter } from "next/navigation";
 import saveAsFlashCard from "@/actions/run/saveAsFlashCard";
 import { add } from "three/src/nodes/math/OperatorNode.js";
+import { getDefaultAutoSelectFamilyAttemptTimeout } from "node:net";
 
 const GameOver = () => {
   const router = useRouter();
@@ -24,6 +25,7 @@ const GameOver = () => {
     addToast,
     shownQuestions,
     deckId,
+    attempts,
   } = useGameEngineStore(
     useShallow((state) => ({
       depth: state.questionsAnswered,
@@ -40,6 +42,7 @@ const GameOver = () => {
       addToast: state.addToast,
       shownQuestions: state.shownQuestions,
       deckId: state.deckId,
+      attempts: state.attempts,
     })),
   );
 
@@ -80,10 +83,13 @@ const GameOver = () => {
         sessionExpEarned,
         totalAccumulatedCredits,
         newLevel,
+        attempts,
       });
 
       if (response.success) {
         addToast("system", "Run ended");
+      } else {
+        addToast("error", response.message ?? "Failed to save run progress");
       }
     })();
     hasSaved.current = true;
@@ -98,6 +104,7 @@ const GameOver = () => {
     shopHistory,
     totalAccumulatedCredits,
     addToast,
+    attempts,
   ]);
 
   return (

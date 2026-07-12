@@ -7,6 +7,13 @@ const createSystemSlice: StateCreator<GameEngineStore, [], [], SystemSlice> = (
   toasts: [],
   sessionId: "",
   deckId: "",
+  attempts: [],
+  setAttempts: (attempt: ConceptAttempt) => {
+    set((state) => ({
+      attempts: [...state.attempts, attempt],
+    }));
+  },
+
   setDeckId: (deckId: string) => {
     set(() => ({
       deckId,

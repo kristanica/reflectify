@@ -23,7 +23,7 @@ export default async function generateQuestions(tasks: ConceptMasteries) {
       .join("\n\n");
 
     const generatedQuestions = await generateText({
-      model: openai("gpt-5-nano"),
+      model: openai("gpt-4.1-nano"),
       output: Output.array({
         element: questionSchema,
       }),

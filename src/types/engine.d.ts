@@ -2,7 +2,15 @@ type ShownQuestionState = {
   question: string;
   correctAnswer: string;
 };
+type ConceptAttempt = {
+  conceptId: string;
+  answeredAt: string;
+  isCorrect: boolean;
+  usedHint: boolean;
+  responseMs: number;
+};
 
+// Slices
 type EconomyState = {
   credits: number;
   jokers: ShopItem[];
@@ -54,6 +62,7 @@ type SystemState = {
   toasts: ToastItem[];
   logs: string[];
   deckId: string;
+  attempts: ConceptAttempt[];
 };
 
 type SystemAction = {
@@ -62,26 +71,10 @@ type SystemAction = {
   addToast: (type: ToastType, message: string) => void;
   removeToast: (id: string) => void;
   addLogs: (logs: string) => void;
+  setAttempts: (attempts: ConceptAttempt) => void;
 };
 
 type SystemSlice = SystemAction & SystemState;
-
-type SystemState = {
-  selectedAnswer: string | undefined;
-  hasAnswered: boolean;
-  questionQueues: GeneratedQuestion[];
-  questionsAnswered: number;
-  is5050Active: boolean;
-};
-
-type SystemAction = {
-  setSelectedAnswer: (val: string) => void;
-  setHasAnswered: (val: boolean) => void;
-  setQuestionQueues: (newQuestions: GeneratedQuestion[]) => void;
-  handleNextQuestion: () => void;
-  resetGame: () => void;
-  submitAnswer: (timeElapsedInSecond: number) => void;
-};
 
 type GameLoopState = {
   selectedAnswer: string | undefined;
@@ -89,7 +82,6 @@ type GameLoopState = {
   questionQueues: GeneratedQuestion[];
   questionsAnswered: number;
   is5050Active: boolean;
-
   shownQuestions: ShownQuestionState[];
 };
 type GameLoopAction = {

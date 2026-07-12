@@ -31,6 +31,7 @@ model User {
   purchases     Purchase[]
   accounts      Account[]
   sessions      Session[]
+  conceptProgress ConceptProgress[]
 }
 
 
@@ -57,6 +58,28 @@ model Concept{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deck Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  conceptProgress ConceptProgress[]
+}
+
+model ConceptProgress {
+  id String @id @default(cuid())
+  userId String
+  conceptId String
+  dueAt DateTime @default(now())
+  fsrsState Int @default(0)
+  stability Float?
+  difficulty Float?
+  learningSteps Int @default(0)
+  elapsedDays Int @default(0)
+  scheduleDays Int @default(0)
+  reps Int @default(0)
+  lapses Int @default(0)
+  lastReviewedAt DateTime?
+
+  user User @relation(fields:[userId], references: [id], onDelete: Cascade)
+  concept Concept @relation(fields: [conceptId], references: [id], onDelete: Cascade)
+  @@unique([userId, conceptId])
+  @@index([userId, dueAt])
 
 }
 
