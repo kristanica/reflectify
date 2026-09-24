@@ -36,6 +36,10 @@
     --sidebar-accent-foreground: #4c4f69;
     --sidebar-border: #bcc0cc;
     --sidebar-ring: #7287fd;
+    --surface-raised: #e6e9ef;
+    --surface-sunken: #dce0e8;
+    --accent-warm: #df8e1d;
+    --success: #40a02b;
 }
 
 * {
@@ -190,6 +194,10 @@ code {
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
+    --color-surface-raised: var(--surface-raised);
+    --color-surface-sunken: var(--surface-sunken);
+    --color-accent-warm: var(--accent-warm);
+    --color-success: var(--success);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -259,6 +267,10 @@ code {
     --sidebar-accent-foreground: #cdd6f4;
     --sidebar-border: #45475a;
     --sidebar-ring: #b4befe;
+    --surface-raised: #181825;
+    --surface-sunken: #11111b;
+    --accent-warm: #f9e2af;
+    --success: #a6e3a1;
 
     /* Catppuccin Mocha — full palette */
     --mocha-rosewater: #f5e0dc;
@@ -302,5 +314,20 @@ code {
     }
     html {
         @apply font-sans;
+    }
+}
+
+[data-user-shell] {
+    --radius: 0rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

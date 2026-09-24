@@ -1,5 +1,5 @@
 "use client";
-import { BookOpen, Shuffle, ShuffleIcon } from "lucide-react";
+import { BookOpen, ShuffleIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "motion/react";
@@ -18,7 +18,7 @@ export default function FlashCardScreen({ cards }: FlashCardScreenProps) {
   const [showAnswer, setShowAnswer] = useState(false);
   if (cards.length === 0) {
     return (
-      <div className="flex min-h-96 w-full max-w-xl flex-col items-center justify-center rounded-lg border border-dashed border-mocha-surface2 bg-mocha-base/40 px-6 py-20 text-center font-mono shadow-[0_0_40px_rgba(0,0,0,0.16)]">
+      <div className="flex min-h-96 w-full max-w-xl flex-col items-center justify-center border border-dashed border-mocha-surface2 bg-mocha-base/40 px-6 py-20 text-center font-mono">
         <BookOpen className="mb-4 h-9 w-9 text-mocha-yellow" />
         <h3 className="text-sm font-bold tracking-[0.18em] text-mocha-text uppercase">
           No Flash Card sets Found
@@ -28,7 +28,7 @@ export default function FlashCardScreen({ cards }: FlashCardScreenProps) {
         </p>
         <Link
           href="/decks"
-          className="rounded-sm border border-mocha-surface2 px-4 py-2 text-xs tracking-wider text-mocha-overlay2 transition-colors hover:border-mocha-yellow hover:text-mocha-yellow"
+          className="border border-mocha-surface2 px-4 py-2 text-xs tracking-wider text-mocha-overlay2 transition-colors hover:border-mocha-yellow hover:text-mocha-yellow"
         >
           Go to Archive
         </Link>
@@ -61,21 +61,21 @@ export default function FlashCardScreen({ cards }: FlashCardScreenProps) {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-1 flex-col items-center justify-center bg-mocha-base px-5 py-10 font-mono sm:px-8">
+    <div className="flex h-full w-full flex-1 flex-col items-center justify-center bg-background px-4 py-8 font-mono sm:px-8">
       <div className="w-full max-w-3xl perspective-distant">
         <motion.article
           animate={{ rotateY: showAnswer ? 180 : 0 }}
           transition={{ duration: 0.45, ease: "easeInOut" }}
           onClick={() => setShowAnswer((prev) => !prev)}
-          className="relative min-h-96 w-full cursor-pointer transform-3d"
+          className="relative min-h-80 w-full cursor-pointer transform-3d sm:min-h-96"
         >
-          <div className="absolute inset-0 flex items-center justify-center rounded-lg border bg-mocha-crust p-12 backface-hidden">
+          <div className="absolute inset-0 flex items-center justify-center border border-mocha-surface1 bg-mocha-base p-6 backface-hidden sm:p-12">
             <p className="max-w-2xl text-center text-2xl leading-relaxed text-mocha-text">
               {currentCard.question}
             </p>
           </div>
 
-          <div className="absolute inset-0 flex items-center justify-center rounded-lg border border-mocha-green bg-mocha-crust p-12  backface-hidden transform-[rotateY(180deg)]">
+          <div className="absolute inset-0 flex items-center justify-center border border-mocha-green bg-mocha-base p-6 backface-hidden transform-[rotateY(180deg)] sm:p-12">
             <p className="max-w-2xl text-center text-2xl leading-relaxed text-mocha-text">
               {currentCard.correctAnswer}
             </p>
@@ -89,29 +89,29 @@ export default function FlashCardScreen({ cards }: FlashCardScreenProps) {
       >
         <button
           onClick={handlePrevious}
-          className="rounded-sm border border-mocha-surface2 px-5 py-3 text-xs font-bold tracking-[0.16em] text-mocha-subtext1 uppercase transition-colors hover:border-mocha-overlay0 hover:bg-mocha-surface0 hover:text-mocha-text"
+          className="border border-mocha-surface2 px-5 py-3 text-xs font-bold tracking-[0.16em] text-mocha-subtext1 uppercase transition-colors hover:border-mocha-overlay0 hover:bg-mocha-surface0 hover:text-mocha-text"
         >
           Previous
         </button>
         <button
           onClick={() => setShowAnswer((prev) => !prev)}
-          className="rounded-sm border border-mocha-mauve bg-mocha-mauve px-5 py-3 text-xs font-bold tracking-[0.16em] text-mocha-base uppercase transition-colors "
+          className="border border-mocha-mauve bg-mocha-mauve px-5 py-3 text-xs font-bold tracking-[0.16em] text-mocha-base uppercase transition-colors hover:bg-mocha-lavender"
         >
           {showAnswer ? "Hide Answer" : "Answer"}
         </button>
         <button
           onClick={handleNext}
-          className="rounded-sm border border-mocha-surface2 px-5 py-3 text-xs font-bold tracking-[0.16em] text-mocha-subtext1 uppercase transition-colors hover:border-mocha-overlay0 hover:bg-mocha-surface0 hover:text-mocha-text"
+          className="border border-mocha-surface2 px-5 py-3 text-xs font-bold tracking-[0.16em] text-mocha-subtext1 uppercase transition-colors hover:border-mocha-overlay0 hover:bg-mocha-surface0 hover:text-mocha-text"
         >
           Next
         </button>
       </nav>
 
       <div className="flex flex-row gap-5 my-5 items-center justify-center ">
-        <button onClick={shufleCards}>
-          <ShuffleIcon></ShuffleIcon>
+        <button className="flex size-11 items-center justify-center border border-mocha-surface1 text-mocha-overlay1 hover:border-mocha-mauve hover:text-mocha-mauve" onClick={shufleCards} aria-label="Shuffle flashcards">
+          <ShuffleIcon className="size-4" aria-hidden="true" />
         </button>
-        <p className=" rounded-full border border-mocha-surface1 bg-mocha-mantle px-4 py-1.5 text-xs tracking-[0.16em] text-mocha-overlay1">
+        <p className="border border-mocha-surface1 bg-mocha-base px-4 py-1.5 text-xs tracking-[0.16em] text-mocha-overlay1">
           {currentCardIndex + 1} / {cards.length}
         </p>
       </div>

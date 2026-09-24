@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -25,8 +24,6 @@ const IngestForm = () => {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
-
-  const [isDragging, setDragging] = useState<boolean>(false);
 
   const handleFileInbound = (file: File) => {
     const result = validateFile(file);
@@ -58,12 +55,6 @@ const IngestForm = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragging(true);
-    } else if (e.type === "dragleave") {
-      setDragging(false);
-      console.log(e.type, "IsNotDragging");
-    }
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -106,12 +97,12 @@ const IngestForm = () => {
   };
 
   return (
-    <section className=" w-1/2 mx-auto  ">
+    <section className="mx-auto w-full max-w-2xl">
       {isSubmitting ? (
-        <div className="flex flex-col items-center gap-4 mt-4 justify-center border border-mocha-surface1 bg-mocha-mantle p-6 rounded font-mono text-xs text-mocha-overlay2">
+        <div className="mt-4 flex flex-col items-center justify-center gap-4 border border-mocha-surface1 bg-mocha-base/70 p-6 font-mono text-xs text-mocha-overlay2">
           <Spinner></Spinner>
 
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-mocha-surface1">
+          <div className="h-1.5 w-full overflow-hidden bg-mocha-surface1">
             <motion.div
               className="h-full bg-mocha-yellow"
               initial={{ width: 0 }}
@@ -123,7 +114,7 @@ const IngestForm = () => {
       ) : (
         <form
           onSubmit={onSubmit}
-          className="space-y-6 max-w-xl   font-mono text-xs"
+          className="border border-mocha-surface1 bg-mocha-base/55 p-4 font-mono text-xs sm:p-6"
         >
           <FieldGroup className=" h-full ">
             <Field>
@@ -147,7 +138,7 @@ const IngestForm = () => {
                     payload: e.target.value,
                   })
                 }
-                className="w-full border border-mocha-surface1 bg-mocha-mantle px-4 py-3 text-mocha-text rounded outline-none focus:border-mocha-yellow transition-colors"
+                className="w-full border border-mocha-surface1 bg-mocha-crust/50 px-4 py-3 text-mocha-text outline-none transition-colors focus:border-mocha-mauve"
               ></Input>
             </Field>
 
@@ -164,7 +155,7 @@ const IngestForm = () => {
                 id="ingestionType"
                 value={state.ingestType}
               />
-              <div className="flex border border-mocha-surface1 bg-mocha-mantle p-1 rounded gap-2">
+              <div className="flex border border-mocha-surface1 bg-mocha-crust/50 p-1">
                 {toggleType.map((type) => (
                   <Button
                     type="button"
@@ -178,7 +169,7 @@ const IngestForm = () => {
                     key={type}
                     className={`flex-1 text-center py-2 transition-all uppercase font-bold text-[10px] bg-mocha-mantle ${
                       state.ingestType === type
-                        ? "bg-mocha-yellow text-black"
+                        ? "bg-mocha-mauve text-mocha-crust"
                         : "text-mocha-overlay1 hover:text-mocha-subtext1"
                     }`}
                   >
@@ -202,7 +193,7 @@ const IngestForm = () => {
                     exit={{ x: -20, opacity: 0 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     onClick={() => fileRef.current?.click()}
-                    className="h-full border border-dashed border-mocha-surface1 hover:border-mocha-yellow/50 font-mono text-xs text-mocha-overlay2 rounded p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all bg-mocha-mantle hover:bg-mocha-base/40"
+                    className="flex min-h-56 cursor-pointer flex-col items-center justify-center border border-dashed border-mocha-surface1 bg-mocha-crust/40 p-8 text-center font-mono text-xs text-mocha-overlay2 transition-colors hover:border-mocha-mauve/60 hover:bg-mocha-mauve/5"
                   >
                     {state.file ? (
                       <div className="flex flex-col items-center space-y-2">
@@ -268,7 +259,7 @@ const IngestForm = () => {
                       id="topicDescription"
                       name="topicDescription"
                       placeholder="Explain the topic or list facts you want compiled..."
-                      className="w-full border border-mocha-surface1 bg-mocha-mantle px-4 py-3 text-mocha-text rounded outline-none focus:border-mocha-yellow transition-colors resize-none leading-relaxed"
+                      className="w-full resize-none border border-mocha-surface1 bg-mocha-crust/50 px-4 py-3 leading-relaxed text-mocha-text outline-none transition-colors focus:border-mocha-mauve"
                     />
                   </motion.div>
                 )}
@@ -278,7 +269,7 @@ const IngestForm = () => {
             <Field>
               <button
                 type="submit"
-                className="w-full block text-center border border-mocha-yellow hover:bg-mocha-yellow hover:text-black text-mocha-yellow py-3.5 transition-all uppercase font-bold text-xs rounded-sm cursor-pointer"
+                className="block min-h-12 w-full cursor-pointer border border-mocha-mauve bg-mocha-mauve py-3.5 text-center font-bold uppercase tracking-[0.14em] text-mocha-crust transition-colors hover:bg-mocha-lavender"
               >
                 Ingest
               </button>

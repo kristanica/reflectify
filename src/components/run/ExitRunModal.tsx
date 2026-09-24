@@ -18,7 +18,7 @@ export default function Modal({ onToggle }: { onToggle: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-      <div className="border w-[90%] sm:w-[50%] max-w-md border-mocha-surface1 bg-mocha-mantle/90 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-6 hover:border-mocha-surface2 transition-colors shadow-2xl">
+      <div className="flex w-[90%] max-w-md flex-col justify-between space-y-6 border border-mocha-surface1 bg-mocha-mantle/95 p-5 font-mono text-xs shadow-2xl transition-colors hover:border-mocha-surface2 sm:w-[50%]">
         <header className="border-b border-mocha-surface1 pb-3 text-[12px] text-mocha-overlay1 uppercase tracking-wider">
           System Warning
         </header>
@@ -39,7 +39,7 @@ export default function Modal({ onToggle }: { onToggle: () => void }) {
           </button>
           <button
             onClick={useEndSession}
-            className="px-4 py-2 bg-mocha-red/10 text-mocha-red border border-mocha-red/30 hover:bg-mocha-red/20 hover:border-mocha-red/60 rounded transition-all uppercase tracking-widest"
+            className="min-h-11 border border-mocha-red/30 bg-mocha-red/10 px-4 py-2 uppercase tracking-widest text-mocha-red transition-colors hover:border-mocha-red/60 hover:bg-mocha-red/20"
           >
             Abandon Run
           </button>

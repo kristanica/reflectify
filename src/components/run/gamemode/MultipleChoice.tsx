@@ -33,32 +33,30 @@ const MultipleChoice = ({ choices, answer }: MultipleChoiceType) => {
     return "grid-cols-1 sm:grid-cols-2";
   };
   return (
-    <div
-      className={`grid gap-4 w-full mt-4 ${getGridClass(safeChoices.length)}`}
-    >
+    <div className={`grid w-full gap-2 ${getGridClass(safeChoices.length)}`}>
       {(choices ?? []).map((option, i) => {
         const isSelected = selectedAnswer === option;
         const isCorrectChoice = option === answer;
         const isElminated = eliminated.includes(option);
         let isDisabled = hasAnswered;
         let optionStyle =
-          "border bg-card text-mocha-subtext1 hover:border-mocha-blue ";
+          "border-mocha-surface1 bg-mocha-base text-mocha-subtext1 hover:border-mocha-blue hover:bg-mocha-blue/5";
 
         if (isElminated) {
           optionStyle =
-            "border-zinc-900 text-mocha-red/40 opacity-30 line-through bg-zinc-950/10";
+            "border-mocha-surface0 bg-mocha-crust/40 text-mocha-red/40 opacity-40 line-through";
           isDisabled = true;
         } else if (hasAnswered) {
           if (isCorrectChoice) {
-            optionStyle = "border-mocha-green ";
+            optionStyle = "border-mocha-green bg-mocha-green/10 text-mocha-green";
           } else if (isSelected && !isCorrectChoice) {
-            optionStyle = "border-red-500 ";
+            optionStyle = "border-mocha-red bg-mocha-red/10 text-mocha-red";
           } else {
             optionStyle =
-              "border-zinc-900 bg-zinc-950/20 text-zinc-700 opacity-50";
+              "border-mocha-surface0 bg-mocha-crust/40 text-mocha-overlay0 opacity-50";
           }
         } else if (isSelected) {
-          optionStyle = "border border-mocha-blue  text-mocha-subtext1";
+          optionStyle = "border-mocha-blue bg-mocha-blue/10 text-mocha-blue";
         }
 
         return (
@@ -66,9 +64,12 @@ const MultipleChoice = ({ choices, answer }: MultipleChoiceType) => {
             onClick={() => setSelectedAnswer(option)}
             key={i}
             disabled={isDisabled}
-            className={`w-full text-left p-5 border rounded-sm font-mono text-sm transition-all duration-300 ${optionStyle}`}
+            className={`group flex min-h-16 w-full items-center gap-3 border p-4 text-left font-mono text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mocha-blue disabled:cursor-default ${optionStyle}`}
           >
-            {option}
+            <span className="text-[10px] font-black text-mocha-overlay1 group-hover:text-current">
+              {String.fromCharCode(65 + i)}
+            </span>
+            <span>{option}</span>
           </motion.button>
         );
       })}

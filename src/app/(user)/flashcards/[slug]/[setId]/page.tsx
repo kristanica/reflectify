@@ -1,6 +1,4 @@
-import { authOptions } from "@/lib/handlers";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
 import FlashCardScreen from "@/components/flashcards/FlashCardScreen";
 
 type FlashCardSet = {
@@ -24,7 +22,7 @@ export default async function Page({ params }: FlashCardSet) {
   });
 
   return (
-    <section className="h-full w-full  flex items-center justify-center">
+    <section className="flex h-full w-full items-center justify-center bg-background">
       <FlashCardScreen cards={flashCardSets} />
     </section>
   );

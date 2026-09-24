@@ -63,23 +63,23 @@ export default function ShopItems() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Dynamic Gold Status HUD */}
-      <div className="flex justify-end pr-2">
-        <div className="border border-mocha-yellow/40 bg-mocha-mantle px-4 py-2 rounded text-xs font-mono text-mocha-yellow shadow-[0_0_10px_rgba(240,165,0,0.1)] flex items-center gap-1.5">
+      <div className="flex justify-end">
+        <div className="flex min-h-11 items-center gap-1.5 border border-mocha-yellow/40 bg-mocha-base px-4 py-2 font-mono text-xs text-mocha-yellow">
           <Coins className="w-3.5 h-3.5" /> INVENTORY GOLD:{" "}
           <span className="text-mocha-text font-bold">{gold} GP</span>
         </div>
       </div>
 
       {/* Grid of items */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {SHOP_ITEMS.map((item) => {
           const canAfford = gold >= item.cost;
           return (
             <div
               key={item.id}
-              className="border border-mocha-surface1 bg-mocha-base/40 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-4 hover:border-mocha-yellow/30 transition-all group"
+              className="group flex min-h-64 flex-col justify-between space-y-4 border border-mocha-surface1 bg-mocha-base/60 p-5 font-mono text-xs transition-colors hover:border-mocha-yellow/40"
             >
               {/* Top Section */}
               <div className="space-y-2">
@@ -97,19 +97,20 @@ export default function ShopItems() {
               {/* Bottom Section */}
               <div className="flex items-center justify-between pt-3 border-t border-mocha-surface2">
                 <span className="text-mocha-yellow font-bold">
-                  🪙 {item.cost} GP
+                  <Coins className="mr-1 inline-block size-3.5" aria-hidden="true" />
+                  {item.cost} GP
                 </span>
 
                 <button
                   onClick={() => buyItem(item)}
                   disabled={!canAfford}
                   className={`px-3 py-1.5 border text-[10px] font-bold transition-all ${
-                    !canAfford
-                      ? "border-mocha-yellow text-mocha-yellow hover:bg-mocha-yellow hover:text-black cursor-pointer"
-                      : "border-mocha-surface1 text-mocha-overlay1 cursor-not-allowed"
+                    canAfford
+                      ? "cursor-pointer border-mocha-yellow text-mocha-yellow hover:bg-mocha-yellow hover:text-black"
+                      : "cursor-not-allowed border-mocha-surface1 text-mocha-overlay1 opacity-50"
                   }`}
                 >
-                  {!canAfford ? "PURCHASE" : "LACK COINS"}
+                  {canAfford ? "PURCHASE" : "LACK COINS"}
                 </button>
               </div>
             </div>

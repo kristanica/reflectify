@@ -87,32 +87,6 @@ async function main() {
   });
   console.log(`Seeded ${decks.length} decks`);
 
-  const fakeCards = decks.flatMap((deck) =>
-    Array.from({ length: faker.number.int({ min: 5, max: 25 }) }).map(
-      (_, index) => ({
-        deckId: deck.id,
-        questionType: faker.helpers.arrayElement([
-          "MULTIPLE_CHOICE",
-          "TRUE_OR_FALSE",
-        ]),
-        options:
-          (index + 1) % 3
-            ? Array.from({ length: 4 }).map(() => faker.word.words(1))
-            : [],
-
-        answer: faker.word.words(1),
-        difficulty: faker.number.int({ min: 1, max: 5 }),
-      }),
-    ),
-  );
-
-  const cards = await prisma.card.createMany({
-    data: fakeCards,
-    skipDuplicates: true,
-  });
-
-  console.log(`Seeded ${cards.count} cards`);
-
   const fakeGameSession = users.flatMap((user) => {
     const usersWithDecks = decks.filter((deck) => deck.userId === user.id);
 

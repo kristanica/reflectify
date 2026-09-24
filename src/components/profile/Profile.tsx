@@ -93,21 +93,24 @@ const RECENT_RUNS = [
 
 export default function PlayerProfilePage() {
   return (
-    <div className="w-full h-full flex flex-col p-6 space-y-8 text-mocha-text overflow-y-auto">
+    <div className="flex w-full flex-col gap-6 text-mocha-text">
       {/* 1. Header */}
-      <div className="border-b border-mocha-surface1 pb-4">
-        <h2 className="text-xl font-bold font-mono tracking-widest text-mocha-yellow uppercase">
-          [ CHARACTER SHEET ]
-        </h2>
-        <p className="text-xs text-mocha-overlay1 font-mono mt-1">
-          PLAYER ID: #0402 // MNEMONIC INITIATE
+      <header className="border-b border-mocha-surface1 pb-5">
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-mocha-mauve">
+          Player record
         </p>
-      </div>
+        <h1 className="mt-2 text-2xl font-black text-mocha-text sm:text-3xl">
+          Character Sheet
+        </h1>
+        <p className="mt-2 font-mono text-xs text-mocha-overlay1">
+          Player ID: #0402 // Mnemonic Initiate
+        </p>
+      </header>
 
       {/* 2. Top: Player Info Card & Stats Matrix */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Column: Player Identity Card */}
-        <div className="border border-mocha-surface1 bg-mocha-base/40 p-6 rounded flex flex-col items-center justify-center text-center space-y-4 font-mono">
+        <div className="flex flex-col items-center justify-center space-y-4 border border-mocha-surface1 bg-mocha-base/60 p-6 text-center font-mono">
           {/* Retro Avatar Circle */}
           <div className="relative w-24 h-24 rounded-full border-2 border-mocha-yellow bg-mocha-surface1 flex items-center justify-center shadow-[0_0_15px_rgba(240,165,0,0.2)]">
             <Zap className="w-8 h-8 text-mocha-yellow" />
@@ -129,9 +132,9 @@ export default function PlayerProfilePage() {
         </div>
 
         {/* Right Column: Player Stats Matrix (2/3 Width) */}
-        <div className="md:col-span-2 border border-mocha-surface1 bg-mocha-base/40 p-6 rounded flex flex-col justify-between space-y-4 font-mono text-xs">
-          <h4 className="font-bold text-mocha-text uppercase tracking-wider border-b border-mocha-surface2 pb-2">
-            // STATS MATRIX
+        <div className="flex flex-col justify-between space-y-4 border border-mocha-surface1 bg-mocha-base/60 p-6 font-mono text-xs md:col-span-2">
+          <h4 className="border-b border-mocha-surface2 pb-2 font-bold uppercase tracking-wider text-mocha-text">
+            Stats matrix
           </h4>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -189,7 +192,7 @@ export default function PlayerProfilePage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="border border-mocha-surface2 bg-mocha-mantle/60 p-3 rounded"
+                className="border border-mocha-surface1 bg-mocha-crust/35 p-3"
               >
                 <span className="text-[9px] text-mocha-overlay1 uppercase block leading-none mb-1.5">
                   {stat.label}
@@ -206,7 +209,7 @@ export default function PlayerProfilePage() {
       {/* 3. Bottom: Achievements (Left) & Campaign Log (Right) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Achievements Gallery (2/3 Width) */}
-        <div className="md:col-span-2 border border-mocha-surface1 bg-mocha-base/40 p-6 rounded space-y-4 font-mono text-xs">
+        <div className="space-y-4 border border-mocha-surface1 bg-mocha-base/60 p-6 font-mono text-xs md:col-span-2">
           <h4 className="font-bold text-mocha-text uppercase tracking-wider border-b border-mocha-surface2 pb-2">
             <Trophy className="w-3.5 h-3.5 inline-block" /> UNLOCKED
             RECOLLECTIONS (ACHIEVEMENTS)
@@ -216,7 +219,7 @@ export default function PlayerProfilePage() {
             {ACHIEVEMENTS.map((badge) => (
               <div
                 key={badge.key}
-                className={`border p-3 rounded flex flex-col justify-between space-y-2 transition-all ${
+                className={`flex flex-col justify-between space-y-2 border p-3 transition-colors ${
                   badge.unlocked
                     ? "border-mocha-surface1 bg-mocha-mantle/60"
                     : "border-mocha-surface2/50 bg-mocha-base/10 opacity-30 select-none"
@@ -245,7 +248,7 @@ export default function PlayerProfilePage() {
         </div>
 
         {/* Campaign Log (1/3 Width) */}
-        <div className="border border-mocha-surface1 bg-mocha-base/40 p-6 rounded space-y-4 font-mono text-xs">
+        <div className="space-y-4 border border-mocha-surface1 bg-mocha-base/60 p-6 font-mono text-xs">
           <h4 className="font-bold text-mocha-text uppercase tracking-wider border-b border-mocha-surface2 pb-2">
             <ScrollText className="w-3.5 h-3.5 inline-block" /> CAMPAIGN LOG
             (RECENT RUNS)
@@ -262,7 +265,7 @@ export default function PlayerProfilePage() {
                     {run.deck}
                   </span>
                   <span
-                    className={`text-[9px] font-bold px-1 py-0.5 rounded ${
+                    className={`border px-1.5 py-0.5 text-[9px] font-bold ${
                       run.result === "COMPLETED"
                         ? "bg-mocha-green/10 text-mocha-green border border-mocha-green/20"
                         : "bg-mocha-red/10 text-mocha-red border border-mocha-red/20"

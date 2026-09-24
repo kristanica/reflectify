@@ -66,7 +66,7 @@ const Augments = () => {
         <button
           disabled={!maxJokerShuffle}
           onClick={shuffleJokers}
-          className="py-2 px-6 border border-mocha-yellow text-mocha-yellow hover:bg-mocha-yellow hover:text-black transition-all duration-300 font-mono tracking-widest text-xs font-bold uppercase disabled:opacity-30 disabled:border-mocha-surface2 disabled:text-mocha-overlay0 disabled:pointer-events-none rounded-sm"
+          className="min-h-11 border border-mocha-yellow px-6 py-2 font-mono text-xs font-bold uppercase tracking-widest text-mocha-yellow transition-colors duration-300 hover:bg-mocha-yellow hover:text-black disabled:pointer-events-none disabled:border-mocha-surface2 disabled:text-mocha-overlay0 disabled:opacity-30"
         >
           SHUFFLE ({maxJokerShuffle})
         </button>

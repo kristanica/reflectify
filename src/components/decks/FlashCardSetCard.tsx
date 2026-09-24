@@ -5,7 +5,6 @@ import { DeleteAction } from "./DeleteAction";
 import Link from "next/link";
 import { durationFormat } from "@/lib/utils";
 import { KeyboardEvent, useState } from "react";
-import { set } from "zod/v3";
 import { renameFlashCardSet } from "@/actions/renameFlashCardSet";
 
 export default function FlashCardSetCard({
@@ -37,7 +36,7 @@ export default function FlashCardSetCard({
   };
 
   return (
-    <div className="border border-mocha-surface1 bg-mocha-base/40 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-4 hover:border-mocha-surface2 transition-all">
+    <div className="flex min-h-60 flex-col justify-between space-y-4 border border-mocha-surface1 bg-mocha-base/60 p-5 font-mono text-xs transition-colors hover:border-mocha-mauve/50">
       {/* Seed Info Header */}
       <div className="space-y-2 relative">
         <DeleteAction
@@ -56,8 +55,7 @@ export default function FlashCardSetCard({
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             onBlur={() => setIsEditing(false)}
-            className="w-full"
-
+            className="w-full border border-mocha-mauve bg-mocha-crust px-3 py-2 text-mocha-text outline-none"
             onKeyDown={handleEditTitle}
           />
         ) : (
@@ -71,7 +69,7 @@ export default function FlashCardSetCard({
       </div>
 
       {/* Run Metrics */}
-      <div className="grid md:grid-cols-3 gap-2 bg-mocha-mantle/60 p-3 border border-mocha-surface2 rounded text-[10px]">
+      <div className="grid gap-2 border border-mocha-surface1 bg-mocha-crust/35 p-3 text-[10px] md:grid-cols-3">
         <div>
           <span className="text-mocha-overlay1">STARTED AT:</span>
           <p className="text-mocha-subtext1 mt-0.5">
@@ -100,7 +98,7 @@ export default function FlashCardSetCard({
 
       <Link
         href={`/flashcards/${slug}/${id}`}
-        className="flex-1 text-center border border-mocha-yellow hover:bg-mocha-yellow hover:text-black text-mocha-yellow py-1.5 transition-all uppercase font-bold text-[10px] rounded-sm"
+        className="flex min-h-11 flex-1 items-center justify-center border border-mocha-mauve bg-mocha-mauve px-3 py-2 text-center font-bold uppercase tracking-[0.12em] text-mocha-crust transition-colors hover:bg-mocha-lavender"
       >
         Study Flashcard
       </Link>

@@ -13,11 +13,12 @@ export default async function Page({ searchParams }: PageProps) {
   const currentPage = Number(params.page || 1);
 
   return (
-    <div className="w-full flex flex-col p-6 space-y-6 text-mocha-text overflow-y-auto">
-      <DeckHeader></DeckHeader>
-      <DeckOwner></DeckOwner>
-
-      <Decks currentPage={currentPage}></Decks>
+    <div className="h-full w-full overflow-y-auto bg-background text-foreground">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
+        <DeckHeader />
+        <DeckOwner />
+        <Decks currentPage={currentPage} />
+      </div>
     </div>
   );
 }

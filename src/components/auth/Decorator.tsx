@@ -6,12 +6,6 @@ import { ReflectifyLogo } from "../ReflectifyLogo";
 import PixelSnow from "../PixelSnow";
 import { Label } from "../ui/label";
 
-const signalItems = [
-  { icon: BrainCircuit, label: "AI concept extraction" },
-  { icon: Layers3, label: "JIT question queue" },
-  { icon: Trophy, label: "Run rewards and mastery" },
-];
-
 const Decorator = () => {
   return (
     <>
@@ -37,30 +31,14 @@ const Decorator = () => {
           <ReflectifyLogo className="size-16" />
         </div>
 
-        <div className="space-y-3">
-          <Label className="text-4xl font-black uppercase tracking-[0.24em] text-mocha-rosewater">
-          Reflectify
+        <div className="space-y-3 flex items-center justify-center flex-col">
+          <Label className="text-4xl font-black uppercase tracking-[0.24em] text-mocha-rosewater ">
+            Reflectify
           </Label>
           <p className="mx-auto max-w-sm text-sm leading-relaxed text-mocha-subtext0">
             An AI-powered study roguelike. Ingest a seed, enter the run, and
             survive questions forged from your own material.
           </p>
-        </div>
-
-        <div className="grid w-full max-w-md gap-2">
-          {signalItems.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <div
-                key={item.label}
-                className="flex items-center gap-3 border border-mocha-surface1 bg-mocha-crust/70 px-4 py-3 text-left font-mono text-xs uppercase tracking-[0.12em] text-mocha-subtext0"
-              >
-                <Icon className="size-4 text-mocha-lavender" aria-hidden="true" />
-                {item.label}
-              </div>
-            );
-          })}
         </div>
       </div>
     </>

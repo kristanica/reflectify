@@ -1,14 +1,12 @@
 import ShopItem from "@/components/ShopItem";
 import { useGameEngineStore } from "@/store/useGameEngineStore";
 import { useState } from "react";
-import { set } from "zod/v3";
 import { useShallow } from "zustand/react/shallow";
 
 const Consumables = () => {
   const {
     credits,
     addConsumablesBrought,
-    consumablesBrought,
     availableConsumables,
     purchase,
     maxConsumablesShuffle,
@@ -18,7 +16,6 @@ const Consumables = () => {
       credits: state.credits,
       availableConsumables: state.availableConsumables,
       addConsumablesBrought: state.addConsumablesBrought,
-      consumablesBrought: state.consumblesBrought,
       purchase: state.purchase,
       maxConsumablesShuffle: state.maxConsumablesShuffle,
       shuffleConsumables: state.shuffleConsumables,
@@ -74,7 +71,7 @@ const Consumables = () => {
         <button
           disabled={!maxConsumablesShuffle}
           onClick={shuffleConsumables}
-          className="py-2 px-6 border border-mocha-sky text-mocha-sky hover:bg-mocha-sky hover:text-black transition-all duration-300 font-mono tracking-widest text-xs font-bold uppercase disabled:opacity-30 disabled:border-mocha-surface2 disabled:text-mocha-overlay0 disabled:pointer-events-none rounded-sm"
+          className="min-h-11 border border-mocha-sky px-6 py-2 font-mono text-xs font-bold uppercase tracking-widest text-mocha-sky transition-colors duration-300 hover:bg-mocha-sky hover:text-black disabled:pointer-events-none disabled:border-mocha-surface2 disabled:text-mocha-overlay0 disabled:opacity-30"
         >
           SHUFFLE ({maxConsumablesShuffle})
         </button>

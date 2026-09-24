@@ -7,7 +7,7 @@ const BlackMarketOwner = () => {
     <aside className="border-b border-mocha-surface1 py-5 select-none">
       <div className="grid grid-cols-3 place-items-center">
         <div className="flex items-center flex-col space-y-2">
-          <div className="relative w-20 h-20 rounded-md border border-mocha-sky/50 bg-mocha-mantle flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.15)] overflow-hidden group">
+          <div className="group relative flex size-20 items-center justify-center overflow-hidden border border-mocha-sky/50 bg-mocha-mantle shadow-[0_0_20px_rgba(6,182,212,0.15)]">
             <Eye className="w-8 h-8 text-mocha-sky group-hover:scale-110 transition-transform duration-500" />
           </div>
 

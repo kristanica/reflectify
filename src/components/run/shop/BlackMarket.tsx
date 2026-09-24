@@ -1,6 +1,5 @@
 "use client";
 
-import { AUGMENTS, CONSUMABLE_DATABASE } from "@/lib/mockData";
 import BlackMarketOwner from "./BlackMarketOwner";
 import Header from "@/components/Header";
 import Augments from "./Augments";
@@ -9,7 +8,7 @@ import Inventory from "./Inventory";
 
 const BlackMarket = () => {
   return (
-    <div className="text-mocha-text h-full w-full flex flex-col flex-1 px-6 py-6 max-w-7xl mx-auto space-y-6 overflow-hidden">
+    <div className="mx-auto flex h-full w-full max-w-7xl flex-1 flex-col space-y-5 overflow-y-auto p-4 text-mocha-text sm:p-6">
       {/* Header Block */}
       <div className="border-b border-mocha-surface1 pb-4 flex-none">
         <Header
@@ -22,7 +21,7 @@ const BlackMarket = () => {
       </div>
 
       {/* Main Layout Grid */}
-      <section className="grid grid-cols-3   w-full space-x-3">
+      <section className="grid w-full gap-3 lg:grid-cols-3">
         <Augments></Augments>
         <Consumables></Consumables>
         <Inventory></Inventory>

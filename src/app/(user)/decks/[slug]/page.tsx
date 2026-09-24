@@ -20,28 +20,26 @@ const page = async ({ params }: PageProps) => {
   });
 
   return (
-    <div className="flex flex-col flex-1 h-full items-center justify-center p-6 relative">
-      {/* Background ambient glow (optional, adds atmosphere) */}
-      <div className="w-full max-w-lg   bg-card  border shadow-xl rounded   sm:p-10 flex flex-col  relative  ">
-        {/* Header Section */}
-        <div className="text-center space-y-4 ">
-          <div className="text-primary font-mono text-[10px] tracking-[0.3em] uppercase opacity-80 flex items-center justify-center gap-4">
-            <span className="w-8 h-px bg-primary"></span>
-            System Warning
-            <span className="w-8 h-px bg-primary"></span>
+    <div className="flex h-full w-full items-center justify-center overflow-y-auto bg-background p-4 sm:p-6">
+      <div className="relative flex w-full max-w-xl flex-col border border-mocha-surface1 bg-mocha-base/70 p-5 sm:p-8">
+        <div className="space-y-4 text-center">
+          <div className="flex items-center justify-center gap-4 font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-mocha-red">
+            <span className="h-px w-8 bg-mocha-red/60" />
+            System warning
+            <span className="h-px w-8 bg-mocha-red/60" />
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-serif tracking-wide text-chart-1">
+          <h1 className="text-2xl font-black text-mocha-text sm:text-3xl">
             You&apos;re about to enter {deckInfo?.title}
-          </h2>
+          </h1>
 
-          <p className="text-zinc-500  mt-2  text-xs font-mono leading-relaxed px-4">
+          <p className="px-4 font-mono text-xs leading-6 text-mocha-subtext0">
             Once initiated, this sequence cannot be paused. All mistakes are
             permanent.
           </p>
         </div>
         {/* Action Buttons */}
-        <StartSessionForm deckId={slug}></StartSessionForm>
+        <StartSessionForm deckId={slug} />
       </div>
     </div>
   );

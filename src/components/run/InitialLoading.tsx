@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Spinner } from "../ui/spinner";
 
-const InitialLoading = ({ isFillingQueue }: {isFillingQueue: boolean}) => {
+const InitialLoading = ({ isFillingQueue }: { isFillingQueue: boolean }) => {
   const LOADING_QUOTES = useMemo(
     () => [
       "Polishing the mirrors of memory...",
@@ -31,10 +31,16 @@ const InitialLoading = ({ isFillingQueue }: {isFillingQueue: boolean}) => {
   }, [LOADING_QUOTES]);
 
   return (
-    <div className="text-mocha-yellow font-mono text-xs uppercase tracking-[0.3em] animate-pulse text-center px-4">
-      <Spinner className="mx-auto my-10 h-10 w-10"></Spinner>
-      {isFillingQueue ? <p>Filling queue</p> : <p>{quote}</p> }
-
+    <div className="w-full max-w-lg border border-mocha-surface1 bg-mocha-base/70 p-6 text-center font-mono sm:p-8">
+      <div className="mx-auto flex size-14 items-center justify-center border border-mocha-yellow/30 bg-mocha-yellow/10">
+        <Spinner className="size-6 text-mocha-yellow" />
+      </div>
+      <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.22em] text-mocha-yellow">
+        {isFillingQueue ? "Refilling question queue" : "Initializing run"}
+      </p>
+      <p className="mt-3 text-xs leading-6 text-mocha-overlay2" aria-live="polite">
+        {isFillingQueue ? "Generating the next encounter batch..." : quote}
+      </p>
     </div>
   );
 };

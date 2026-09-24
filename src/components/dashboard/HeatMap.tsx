@@ -14,29 +14,43 @@ const HeatMap = ({ sessions }: { sessions: { startedAt: Date }[] }) => {
   });
 
   return (
-    <div className="border bg-card p-5 rounded font-mono col-span-2">
-      <h4 className="text-xs text-mocha-yellow uppercase font-bold tracking-wider mb-4">
-        NEURAL ACTIVITY LOG for
-      </h4>
+    <section
+      className="border border-mocha-surface1 bg-mocha-base/70 p-5 lg:col-span-12"
+      aria-labelledby="activity-heading"
+    >
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            Last 30 days
+          </p>
+          <h2 id="activity-heading" className="mt-1 text-base font-semibold">
+            Run activity
+          </h2>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Brighter marks represent repeat expeditions.
+        </p>
+      </div>
 
-      <div className="flex flex-wrap gap-1.5">
+      <div className="mt-5 grid grid-cols-10 gap-1.5 sm:grid-cols-[repeat(15,minmax(0,1fr))] md:grid-cols-[repeat(30,minmax(0,1fr))]">
         {days.map((dayStr) => {
           const count = activityMap[dayStr] || 0;
-          let colorClass = "bg-mocha-mantle border border-mocha-surface1"; // 0 runs
+          let colorClass = "border-border bg-muted";
           if (count === 1)
-            colorClass = "bg-mocha-green/40 border-mocha-green/50";
-          if (count >= 2) colorClass = "bg-mocha-green border-mocha-green";
+            colorClass = "border-mocha-green/40 bg-mocha-green/35";
+          if (count >= 2) colorClass = "border-mocha-green bg-mocha-green";
 
           return (
             <div
               key={dayStr}
               title={`${count} runs on ${dayStr}`}
-              className={`w-4 h-4 rounded-sm transition-all duration-300 ${colorClass}`}
-            ></div>
+              aria-label={`${count} runs on ${dayStr}`}
+              className={`aspect-square min-w-0 border transition-colors duration-200 motion-reduce:transition-none ${colorClass}`}
+            />
           );
         })}
       </div>
-    </div>
+    </section>
   );
 };
 

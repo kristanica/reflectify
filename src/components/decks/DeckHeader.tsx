@@ -3,21 +3,24 @@ import React from "react";
 
 const DeckHeader = () => {
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-mocha-surface1 pb-4 gap-4">
+    <header className="flex flex-col gap-4 border-b border-mocha-surface1 pb-5 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h2 className="text-xl font-bold font-mono tracking-widest text-mocha-yellow uppercase">
-          [ THE ARCHIVES ]
-        </h2>
-        <p className="text-xs text-mocha-overlay1 font-mono mt-1">
-          INGESTED MATERIAL & PROCEDURAL RUN SEEDS
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-mocha-mauve">
+          Seed registry
+        </p>
+        <h1 className="mt-2 text-2xl font-black text-mocha-text sm:text-3xl">
+          The Archives
+        </h1>
+        <p className="mt-2 text-sm leading-6 text-mocha-subtext0">
+          Ingested material and procedural run seeds.
         </p>
       </div>
 
       <Link
         href="/decks/ingest"
-        className="border border-mocha-yellow hover:bg-mocha-yellow hover:text-black text-mocha-yellow font-mono text-xs font-bold px-4 py-2 transition-all"
+        className="inline-flex min-h-11 items-center justify-center border border-mocha-mauve bg-mocha-mauve px-4 py-2 font-mono text-xs font-black uppercase tracking-[0.14em] text-mocha-crust transition-colors hover:bg-mocha-lavender focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mocha-lavender"
       >
-        + INGEST NEW SEED
+        Ingest new seed
       </Link>
     </header>
   );

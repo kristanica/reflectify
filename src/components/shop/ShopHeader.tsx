@@ -2,13 +2,16 @@ import React from "react";
 
 const ShopHeader = () => {
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-mocha-surface1 pb-4 gap-4">
+    <header className="border-b border-mocha-surface1 pb-5">
       <div>
-        <h2 className="text-xl font-bold font-mono tracking-widest text-mocha-yellow uppercase">
-          [ THE SHOP ]
-        </h2>
-        <p className="text-xs text-mocha-overlay1 font-mono mt-1">
-          INGESTED MATERIAL & PROCEDURAL RUN SEEDS
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-mocha-mauve">
+          Relic exchange
+        </p>
+        <h1 className="mt-2 text-2xl font-black text-mocha-text sm:text-3xl">
+          The Shop
+        </h1>
+        <p className="mt-2 text-sm leading-6 text-mocha-subtext0">
+          Spend run currency on tools for the next encounter.
         </p>
       </div>
     </header>

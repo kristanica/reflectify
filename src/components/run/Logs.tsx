@@ -20,16 +20,26 @@ const Logs = () => {
   const logs = useGameEngineStore((state) => state.logs);
 
   return (
-    <>
-      <h2 className="text-sm font-bold font-mono tracking-widest mb-2 text-mocha-yellow uppercase flex items-center gap-2">
-        <span>[ SYSTEM_LOGS ]</span>
-      </h2>
-
+    <section className="flex h-full min-h-72 flex-col border border-mocha-surface1 bg-mocha-base/70">
+      <header className="flex items-center justify-between border-b border-mocha-surface1 px-4 py-3 font-mono">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-mocha-yellow">
+            Run activity
+          </p>
+          <p className="mt-1 text-[9px] uppercase tracking-[0.12em] text-mocha-overlay1">
+            Event stream
+          </p>
+        </div>
+        <span className="border border-mocha-green/30 bg-mocha-green/10 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.14em] text-mocha-green">
+          Live
+        </span>
+      </header>
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="h-full w-full border-mocha-surface1 border mt-2 bg-mocha-base/40 py-3 px-4 overflow-y-auto flex flex-col font-mono text-[11px] leading-relaxed relative"
+        aria-live="polite"
+        className="relative flex min-h-0 flex-1 flex-col overflow-y-auto p-4 font-mono text-[11px] leading-relaxed"
       >
         <AnimatePresence initial={false}>
           {[...logs].reverse().map((item, index) => {
@@ -43,9 +53,11 @@ const Logs = () => {
                 layout
                 initial="hidden"
                 animate="show"
-                className={`flex gap-3 mb-2 transition-colors duration-300 ease-in-out`}
-
+                className="grid grid-cols-[auto_1fr] gap-3 border-b border-mocha-surface0 py-3 transition-colors duration-300"
               >
+                <span className={isLatest ? "text-mocha-green" : "text-mocha-surface2"}>
+                  {isLatest ? ">" : "·"}
+                </span>
                 <p
                   className={`${isLatest ? "text-mocha-text tracking-wide" : "text-mocha-overlay1"}`}
                 >
@@ -65,7 +77,7 @@ const Logs = () => {
           </motion.div>
         )}
       </motion.div>
-    </>
+    </section>
   );
 };
 

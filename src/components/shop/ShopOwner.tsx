@@ -1,28 +1,26 @@
 "use client";
-import { ReflectifyLogo } from "../ReflectifyLogo";
 import { Compass } from "lucide-react";
 import TypeIt from "typeit-react";
 
 const ShopOwner = () => {
   return (
-    <aside className="border-b py-5">
-      <div className="grid grid-cols-3 place-items-center">
-        <div className="flex items-center flex-col space-y-2">
-          <div className="relative w-20 h-20 rounded-full border border-mocha-yellow bg-mocha-mantle flex items-center justify-center shadow-[0_0_15px_rgba(240,165,0,0.15)] overflow-hidden">
-            <Compass className="w-8 h-8 text-mocha-yellow" />
+    <aside className="border border-mocha-surface1 bg-mocha-base/70 p-4 sm:p-5">
+      <div className="grid gap-4 sm:grid-cols-[auto_1fr] sm:items-center">
+        <div className="flex items-center gap-3 sm:min-w-56">
+          <div className="flex size-14 shrink-0 items-center justify-center border border-mocha-yellow/50 bg-mocha-crust">
+            <Compass className="size-6 text-mocha-yellow" aria-hidden="true" />
           </div>
 
-          <div className="flex items-center flex-col">
-            <p className="text-sm font-mono font-bold text-mocha-maroon">
+          <div>
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.14em] text-mocha-rosewater">
               Aurelius
             </p>
-
-            <p className="text-xs text-mocha-overlay1 font-mono">
-              Weaver of the Shattered Shards{" "}
+            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-mocha-overlay1">
+              Weaver of Shattered Shards
             </p>
           </div>
         </div>
-        <div className="col-span-2 text-xs text-mocha-overlay1 font-mono mt-1 text-left">
+        <div className="border-t border-mocha-surface1 pt-4 font-mono text-xs leading-6 text-mocha-subtext0 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
           <TypeIt
             options={{
               speed: 25,

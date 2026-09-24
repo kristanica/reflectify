@@ -1,22 +1,36 @@
+import PixelSnow from "@/components/PixelSnow";
 import MobileNavigation from "@/components/user/MobileNavigation";
 import Navigation from "@/components/user/Navigation";
 import { ReactNode } from "react";
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen dark:bg-mocha-mantle relative">
-      <div className="hidden md:block">
-        {/* <PixelBackground></PixelBackground> */}
-      </div>
+    <div className="relative isolate min-h-dvh overflow-hidden bg-mocha-crust">
+      <PixelSnow
+        color="#cba6f7"
+        flakeSize={0.009}
+        minFlakeSize={1.1}
+        pixelResolution={380}
+        speed={0.24}
+        density={0.16}
+        direction={180}
+        brightness={0.62}
+        depthFade={8}
+        farPlane={16}
+        gamma={0.4545}
+        variant="square"
+        maxFPS={30}
+        className="pointer-events-none absolute inset-0 z-[-1]"
+      />
+      <div className="mx-auto flex h-dvh w-full max-w-360 overflow-hidden border-x border-border  ">
+        <Navigation />
 
-      <main className="relative z-99  h-screen w-full md:w-3xl lg:w-6xl flex flex-col dark:bg-background  m-auto  border-x ">
-        <Navigation></Navigation>
-        <div className="md:flex  md:flex-1 min-h-[90%] overflow-y-hidden">
+        <main className="min-w-0 flex-1 overflow-hidden pb-20 md:pb-0">
           {children}
-        </div>
+        </main>
 
-        <MobileNavigation></MobileNavigation>
-      </main>
+        <MobileNavigation />
+      </div>
     </div>
   );
 }

@@ -30,13 +30,13 @@ export function DeleteAction({
 
   return (
     <div className="absolute right-0">
-      <button onClick={openModal}>
-        <Trash className="stroke-mocha-red size-4"></Trash>
+      <button className="flex size-10 items-center justify-center text-mocha-red hover:bg-mocha-red/10" onClick={openModal} aria-label={`Delete ${title}`}>
+        <Trash className="size-4" aria-hidden="true" />
       </button>
 
       {modalVisibility && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="border w-[90%] sm:w-[50%] max-w-md border-mocha-surface1 bg-mocha-mantle/90 p-5 rounded font-mono text-xs flex flex-col justify-between space-y-6   shadow-2xl">
+          <div className="flex w-[90%] max-w-md flex-col justify-between space-y-6 border border-mocha-surface1 bg-mocha-mantle/95 p-5 font-mono text-xs shadow-2xl sm:w-[50%]">
             <div className="leading-tight flex justify-center items-center flex-col gap-2">
               <p className="text-mocha-blue font-bold text-lg  tracking-tighter">
                 Are you sure you want to delete {title}?

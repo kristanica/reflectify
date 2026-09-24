@@ -9,7 +9,7 @@ const Explanation = ({ explanation }: { explanation: string }) => {
       exit={{ opacity: 0, height: 0 }}
       className="w-full overflow-hidden"
     >
-      <p className="text-mocha-subtext1 font-mono text-xs leading-relaxed whitespace-pre-wrap">
+      <p className="whitespace-pre-wrap text-sm leading-7 text-mocha-subtext1">
         {explanation}
       </p>
     </motion.div>

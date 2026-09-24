@@ -1,11 +1,8 @@
 "use server";
 
-import { deleteFlashCardSet } from "@/actions/deleteFlashCardSet";
-import { DeleteAction } from "@/components/decks/DeleteAction";
 import FlashCardSetCard from "@/components/decks/FlashCardSetCard";
 import { authOptions } from "@/lib/handlers";
 import prisma from "@/lib/prisma";
-import { durationFormat } from "@/lib/utils";
 import { BookOpen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -75,7 +72,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   if (sets.length === 0) {
     return (
-      <div className="flex flex-col flex-1 items-center justify-center rounded  bg-mocha-base/10 py-20 text-center font-mono">
+      <div className="flex h-full min-h-80 w-full flex-col items-center justify-center border border-dashed border-mocha-surface1 bg-mocha-base/30 px-5 py-20 text-center font-mono">
         <BookOpen className="w-8 h-8 mb-4 text-mocha-overlay1" />
         <h3 className="text-sm font-bold text-mocha-text uppercase">
           No Flash Card sets Found {slug}
@@ -94,13 +91,21 @@ export default async function Page({ params, searchParams }: PageProps) {
   }
 
   return (
-    <section className="w-full flex flex-col p-6 space-y-6 text-mocha-text overflow-y-auto">
-      <p>
-        Flashcards saves for deck:
-        <span> {sets[0].deck.title}</span>
-      </p>
+    <section className="h-full w-full overflow-y-auto bg-background text-mocha-text">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
+        <header className="border-b border-mocha-surface1 pb-5">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-mocha-mauve">
+            Session memory
+          </p>
+          <h1 className="mt-2 text-2xl font-black text-mocha-text sm:text-3xl">
+            {sets[0].deck.title}
+          </h1>
+          <p className="mt-2 text-sm text-mocha-subtext0">
+            Flashcard sets saved from completed runs.
+          </p>
+        </header>
 
-      <article className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <article className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {sets.map((set) => (
           <div key={set.id}>
             <FlashCardSetCard
@@ -121,18 +126,19 @@ export default async function Page({ params, searchParams }: PageProps) {
         <div className="flex flex-row items-center gap-2">
           <Link
             href={`/decks?page=${Number(page) - 1}`}
-            className={`border border-mocha-surface1 px-3 py-1.5 rounded uppercase ${Number(page) > 1 ? "hover:border-mocha-overlay1 hover:text-mocha-text transition-colors" : "pointer-events-none cursor-not-allowed"}`}
+            className={`flex min-h-10 items-center border border-mocha-surface1 px-3 py-1.5 uppercase ${Number(page) > 1 ? "transition-colors hover:border-mocha-overlay1 hover:text-mocha-text" : "pointer-events-none cursor-not-allowed opacity-40"}`}
           >
             PREV
           </Link>
 
           <Link
             href={`/decks?page=${Number(page) + 1}`}
-            className={`border border-mocha-surface1 px-3 py-1.5 rounded uppercase ${Number(page) < totalPages ? "hover:border-mocha-overlay1 hover:text-mocha-text transition-colors" : "pointer-events-none cursor-not-allowed"}`}
+            className={`flex min-h-10 items-center border border-mocha-surface1 px-3 py-1.5 uppercase ${Number(page) < totalPages ? "transition-colors hover:border-mocha-overlay1 hover:text-mocha-text" : "pointer-events-none cursor-not-allowed opacity-40"}`}
           >
             NEXT
           </Link>
         </div>
+      </div>
       </div>
     </section>
   );

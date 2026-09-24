@@ -1,7 +1,16 @@
-/* eslint-disable react/jsx-no-comment-textnodes */
 // app/(app)/dashboard/page.tsx
 import Link from "next/link";
-import { Coins, Flame, Bot, TriangleAlert } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Bot,
+  Coins,
+  Flame,
+  Play,
+  Shield,
+  Sparkles,
+  Target,
+} from "lucide-react";
 import prisma from "@/lib/prisma";
 import checkSession from "@/lib/checkSession";
 import { NextResponse } from "next/server";
@@ -80,148 +89,250 @@ export default async function DashboardPage() {
     100,
     (xpInCurrentLevel / xpRequiredForNextLevel) * 100,
   );
+  const primaryDeck = decks[0];
 
   return (
-    <div className="w-full h-full flex flex-col p-6 space-y-6 text-mocha-text overflow-y-auto">
-      {/* 1. Header & Character Status */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-mocha-surface1 pb-4 gap-4">
-        <div>
-          <h2 className="text-xl font-bold font-mono tracking-widest text-mocha-yellow uppercase">
-            [ THE KEEP ]
-          </h2>
-          <p className="text-xs text-mocha-overlay1 font-mono mt-1">
-            LOBBY / MAIN DECK
-          </p>
-        </div>
-
-        {/* Player Stats Block */}
-        <div className="flex gap-4 text-xs font-mono h-auto">
-          <div className="border border-mocha-surface1 space-x-2 bg-mocha-mantle px-3 py-1.5 rounded flex flex-row items-center">
-            <span className="text-mocha-overlay1">LEVEL:</span>{" "}
-            <span className="text-mocha-text">Lv. {userStat.level}</span>
+    <div className="h-full w-full overflow-y-auto bg-background text-foreground">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
+        <header className="flex flex-col gap-3 border-b border-border/70 pb-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-mocha-yellow">
+              <Shield className="size-3.5" aria-hidden="true" />
+              The Keep
+            </div>
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              Your next expedition is ready.
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+              Resume a study seed, forge a new one, or review your recent
+              progress.
+            </p>
           </div>
-          <div className="border border-mocha-surface1 space-x-2 bg-moch-mantle flex flex-row items-center px-3 py-1.5 rounded">
-            <span className="text-mocha-overlay1">GOLD:</span>{" "}
-            <span className="text-mocha-yellow flex items-center gap-1">
-              <Coins className="w-3.5 h-3.5" /> {userStat.currency}
-            </span>
+          <div className="flex items-center gap-2 border border-mocha-surface1 bg-mocha-base/70 px-3 py-2 font-mono text-xs text-muted-foreground">
+            <Sparkles className="size-4 text-primary" aria-hidden="true" />
+            Archive synchronized
           </div>
-          <div className="flex flex-row items-center space-x-2 border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5 rounded">
-            <span className="text-mocha-overlay1">STREAK:</span>{" "}
-            <span className="text-mocha-red flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5" /> 5 Days
-            </span>
-          </div>
-        </div>
-      </div>
+        </header>
 
-      {/* XP Mana/Health Bar */}
-      <div className="w-full border dark:bg-card p-2.5 rounded font-mono text-xs">
-        <div className="flex justify-between text-mocha-overlay2 mb-1">
-          <span>XP PROGRESS</span>
-          <span>
-            {xpInCurrentLevel} / {xpRequiredForNextLevel} XP
-          </span>
-        </div>
-        <div className="w-full bg-mocha-surface1 h-2.5 rounded-sm overflow-hidden border border-mocha-surface1">
-          <div
-            className="bg-mocha-yellow h-full transition-all duration-500 ease-in-out"
-            style={{ width: `${progressPercentage}%` }}
-          ></div>
-        </div>
-      </div>
-
-      {/* 2. Grid Content (2-Column Layout) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 ">
-        {/* LEFT COLUMN: Main Actions & AI Coach (2/3 Width) */}
-        <div className="md:col-span-2 space-y-6">
-          {/* Main Procedural Run Trigger */}
-          <div className="border bg-card p-6 rounded flex flex-col justify-between h-[200px]">
+        <section
+          aria-labelledby="next-action-heading"
+          className="relative overflow-hidden border border-mocha-mauve/35 bg-mocha-base/70 p-5 sm:p-7"
+        >
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-mocha-mauve" />
+          <div className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <h3 className="text-sm font-bold tracking-wider font-mono text-mocha-text uppercase">
-                // PROCEDURAL RUN
-              </h3>
-              <p className="text-xs text-mocha-overlay2 mt-2 leading-relaxed">
-                Ready to initiate a run? Selecting a study seed (document/topic)
-                will compile a randomized dungeon of questions with adaptive
-                difficulty.
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+                Next action
+              </p>
+              <h2
+                id="next-action-heading"
+                className="mt-3 text-xl font-semibold text-foreground sm:text-2xl"
+              >
+                {primaryDeck ? primaryDeck.title : "Create your first seed"}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                {primaryDeck
+                  ? `Last mapped ${primaryDeck.createdAt.toDateString()}. Enter the seed setup to begin a new procedural run.`
+                  : "Your archives are empty. Ingest a document or topic to generate concepts and unlock your first run."}
               </p>
             </div>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Link
+                href={primaryDeck ? `/decks/${primaryDeck.id}` : "/decks/ingest"}
+                className="inline-flex min-h-11 items-center justify-center gap-2 border border-mocha-mauve bg-mocha-mauve px-4 py-2.5 font-mono text-xs font-black uppercase tracking-[0.14em] text-mocha-crust transition-colors hover:bg-mocha-lavender focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {primaryDeck ? (
+                  <Play className="size-4" aria-hidden="true" />
+                ) : (
+                  <Sparkles className="size-4" aria-hidden="true" />
+                )}
+                {primaryDeck ? "Start run" : "Create seed"}
+              </Link>
+              {primaryDeck && (
+                <Link
+                  href="/decks/ingest"
+                  className="inline-flex min-h-11 items-center justify-center border border-mocha-surface2 bg-mocha-base/60 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-[0.14em] text-mocha-subtext0 transition-colors hover:bg-mocha-surface0 hover:text-mocha-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  New seed
+                </Link>
+              )}
+            </div>
+          </div>
+        </section>
 
-            <div className="flex gap-4">
+        <section aria-labelledby="progress-heading" className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                Player status
+              </p>
+              <h2 id="progress-heading" className="mt-1 text-base font-semibold">
+                Progress at a glance
+              </h2>
+            </div>
+            <span className="font-mono text-xs text-muted-foreground">
+              {xpInCurrentLevel} / {xpRequiredForNextLevel} XP
+            </span>
+          </div>
+
+          <div
+            className="h-2 overflow-hidden bg-mocha-surface0"
+            role="progressbar"
+            aria-label={`Level ${userStat.level} experience progress`}
+            aria-valuemin={0}
+            aria-valuemax={xpRequiredForNextLevel}
+            aria-valuenow={Math.round(xpInCurrentLevel)}
+          >
+            <div
+              className="h-full bg-mocha-mauve transition-[width] duration-500 motion-reduce:transition-none"
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <StatCard icon={Shield} label="Level" value={userStat.level} />
+            <StatCard
+              icon={Coins}
+              label="Gold"
+              value={userStat.currency}
+              tone="text-mocha-yellow"
+            />
+            <StatCard
+              icon={Flame}
+              label="Streak"
+              value="5 days"
+              tone="text-mocha-red"
+            />
+            <StatCard
+              icon={Target}
+              label="Accuracy"
+              value={`${globalAccuracy}%`}
+              tone="text-mocha-green"
+            />
+          </div>
+        </section>
+
+        <div className="grid gap-6 lg:grid-cols-12">
+          <section
+            aria-labelledby="seeds-heading"
+            className="border border-mocha-surface1 bg-mocha-base/70 p-5 lg:col-span-7"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Current study seeds
+                </p>
+                <h2 id="seeds-heading" className="mt-1 text-base font-semibold">
+                  Return to the archives
+                </h2>
+              </div>
               <Link
                 href="/decks"
-                className="border border-mocha-yellow hover:bg-mocha-yellow hover:text-black text-mocha-yellow font-mono text-xs font-bold px-4 py-2 transition-all"
+                className="inline-flex min-h-11 items-center gap-1.5 border border-transparent px-2 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-primary hover:border-primary/40 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                INITIATE RUN
-              </Link>
-              <Link
-                href="/decks/ingest"
-                className="border border-mocha-surface2 hover:border-mocha-text text-mocha-overlay2 hover:text-mocha-text font-mono text-xs px-4 py-2 transition-all"
-              >
-                INGEST NEW SEED
+                View all
+                <ArrowRight className="size-3.5" aria-hidden="true" />
               </Link>
             </div>
-          </div>
 
-          {/* Global Metrics */}
-          <div className="border bg-card p-5 rounded font-mono">
-            <h4 className="text-xs text-mocha-yellow uppercase font-bold tracking-wider mb-3">
-              <Bot className="w-3.5 h-3.5 inline-block mr-1" /> GLOBAL METRICS
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="border bg-mocha-mantle p-3 flex flex-col items-center justify-center">
-                <span className="text-mocha-overlay1 text-[10px] uppercase">
-                  Total Runs
-                </span>
-                <span className="text-mocha-text text-lg font-bold">
-                  {globalStats._count.id}
-                </span>
-              </div>
-              <div className="border bg-mocha-mantle p-3 flex flex-col items-center justify-center">
-                <span className="text-mocha-overlay1 text-[10px] uppercase">
-                  Global Accuracy
-                </span>
-                <span className="text-mocha-green text-lg font-bold">
-                  {globalAccuracy}%
-                </span>
-              </div>
-              <div className="border bg-mocha-mantle p-3 flex flex-col items-center justify-center">
-                <span className="text-mocha-overlay1 text-[10px] uppercase">
-                  Questions Answered
-                </span>
-                <span className="text-mocha-yellow text-lg font-bold">
-                  {totalQuestions}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN: Spaced Repetition & Threat List (1/3 Width) */}
-        {/* Spaced Repetition Queue */}
-        <div className="border bg-card p-5 rounded space-y-4 font-mono text-xs ">
-          <h3 className="font-bold text-mocha-text tracking-wider uppercase">
-            // REVIEW QUEUE
-          </h3>
-
-          <div className="flex flex-col gap-2 ">
-            {decks.length === 0 && <p>No decks available.</p>}
-            {decks.map((deck) => (
-              <Link href={`/decks/${deck.id}`} key={deck.id}>
-                <div className="border bg-card p-3 rounded">
-                  <p className="text-mocha-yellow font-bold">{deck.title}</p>
-                  <p className="text-mocha-overlay1 text-[10px] mt-1">
-                    {deck.createdAt.toDateString()}
+            <div className="mt-4 space-y-2">
+              {decks.length === 0 ? (
+                <div className="border border-dashed border-mocha-surface1 bg-mocha-crust/30 px-4 py-8 text-center">
+                  <BookOpen className="mx-auto size-6 text-muted-foreground" aria-hidden="true" />
+                  <p className="mt-3 text-sm font-medium">No seeds mapped yet</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Create a seed to begin your first expedition.
                   </p>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+              ) : (
+                decks.map((deck, index) => (
+                  <Link
+                    href={`/decks/${deck.id}`}
+                    key={deck.id}
+                    className="group flex min-h-16 items-center gap-3 border border-mocha-surface1 bg-mocha-crust/30 p-3 transition-colors hover:border-mocha-mauve/50 hover:bg-mocha-mauve/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <span className="flex size-9 shrink-0 items-center justify-center border border-mocha-surface1 bg-mocha-base text-muted-foreground group-hover:border-mocha-mauve/50 group-hover:text-primary">
+                      <BookOpen className="size-4" aria-hidden="true" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium text-foreground">
+                        {deck.title}
+                      </span>
+                      <span className="mt-1 block font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                        {index === 0 ? "Most recent" : "Archived"} · {deck.createdAt.toDateString()}
+                      </span>
+                    </span>
+                    <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary motion-reduce:transform-none" aria-hidden="true" />
+                  </Link>
+                ))
+              )}
+            </div>
+          </section>
 
-        <HeatMap sessions={heatMap}></HeatMap>
+          <section
+            aria-labelledby="metrics-heading"
+            className="border border-mocha-surface1 bg-mocha-base/70 p-5 lg:col-span-5"
+          >
+            <div className="flex items-center gap-2">
+              <Bot className="size-4 text-primary" aria-hidden="true" />
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Run record
+                </p>
+                <h2 id="metrics-heading" className="mt-1 text-base font-semibold">
+                  Expedition metrics
+                </h2>
+              </div>
+            </div>
+
+            <dl className="mt-5 divide-y divide-border/70">
+              <MetricRow label="Total runs" value={globalStats._count.id} />
+              <MetricRow label="Questions answered" value={totalQuestions} />
+              <MetricRow label="Global accuracy" value={`${globalAccuracy}%`} />
+            </dl>
+          </section>
+
+          <HeatMap sessions={heatMap} />
+        </div>
       </div>
+    </div>
+  );
+}
+
+type IconComponent = React.ComponentType<{
+  className?: string;
+  "aria-hidden"?: React.AriaAttributes["aria-hidden"];
+}>;
+
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  tone = "text-foreground",
+}: {
+  icon: IconComponent;
+  label: string;
+  value: string | number;
+  tone?: string;
+}) {
+  return (
+    <div className="border border-mocha-surface1 bg-mocha-base/70 p-3 sm:p-4">
+      <div className="flex items-center gap-2 text-muted-foreground">
+        <Icon className="size-3.5" aria-hidden="true" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.14em]">
+          {label}
+        </span>
+      </div>
+      <p className={`mt-2 text-lg font-semibold sm:text-xl ${tone}`}>{value}</p>
+    </div>
+  );
+}
+
+function MetricRow({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+      <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="font-mono text-sm font-semibold text-foreground">{value}</dd>
     </div>
   );
 }

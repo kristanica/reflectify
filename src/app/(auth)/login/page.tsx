@@ -22,7 +22,7 @@ const Login = () => {
         </div>
       </section>
 
-      <section className="relative z-10 m-5 hidden flex-1 flex-col items-center justify-center overflow-hidden border border-mocha-surface1 bg-mocha-base/45 shadow-2xl shadow-black/35 lg:flex">
+      <section className="relative z-10 m-5 hidden flex-1 flex-col items-center justify-center overflow-hidden border border-mocha-surface1 bg-mocha-base/45  lg:flex">
         <Decorator />
       </section>
     </main>

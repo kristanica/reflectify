@@ -14,11 +14,11 @@ const Stats = () => {
   const animatedCredits = useAnimatedNumber({ val: credits });
 
   return (
-    <div className="grid w-full grid-cols-2 md:flex gap-4 items-center h-full">
+    <div className="grid w-full grid-cols-2 gap-px border border-mocha-surface1 bg-mocha-surface1 lg:grid-cols-4">
       {/* Lives */}
-      <section className=" flex items-center gap-2 border bg-card  px-3 py-1.5 rounded h-full">
-        <span className="text-mocha-subtext1 font-mono text-[10px] tracking-wider">
-          LIVES:
+      <section className="flex min-h-16 flex-col justify-center gap-2 bg-mocha-base px-4 py-3">
+        <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-mocha-overlay1">
+          Integrity
         </span>
         <div className="flex flex-row gap-1">
           <AnimatePresence>
@@ -49,35 +49,23 @@ const Stats = () => {
         </div>
       </section>
 
-      {/* Combo Meter */}
-      <AnimatePresence>
-        {streak > 1 && (
-          <motion.section
-            key="combo-meter"
-            initial={{ opacity: 0, scale: 0.8, x: 20 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{
-              opacity: 0,
-              scale: 0.5,
-              y: 10,
-              filter: "blur(5px)",
-            }}
-            className={`flex items-center gap-2 border border-mocha-yellow/30 bg-mocha-yellow/10 px-3 py-1.5 rounded h-full`}
-          >
-            <span className="text-mocha-yellow font-mono text-[10px] tracking-wider uppercase animate-pulse">
-              COMBO:
-            </span>
-            <span className="text-mocha-yellow font-bold font-mono text-xs leading-none">
-              x{streak}
-            </span>
-          </motion.section>
-        )}
-      </AnimatePresence>
+      <motion.section
+        key="combo-meter"
+        animate={streak > 1 ? { backgroundColor: "rgba(249,226,175,0.1)" } : {}}
+        className="flex min-h-16 flex-col justify-center gap-1 bg-mocha-base px-4 py-3"
+      >
+        <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-mocha-overlay1">
+          Combo
+        </span>
+        <span className={`font-mono text-lg font-black ${streak > 1 ? "text-mocha-yellow" : "text-mocha-subtext0"}`}>
+          x{streak}
+        </span>
+      </motion.section>
 
       {/* Score */}
-      <section className="flex items-center gap-2 border bg-card text-mocha-sky px-3 py-1.5 rounded h-full">
-        <span className="text-mocha-subtext1 font-mono text-[10px] tracking-wider uppercase">
-          SCORE:
+      <section className="flex min-h-16 flex-col justify-center gap-1 bg-mocha-base px-4 py-3 text-mocha-sky">
+        <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-mocha-overlay1">
+          Score
         </span>
         <motion.div
           key={score}
@@ -85,15 +73,15 @@ const Stats = () => {
           animate={{ scale: 1, color: "#89b4fa" }} // mocha-blue hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          <motion.span className="font-mono text-xs text-mocha-sky  leading-none">
+          <motion.span className="font-mono text-lg font-black leading-none text-mocha-sky">
             {animatedScore}
           </motion.span>
         </motion.div>
       </section>
 
-      <section className="flex items-center gap-2 border bg-card  px-3 py-1.5 rounded h-full">
-        <span className="text-mocha-subtext1 font-mono text-[10px] tracking-wider uppercase">
-          GOLD:
+      <section className="flex min-h-16 flex-col justify-center gap-1 bg-mocha-base px-4 py-3">
+        <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-mocha-overlay1">
+          Credits
         </span>
         <motion.div
           key={credits}
@@ -101,7 +89,7 @@ const Stats = () => {
           animate={{ scale: 1, color: "#f9e2af" }} // mocha-yellow hex
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
         >
-          <motion.span className="text-mocha-yellow font-mono text-xs  leading-none">
+          <motion.span className="font-mono text-lg font-black leading-none text-mocha-yellow">
             {animatedCredits}
           </motion.span>
         </motion.div>

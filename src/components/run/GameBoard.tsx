@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import InitialLoading from "./InitialLoading";
-import { Bot } from "lucide-react";
+import { Bot, Database, ShieldAlert, Swords } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import useGenerateQuestions from "@/hooks/useGenerateQuestions";
 import GameTypeIdentifier from "./GameTypeIdentifier";
@@ -68,7 +68,7 @@ export default function GameBoard({
   const [hasLoadedInitialQuestions, sethasLoadedInitialQuestions] =
     useState<boolean>(false);
 
-  const [showWarning, setShowWarning] = useState<boolean>(false);
+  const [, setShowWarning] = useState<boolean>(false);
 
   const hasInitialized = useRef<boolean>(false);
 
@@ -205,84 +205,129 @@ export default function GameBoard({
   }
 
   return (
-    <div className="w-full h-full flex flex-col pt-2 p-6 overflow-hidden">
+    <div className="h-full w-full overflow-y-auto bg-mocha-crust">
       <AnimatePresence mode="wait">
         <motion.div
           key="question"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -15 }}
-          className="flex flex-col flex-1 relative w-full max-w-5xl mx-auto h-full space-y-6 min-h-0"
+          className="mx-auto flex min-h-full w-full max-w-7xl flex-col gap-4 p-4 sm:p-6"
         >
-          {/* Header Block */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b pb-4 gap-4">
-            <div>
-              <h2
-                className={`text-xl font-bold font-mono tracking-widest uppercase ${
-                  isBossEncounter
-                    ? "text-destructive animate-pulse"
-                    : "text-primary"
-                }`}
-              >
-                {isBossEncounter
-                  ? "[ CRITICAL BOSS ENCOUNTER ]"
-                  : "[ ACTIVE RUN ]"}
-              </h2>
-              <p className="text-xs text-mocha-subtext0 font-mono mt-1">
-                DEPTH: {depth}
-              </p>
+          <header className="border border-mocha-surface1 bg-mocha-base/70">
+            <div className="flex flex-col gap-4 border-b border-mocha-surface1 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <div className="flex items-start gap-3">
+                <div
+                  className={`flex size-11 shrink-0 items-center justify-center border ${
+                    isBossEncounter
+                      ? "border-mocha-red/50 bg-mocha-red/10 text-mocha-red"
+                      : "border-mocha-mauve/40 bg-mocha-mauve/10 text-mocha-mauve"
+                  }`}
+                >
+                  {isBossEncounter ? (
+                    <ShieldAlert className="size-5" aria-hidden="true" />
+                  ) : (
+                    <Swords className="size-5" aria-hidden="true" />
+                  )}
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-mocha-overlay1">
+                    Reflectify / live session
+                  </p>
+                  <h1
+                    className={`mt-1 text-lg font-black uppercase tracking-[0.12em] sm:text-xl ${
+                      isBossEncounter ? "text-mocha-red" : "text-mocha-text"
+                    }`}
+                  >
+                    {isBossEncounter ? "Critical boss encounter" : "Active run"}
+                  </h1>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 border border-mocha-surface1 bg-mocha-crust/50 font-mono sm:min-w-64">
+                <div className="border-r border-mocha-surface1 px-4 py-2.5">
+                  <p className="text-[9px] uppercase tracking-[0.16em] text-mocha-overlay1">
+                    Depth
+                  </p>
+                  <p className="mt-1 text-lg font-black text-mocha-mauve">
+                    {String(depth).padStart(2, "0")}
+                  </p>
+                </div>
+                <div className="px-4 py-2.5">
+                  <p className="text-[9px] uppercase tracking-[0.16em] text-mocha-overlay1">
+                    Queue
+                  </p>
+                  <p className="mt-1 flex items-center gap-2 text-lg font-black text-mocha-sky">
+                    <Database className="size-3.5" aria-hidden="true" />
+                    {String(questionQueues.length).padStart(2, "0")}
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="flex gap-4 text-xs font-mono items-center flex-row">
+            <div className="p-3 sm:p-4">
               <Stats />
             </div>
-          </div>
+          </header>
 
-          {/* Main Layout Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
-            {/* LEFT COLUMN: Question & Answers (3/4 Width) */}
-            <div className="lg:col-span-3 row-span-4 flex flex-col space-y-6 overflow-y-auto pr-2 pb-6">
-              {/* Question Block */}
-              <div className="border bg-card p-6 rounded flex flex-col space-y-4">
-                <div className="flex justify-between items-start border-b pb-4">
+          <div className="grid flex-1 gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]">
+            <section className="min-w-0 space-y-4" aria-label="Current question">
+              <div
+                className={`border bg-mocha-base/70 ${
+                  isBossEncounter
+                    ? "border-mocha-red/50"
+                    : "border-mocha-surface1"
+                }`}
+              >
+                <div className="flex flex-col gap-3 border-b border-mocha-surface1 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <h3 className="text-sm font-bold tracking-wider font-mono text-mocha-text uppercase">
-                      CURRENT QUERY {questionQueues.length}
-                    </h3>
+                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-mocha-overlay1">
+                      Current query
+                    </p>
+                    <p className="mt-1 font-mono text-xs text-mocha-subtext0">
+                      {isBossEncounter
+                        ? "Linked-concept synthesis protocol"
+                        : "Select the best response, then confirm."}
+                    </p>
                   </div>
 
-                  <div className="flex gap-4 items-center">
-                    {hasAnswered ? (
+                  {hasAnswered ? (
+                    <button
+                      disabled={!hasAnswered}
+                      onClick={() => handleNextQuestion()}
+                      className="min-h-11 w-full border border-mocha-mauve bg-mocha-mauve px-5 py-2 font-mono text-xs font-black uppercase tracking-[0.16em] text-mocha-crust transition-colors hover:bg-mocha-lavender focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mocha-lavender disabled:pointer-events-none disabled:opacity-30 sm:w-auto"
+                    >
+                      Next query
+                    </button>
+                  ) : (
+                    !hasDictionary && (
                       <button
-                        disabled={!hasAnswered}
-                        onClick={() => handleNextQuestion()}
-                        className="px-6 py-2 border bg-transparent text-mocha-text border-primary hover:bg-primary font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-mocha-surface2 disabled:text-mocha-overlay0 disabled:pointer-events-none rounded-sm"
+                        disabled={!selectedAnswer}
+                        onClick={answerQuestion}
+                        className="min-h-11 w-full border border-mocha-mauve bg-mocha-mauve px-5 py-2 font-mono text-xs font-black uppercase tracking-[0.16em] text-mocha-crust transition-colors hover:bg-mocha-lavender focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mocha-lavender disabled:pointer-events-none disabled:border-mocha-surface2 disabled:bg-transparent disabled:text-mocha-overlay0 disabled:opacity-50 sm:w-auto"
                       >
-                        NEXT
+                        Lock answer
                       </button>
-                    ) : (
-                      !hasDictionary && (
-                        <button
-                          disabled={!selectedAnswer}
-                          onClick={answerQuestion}
-                          className="px-6 py-2 border bg-transparent text-mocha-text border-primary hover:bg-primary hover:text-muted font-mono text-xs font-bold transition-all duration-300 tracking-widest uppercase disabled:opacity-30 disabled:border-mocha-surface2 disabled:text-mocha-overlay0 disabled:pointer-events-none rounded-sm"
-                        >
-                          ANSWER
-                        </button>
-                      )
-                    )}
-                  </div>
+                    )
+                  )}
                 </div>
 
-                <div>
-                  <p className="text-mocha-subtext1 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+                <div className="p-5 sm:p-7 lg:p-8">
+                  <p className="whitespace-pre-wrap text-base font-semibold leading-7 text-mocha-text sm:text-lg sm:leading-8">
                     {questionQueues[0].question}
                   </p>
                 </div>
               </div>
 
-              {/* Answers Block */}
-              <div className="w-full">
+              <div className="border border-mocha-surface1 bg-mocha-mantle/60 p-3 sm:p-4">
+                <div className="mb-3 flex items-center justify-between border-b border-mocha-surface1 pb-3 font-mono">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-mocha-sky">
+                    Response matrix
+                  </p>
+                  <p className="text-[9px] uppercase tracking-[0.14em] text-mocha-overlay1">
+                    {selectedAnswer ? "Response selected" : "Awaiting input"}
+                  </p>
+                </div>
                 <GameTypeIdentifier
                   choices={questionQueues[0].options as string[]}
                   answer={questionQueues[0].answer}
@@ -290,49 +335,48 @@ export default function GameBoard({
                 />
               </div>
 
-              <div className="border bg-card p-5 rounded font-mono mt-4">
-                <h4 className="text-xs text-mocha-text uppercase font-bold tracking-wider mb-3">
-                  <Bot className="w-3.5 h-3.5 inline-block" /> AI EXPLANATION
-                </h4>
+              <section
+                className="border border-mocha-surface1 bg-mocha-base/70"
+                aria-live="polite"
+              >
+                <div className="flex items-center gap-2 border-b border-mocha-surface1 px-4 py-3 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-mocha-green">
+                  <Bot className="size-4" aria-hidden="true" />
+                  Analysis channel
+                </div>
+                <div className="min-h-20 p-4 sm:p-5">
+                  <AnimatePresence mode="wait">
+                    {hasAnswered ? (
+                      <motion.div
+                        key="answer"
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                      >
+                        <Explanation explanation={questionQueues[0].explanation} />
+                      </motion.div>
+                    ) : (
+                      <motion.p
+                        key="no-answer"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="font-mono text-xs leading-6 text-mocha-overlay1"
+                      >
+                        Submit a response to unlock the concept breakdown.
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </section>
 
-                {/* Explanation Block */}
-                <AnimatePresence mode="wait">
-                  {hasAnswered ? (
-                    <motion.div
-                      key="answer"
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="overflow-hidden"
-                    >
-                      <Explanation
-                        explanation={questionQueues[0].explanation}
-                      />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="no answer"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                    >
-                      <p className="text-mocha-overlay1 font-mono text-xs leading-relaxed whitespace-pre-wrap">
-                        THE AI IS WAITING FOR YOUR ANSWER....
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              <div className="grid gap-4 font-mono md:grid-cols-2">
+                <Augments handleConsumable={handleConsumable} />
               </div>
+            </section>
 
-              <div className="grid gap-2 md:grid-cols-2 rounded font-mono mt-4">
-                <Augments handleConsumable={handleConsumable}></Augments>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN: Augments & Consumables (1/4 Width) */}
-            <div className="flex flex-1 flex-col space-x-6 md:space-x-0 border-t row-span-1 pt-5 md:pt-0 md:border-none md:row-span-4 space-y-6 overflow-y-auto pr-2 pb-6">
-              <Logs></Logs>
-            </div>
+            <aside className="min-h-72 xl:sticky xl:top-4 xl:h-[calc(100dvh-9.5rem)]" aria-label="Run activity">
+              <Logs />
+            </aside>
           </div>
         </motion.div>
       </AnimatePresence>

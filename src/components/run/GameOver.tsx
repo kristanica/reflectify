@@ -5,8 +5,6 @@ import { useShallow } from "zustand/react/shallow";
 import saveToGameSession from "@/actions/run/saveGameSession";
 import { useRouter } from "next/navigation";
 import saveAsFlashCard from "@/actions/run/saveAsFlashCard";
-import { add } from "three/src/nodes/math/OperatorNode.js";
-import { getDefaultAutoSelectFamilyAttemptTimeout } from "node:net";
 
 const GameOver = () => {
   const router = useRouter();
@@ -123,7 +121,7 @@ const GameOver = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-mocha-red tracking-widest uppercase">
             Run Terminated
           </h1>
-          <div className="border border-mocha-red/30 my-5 bg-mocha-mantle/80 p-8 rounded-sm mb-10 w-full max-w-md text-left relative overflow-hidden shadow-[0_0_30px_rgba(220,38,38,0.05)]">
+          <div className="relative my-5 mb-10 w-full max-w-md overflow-hidden border border-mocha-red/30 bg-mocha-mantle/80 p-8 text-left shadow-[0_0_30px_rgba(220,38,38,0.05)]">
             <div className="absolute inset-0  pointer-events-none opacity-30"></div>
 
             <div className="relative z-10 flex flex-col gap-5">
@@ -159,7 +157,7 @@ const GameOver = () => {
           <div className="flex flex-col  gap-4 justify-center w-full max-w-md">
             <button
               onClick={handleReset}
-              className="w-full py-3 px-8 border border-mocha-surface2 text-mocha-subtext1 hover:bg-mocha-yellow hover:text-black transition-all duration-300 font-mono tracking-[0.2em] text-xs uppercase rounded-sm"
+              className="min-h-12 w-full border border-mocha-surface2 px-8 py-3 font-mono text-xs uppercase tracking-[0.2em] text-mocha-subtext1 transition-colors duration-300 hover:bg-mocha-yellow hover:text-black"
             >
               Return to Base
             </button>

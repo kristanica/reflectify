@@ -34,27 +34,26 @@ const Navigation = () => {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-1 border border-mocha-surface1 bg-mocha-base/70 p-1 md:flex">
-          {navOptions.map((nav) => {
-            const Icon = nav.icon;
-
-            return (
-              <Link
-                href={nav.route}
-                key={nav.name}
-                className="group flex h-10 items-center gap-2 px-4 text-xs font-bold uppercase tracking-[0.16em] text-mocha-subtext0 transition-colors duration-300 hover:bg-mocha-surface0 hover:text-mocha-lavender"
-              >
-                <Icon
-                  className="size-4 text-mocha-overlay1 transition-colors duration-300 group-hover:text-mocha-sky"
-                  aria-hidden="true"
-                />
-                {nav.name}
-              </Link>
-            );
-          })}
-        </div>
-
         <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-1  p-1 md:flex">
+            {navOptions.map((nav) => {
+              const Icon = nav.icon;
+
+              return (
+                <Link
+                  href={nav.route}
+                  key={nav.name}
+                  className="group flex h-10 items-center gap-2 px-4 text-xs font-bold uppercase tracking-[0.16em] text-mocha-subtext0 transition-colors duration-300 hover:bg-mocha-surface0 hover:text-mocha-lavender"
+                >
+                  <Icon
+                    className="size-4 text-mocha-overlay1 transition-colors duration-300 group-hover:text-mocha-sky"
+                    aria-hidden="true"
+                  />
+                  {nav.name}
+                </Link>
+              );
+            })}
+          </div>
           <Link
             href="#features"
             className="hidden h-11 items-center px-3 text-xs font-bold uppercase tracking-[0.16em] text-mocha-overlay1 transition-colors duration-300 hover:text-mocha-lavender sm:flex md:hidden"

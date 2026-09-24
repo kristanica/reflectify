@@ -23,7 +23,7 @@ const Score = () => {
               y: 10,
               filter: "blur(5px)",
             }}
-            className="flex items-center gap-2 border border-mocha-yellow/30 bg-mocha-yellow/10 px-3 py-1.5 rounded h-full"
+            className="flex h-full items-center gap-2 border border-mocha-yellow/30 bg-mocha-yellow/10 px-3 py-1.5"
           >
             <span className="text-mocha-yellow font-mono text-[10px] tracking-wider uppercase animate-pulse">
               COMBO:
@@ -35,7 +35,7 @@ const Score = () => {
         )}
       </AnimatePresence>
 
-      <div className="flex items-center gap-2 border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5 rounded h-full">
+      <div className="flex h-full items-center gap-2 border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5">
         <span className="text-mocha-overlay1 font-mono text-[10px] tracking-wider uppercase">
           SCORE:
         </span>
@@ -51,7 +51,7 @@ const Score = () => {
         </motion.div>
       </div>
 
-      <div className="flex items-center gap-2 border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5 rounded h-full">
+      <div className="flex h-full items-center gap-2 border border-mocha-surface1 bg-mocha-mantle px-3 py-1.5">
         <span className="text-mocha-overlay1 font-mono text-[10px] tracking-wider uppercase">
           GOLD:
         </span>
